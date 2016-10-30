@@ -9,13 +9,13 @@ Chaque utilisateur peut également créer un groupe de discussion, il en devient
 Il existe un compte unique nommé Administrateur qui dispose de droits étendus : créer, modifier ou supprimer des comptes utilisateurs, modifier les groupe de discussion, etc.  
 
 ## Cas d'utilisation
-* CU1 - Création et suppression de compte utilisateur
-* CU2 - Connexion / Déconnexion
-* CU3 - Modification de compte utilisateur
-* CU4 - Création d'un groupe
-* CU5 - Affichage de la liste des discussions disponibles
-* CU6 - Modération d'un groupe
-* CU7 - Envoi et réception de messages
+* CU1 - Création et suppression de compte utilisateur ✖
+* CU2 - Connexion / Déconnexion ✖
+* CU3 - Modification de compte utilisateur ✖
+* CU4 - Création d'un groupe ✖
+* CU5 - Affichage de la liste des discussions disponibles ✖
+* CU6 - Modération d'un groupe ✖
+* CU7 - Envoi et réception de messages ✖
 
 ## Architecture
 * controller : Intéraction de l'utilisateur en Swing - Appels de services
