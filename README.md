@@ -17,7 +17,13 @@ Il existe un compte unique nommé Administrateur qui dispose de droits étendus 
 * CU6 - Modération d'un groupe
 * CU7 - Envoi et réception de messages
 
-## Suivi du projet
+## Architecture
+* controller : Intéraction de l'utilisateur en Swing - Appels de services
+* service : Traitements métiers de l'application - Communication controller / mapper
+* persistence : Accès à la base de données - Transformation en objet Java
+* domain : Objets métiers
+
+## Suivi
 Trello : https://trello.com/b/fks7bbBR/chat-book
 
 ## Contributeurs
