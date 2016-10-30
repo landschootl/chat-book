@@ -1,8 +1,8 @@
 /****************** Configuration de la Base ******************/
 -- creation de la base
-DROP DATABASE IF EXISTS projet_coo;
-CREATE DATABASE projet_coo CHARACTER SET 'utf8';
-USE projet_coo;
+DROP DATABASE IF EXISTS chat_book;
+CREATE DATABASE chat_book CHARACTER SET 'utf8';
+USE chat_book;
 
 /****************** Création des tables ******************/
 -- table des utilisateurs
@@ -14,7 +14,7 @@ CREATE TABLE USER (
 	surname varchar(11) NOT NULL,
 	password varchar(15) NOT NULL,
 	role varchar(12) NOT NULL,
-	constraint u_role_enum check(u_role in ('USER_DEFAULT','USER_ADMIN'))
+	constraint u_role_enum check(role in ('USER_DEFAULT','USER_ADMIN'))
 );
 
 -- table des groupes de centres d'intêrets
@@ -48,7 +48,7 @@ CREATE TABLE USER_HOBBY (
 	id_hobby int references HOBBY
 );
 
--- table de relation ntre deux utilisateurs amis
+-- table de relation entre deux utilisateurs amis
 DROP TABLE IF EXISTS FRIEND;
 CREATE TABLE FRIEND (
 	id int NOT NULL AUTO_INCREMENT primary key,
@@ -79,7 +79,7 @@ CREATE TABLE MESSAGE (
 	id int NOT NULL AUTO_INCREMENT primary key,
 	id_connection int references CONNECTION,
 	id_user int references USER,
-	message varchar(100) NOT NULL,
+	message varchar(140) NOT NULL,
 	prioritaire boolean,
 	expiration date
 );
