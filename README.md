@@ -1,5 +1,5 @@
 # chat-book
-Projet de COO en M1MIAGE-FA
+Projet de COO en M1MIAGEFA - Plate-forme de discussion / Réseau social 
 
 ## Présentation générale
 Le principe général consiste à réaliser une plate-forme de discussion / forum / réseau social.  
