@@ -1,10 +1,14 @@
 package gui;
 
+import com.intellij.uiDesigner.core.GridConstraints;
+import com.intellij.uiDesigner.core.GridLayoutManager;
 import service.UserService;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class UserFrame extends AppFrame {
     private JPanel mainPanel;
@@ -12,6 +16,8 @@ public class UserFrame extends AppFrame {
     private JLabel titleLabel;
     private JLabel userLabel;
     private JPanel bodyPanel;
+    private JPanel userPanel;
+    private JButton deconnectButton;
 
     private UserService userService;
 
@@ -20,6 +26,7 @@ public class UserFrame extends AppFrame {
         this.setContentPane(this.mainPanel);
         initFrame();
         initLabels();
+        configDeconnectButton();
         this.setTitle("Chatbook - " + this.userService.getConnectedUser().getFirstname() + " " + this.userService.getConnectedUser().getLastname());
         this.setVisible(true);
     }
@@ -28,6 +35,14 @@ public class UserFrame extends AppFrame {
         this.titleLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
         this.userLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
         this.userLabel.setText(userService.getConnectedUser().getFirstname() + " " + userService.getConnectedUser().getLastname());
+    }
+
+    public void configDeconnectButton() {
+        deconnectButton.addActionListener(e -> {
+            this.userService.setConnectedUser(null);
+            this.setVisible(false);
+            new LoginFrame();
+        });
     }
 
     {
@@ -59,12 +74,20 @@ public class UserFrame extends AppFrame {
         titleLabel.setHorizontalAlignment(2);
         titleLabel.setText("chatbook");
         navPanel.add(titleLabel, BorderLayout.WEST);
+        userPanel = new JPanel();
+        userPanel.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
+        userPanel.setBackground(new Color(-12887656));
+        navPanel.add(userPanel, BorderLayout.EAST);
         userLabel = new JLabel();
-        userLabel.setForeground(new Color(-1705985));
+        userLabel.setForeground(new Color(-2561551));
         userLabel.setText("Label");
-        navPanel.add(userLabel, BorderLayout.EAST);
+        userPanel.add(userLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        deconnectButton = new JButton();
+        deconnectButton.setText("✖");
+        deconnectButton.setToolTipText("Se déconnecter");
+        userPanel.add(deconnectButton, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(10, 10), null, 0, false));
         bodyPanel = new JPanel();
-        bodyPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        bodyPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         mainPanel.add(bodyPanel, BorderLayout.CENTER);
     }
 

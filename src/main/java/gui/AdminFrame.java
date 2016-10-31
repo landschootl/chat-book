@@ -1,5 +1,8 @@
 package gui;
 
+import com.intellij.uiDesigner.core.GridConstraints;
+import com.intellij.uiDesigner.core.GridLayoutManager;
+import com.intellij.uiDesigner.core.Spacer;
 import service.UserService;
 
 import javax.swing.*;
@@ -12,6 +15,8 @@ public class AdminFrame extends AppFrame {
     private JPanel mainPanel;
     private JPanel bodyPanel;
     private JLabel userLabel;
+    private JPanel userPanel;
+    private JButton deconnectButton;
 
     private UserService userService;
 
@@ -20,6 +25,7 @@ public class AdminFrame extends AppFrame {
         this.setContentPane(this.mainPanel);
         initFrame();
         initLabels();
+        configDeconnectButton();
         this.setTitle("Chatbook - Admin");
         this.setVisible(true);
     }
@@ -28,6 +34,14 @@ public class AdminFrame extends AppFrame {
         this.titleLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
         this.userLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
         this.userLabel.setText(userService.getConnectedUser().getFirstname() + " " + userService.getConnectedUser().getLastname());
+    }
+
+    public void configDeconnectButton() {
+        deconnectButton.addActionListener(e -> {
+            this.userService.setConnectedUser(null);
+            this.setVisible(false);
+            new LoginFrame();
+        });
     }
 
     {
@@ -59,13 +73,23 @@ public class AdminFrame extends AppFrame {
         titleLabel.setHorizontalAlignment(2);
         titleLabel.setText("chatbook - admin");
         navPanel.add(titleLabel, BorderLayout.WEST);
+        userPanel = new JPanel();
+        userPanel.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
+        userPanel.setBackground(new Color(-12887656));
+        navPanel.add(userPanel, BorderLayout.EAST);
         userLabel = new JLabel();
         userLabel.setForeground(new Color(-2561551));
         userLabel.setText("Label");
-        navPanel.add(userLabel, BorderLayout.EAST);
+        userPanel.add(userLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        deconnectButton = new JButton();
+        deconnectButton.setText("✖");
+        deconnectButton.setToolTipText("Se déconnecter");
+        userPanel.add(deconnectButton, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(10, 10), null, 0, false));
         bodyPanel = new JPanel();
         bodyPanel.setLayout(new BorderLayout(0, 0));
         mainPanel.add(bodyPanel, BorderLayout.CENTER);
+        final Spacer spacer1 = new Spacer();
+        bodyPanel.add(spacer1, BorderLayout.EAST);
     }
 
     /**

@@ -1,5 +1,7 @@
 package gui;
 
+import com.intellij.uiDesigner.core.GridConstraints;
+import com.intellij.uiDesigner.core.GridLayoutManager;
 import domain.User;
 import service.UserService;
 
@@ -45,7 +47,6 @@ public class LoginFrame extends AppFrame {
 
     public void initLabels() {
         this.titleLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
-        this.userLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
         ImageIcon icon = new ImageIcon(getClass().getResource("/img/logo.png"));
         this.logoLabel.setIcon(icon);
     }
@@ -110,10 +111,6 @@ public class LoginFrame extends AppFrame {
         titleLabel.setHorizontalAlignment(2);
         titleLabel.setText("chatbook");
         navPanel.add(titleLabel, BorderLayout.WEST);
-        userLabel = new JLabel();
-        userLabel.setForeground(new Color(-1705985));
-        userLabel.setText("Label");
-        navPanel.add(userLabel, BorderLayout.EAST);
         bodyPanel = new JPanel();
         bodyPanel.setLayout(new BorderLayout(0, 0));
         mainPanel.add(bodyPanel, BorderLayout.CENTER);
@@ -122,25 +119,25 @@ public class LoginFrame extends AppFrame {
         logoLabel.setText("");
         bodyPanel.add(logoLabel, BorderLayout.NORTH);
         formPanel = new JPanel();
-        formPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(4, 2, new Insets(40, 200, 200, 200), -1, -1));
+        formPanel.setLayout(new GridLayoutManager(4, 2, new Insets(40, 200, 200, 200), -1, -1));
         bodyPanel.add(formPanel, BorderLayout.CENTER);
         loginLabel = new JLabel();
         loginLabel.setText("Identifiant");
-        formPanel.add(loginLabel, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_EAST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        formPanel.add(loginLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_EAST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         passwordLabel = new JLabel();
         passwordLabel.setText("Mot de passe");
-        formPanel.add(passwordLabel, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_EAST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        formPanel.add(passwordLabel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_EAST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         loginField = new JTextField();
-        formPanel.add(loginField, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        formPanel.add(loginField, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         passwordField = new JPasswordField();
-        formPanel.add(passwordField, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        formPanel.add(passwordField, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         connectButton = new JButton();
         connectButton.setText("Se connecter");
-        formPanel.add(connectButton, new com.intellij.uiDesigner.core.GridConstraints(2, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        formPanel.add(connectButton, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         errorLabel = new JLabel();
         errorLabel.setForeground(new Color(-3932126));
         errorLabel.setText("");
-        formPanel.add(errorLabel, new com.intellij.uiDesigner.core.GridConstraints(3, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        formPanel.add(errorLabel, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**

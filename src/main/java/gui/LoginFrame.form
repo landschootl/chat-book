@@ -25,13 +25,6 @@
               <text value="chatbook" noi18n="true"/>
             </properties>
           </component>
-          <component id="fc6c2" class="javax.swing.JLabel" binding="userLabel">
-            <constraints border-constraint="East"/>
-            <properties>
-              <foreground color="-1705985"/>
-              <text value="Label"/>
-            </properties>
-          </component>
         </children>
       </grid>
       <grid id="7fa3d" binding="bodyPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
