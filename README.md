@@ -23,6 +23,11 @@ Il existe un compte unique nommé Administrateur qui dispose de droits étendus 
 * persistence : Accès à la base de données - Transformation en objet Java
 * domain : Objets métiers
 
+## Tâches Maven
+* `mvn clean install` : Installation des dépendances du projet
+* `mvn exec:java` : Execution du projet
+* `mvn clean compile assembly:single` : Génération d'un fichier JAR exécutable
+
 ## Suivi
 Trello : https://trello.com/b/fks7bbBR/chat-book
 
