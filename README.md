@@ -9,8 +9,8 @@ Chaque utilisateur peut également créer un groupe de discussion, il en devient
 Il existe un compte unique nommé Administrateur qui dispose de droits étendus : créer, modifier ou supprimer des comptes utilisateurs, modifier les groupe de discussion, etc.  
 
 ## Cas d'utilisation
-* CU1 - Création et suppression de compte utilisateur ✖
-* CU2 - Connexion / Déconnexion ✖
+* CU1 - Connexion / Déconnexion ✖
+* CU2 - Création et suppression de compte utilisateur ✖
 * CU3 - Modification de compte utilisateur ✖
 * CU4 - Création d'un groupe ✖
 * CU5 - Affichage de la liste des discussions disponibles ✖
