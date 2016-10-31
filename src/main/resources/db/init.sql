@@ -35,3 +35,7 @@ INSERT INTO USER_HOBBIES VALUES (default, 3, 3);
 INSERT INTO USER VALUES (default, "BeatriceDailly", "Beatrice", "Dailly", "123456", "USER_DEFAULT");
 INSERT INTO USER_HOBBY VALUES (default, 4, 2);
 INSERT INTO USER_HOBBY VALUES (default, 4, 9);
+
+INSERT INTO USER VALUES (default, "lauthieb", "Laurent", "Thiebault", "MDP2lauthieb", "USER_DEFAULT");
+INSERT INTO USER_HOBBIES VALUES (default, 2, 1);
+INSERT INTO USER_HOBBY VALUES (default, 2, 5);

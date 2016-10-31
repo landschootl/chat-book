@@ -7,9 +7,11 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.sql.SQLException;
 
-public class LoginFrame extends JFrame {
+public class LoginFrame extends AppFrame {
     private JPanel mainPanel;
     private JLabel titleLabel;
     private JPanel navPanel;
@@ -22,6 +24,7 @@ public class LoginFrame extends JFrame {
     private JPasswordField passwordField;
     private JButton connectButton;
     private JLabel errorLabel;
+    private JLabel userLabel;
 
     private UserService userService;
 
@@ -31,16 +34,8 @@ public class LoginFrame extends JFrame {
         initPanels();
         initLabels();
         configConnectButton();
-        this.setVisible(true);
-    }
-
-    public void initFrame() {
-        this.setTitle("Chatbook");
-        this.setSize(800, 600);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setLocationRelativeTo(null);
         this.setContentPane(this.mainPanel);
-        this.setResizable(false);
+        this.setVisible(true);
     }
 
     public void initPanels() {
@@ -49,21 +44,16 @@ public class LoginFrame extends JFrame {
 
     public void initLabels() {
         this.titleLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        this.userLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
         ImageIcon icon = new ImageIcon(getClass().getResource("/img/logo.png"));
         this.logoLabel.setIcon(icon);
     }
 
     public void configConnectButton() {
         connectButton.addActionListener(event -> {
-            if (this.loginField.getText() != "" && this.passwordField.getPassword().length != 0) {
+            if (!fieldEmpty()) {
                 try {
-                    User user = this.userService.findByCredentials(this.loginField.getText(), new String(this.passwordField.getPassword()));
-
-                    if (user != null) {
-                        this.errorLabel.setText("Bienvenue" + user);
-                    } else {
-                        this.errorLabel.setText("Identifiant / Mot de passe incorrects");
-                    }
+                    checkUser(this.userService.findByCredentials(this.loginField.getText(), new String(this.passwordField.getPassword())));
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -71,5 +61,22 @@ public class LoginFrame extends JFrame {
                 this.errorLabel.setText("Veuillez remplir l'ensemble des champs");
             }
         });
+    }
+
+    public boolean fieldEmpty() {
+        return this.loginField.getText() == "" || this.passwordField.getPassword().length == 0;
+    }
+
+    public void checkUser(User user) {
+        if (user != null) {
+            this.setVisible(false);
+            if (user.getRole().equals("USER_ADMIN")) {
+                new AdminFrame();
+            } else {
+                new UserFrame();
+            }
+        } else {
+            this.errorLabel.setText("Identifiant / Mot de passe incorrects");
+        }
     }
 }

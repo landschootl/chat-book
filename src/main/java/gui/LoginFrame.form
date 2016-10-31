@@ -16,13 +16,20 @@
         <border type="none"/>
         <children>
           <component id="751a5" class="javax.swing.JLabel" binding="titleLabel">
-            <constraints border-constraint="Center"/>
+            <constraints border-constraint="West"/>
             <properties>
               <enabled value="true"/>
               <font name="Lucida Grande" size="24" style="1"/>
               <foreground color="-1705985"/>
               <horizontalAlignment value="2"/>
               <text value="chatbook" noi18n="true"/>
+            </properties>
+          </component>
+          <component id="fc6c2" class="javax.swing.JLabel" binding="userLabel">
+            <constraints border-constraint="East"/>
+            <properties>
+              <foreground color="-1705985"/>
+              <text value="Label"/>
             </properties>
           </component>
         </children>

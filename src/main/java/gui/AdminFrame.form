@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="gui.AdminFrame">
+  <grid id="27dc6" binding="mainPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+    <constraints>
+      <xy x="20" y="20" width="647" height="400"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <grid id="f9bb6" binding="navPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+        <constraints border-constraint="North"/>
+        <properties>
+          <background color="-12887656"/>
+          <foreground color="-1771521"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="b918c" class="javax.swing.JLabel" binding="titleLabel">
+            <constraints border-constraint="West"/>
+            <properties>
+              <enabled value="true"/>
+              <font name="Lucida Grande" size="24" style="1"/>
+              <foreground color="-1705985"/>
+              <horizontalAlignment value="2"/>
+              <text value="chatbook - admin" noi18n="true"/>
+            </properties>
+          </component>
+          <component id="f6ebc" class="javax.swing.JLabel" binding="userLabel">
+            <constraints border-constraint="East"/>
+            <properties>
+              <foreground color="-2561551"/>
+              <text value="Label"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <grid id="fc992" binding="bodyPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+        <constraints border-constraint="Center"/>
+        <properties/>
+        <border type="none"/>
+        <children/>
+      </grid>
+    </children>
+  </grid>
+</form>
