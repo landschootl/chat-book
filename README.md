@@ -18,7 +18,7 @@ Il existe un compte unique nommé Administrateur qui dispose de droits étendus 
 * CU7 - Envoi et réception de messages ✖
 
 ## Architecture
-* controller : Intéraction de l'utilisateur en Swing - Appels de services
+* gui : IHM - Intéraction de l'utilisateur en Swing et appels de services
 * service : Traitements métiers de l'application - Communication controller / mapper
 * persistence : Accès à la base de données - Transformation en objet Java
 * domain : Objets métiers
