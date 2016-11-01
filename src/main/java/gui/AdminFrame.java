@@ -2,12 +2,12 @@ package gui;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import com.intellij.uiDesigner.core.Spacer;
 import service.UserService;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 
 public class AdminFrame extends AppFrame {
     private JPanel navPanel;
@@ -17,23 +17,48 @@ public class AdminFrame extends AppFrame {
     private JLabel userLabel;
     private JPanel userPanel;
     private JButton deconnectButton;
+    private JButton accountsButton;
+    private JPanel dashboardPanel;
+    private JButton groupsButton;
+    private JPanel contentPanel;
+    private JPanel accountsPanel;
+    private JPanel groupsPanel;
 
     private UserService userService;
 
     public AdminFrame() {
         this.userService = UserService.getInstance();
         this.setContentPane(this.mainPanel);
+        cleanPanels();
         initFrame();
-        initLabels();
+        initComponents();
         configDeconnectButton();
+        configDashboard();
         this.setTitle("Chatbook - Admin");
         this.setVisible(true);
     }
 
-    public void initLabels() {
-        this.titleLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
-        this.userLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
-        this.userLabel.setText(userService.getConnectedUser().getFirstname() + " " + userService.getConnectedUser().getLastname());
+    public void cleanPanels() {
+        this.accountsPanel.setVisible(false);
+        this.groupsPanel.setVisible(false);
+    }
+
+    public void initComponents() {
+        titleLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        userLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        userLabel.setText(userService.getConnectedUser().getFirstname() + " " + userService.getConnectedUser().getLastname());
+        dashboardPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+    }
+
+    public void configDashboard() {
+        accountsButton.addActionListener((ActionEvent e) -> {
+            cleanPanels();
+            this.accountsPanel.setVisible(true);
+        });
+        groupsButton.addActionListener((ActionEvent e) -> {
+            cleanPanels();
+            this.groupsPanel.setVisible(true);
+        });
     }
 
     public void configDeconnectButton() {
@@ -88,8 +113,30 @@ public class AdminFrame extends AppFrame {
         bodyPanel = new JPanel();
         bodyPanel.setLayout(new BorderLayout(0, 0));
         mainPanel.add(bodyPanel, BorderLayout.CENTER);
-        final Spacer spacer1 = new Spacer();
-        bodyPanel.add(spacer1, BorderLayout.EAST);
+        dashboardPanel = new JPanel();
+        dashboardPanel.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
+        bodyPanel.add(dashboardPanel, BorderLayout.NORTH);
+        accountsButton = new JButton();
+        accountsButton.setText("Gestion des comptes");
+        dashboardPanel.add(accountsButton, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        groupsButton = new JButton();
+        groupsButton.setText("Gestion des groupes");
+        dashboardPanel.add(groupsButton, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        contentPanel = new JPanel();
+        contentPanel.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
+        bodyPanel.add(contentPanel, BorderLayout.CENTER);
+        accountsPanel = new JPanel();
+        accountsPanel.setLayout(new BorderLayout(0, 0));
+        contentPanel.add(accountsPanel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        final JLabel label1 = new JLabel();
+        label1.setText("GESTION DES COMPTES");
+        accountsPanel.add(label1, BorderLayout.NORTH);
+        groupsPanel = new JPanel();
+        groupsPanel.setLayout(new BorderLayout(0, 0));
+        contentPanel.add(groupsPanel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        final JLabel label2 = new JLabel();
+        label2.setText("GESTION DES GROUPES");
+        groupsPanel.add(label2, BorderLayout.NORTH);
     }
 
     /**

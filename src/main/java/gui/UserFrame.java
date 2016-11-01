@@ -25,13 +25,13 @@ public class UserFrame extends AppFrame {
         this.userService = UserService.getInstance();
         this.setContentPane(this.mainPanel);
         initFrame();
-        initLabels();
+        initComponents();
         configDeconnectButton();
         this.setTitle("Chatbook - " + this.userService.getConnectedUser().getFirstname() + " " + this.userService.getConnectedUser().getLastname());
         this.setVisible(true);
     }
 
-    public void initLabels() {
+    public void initComponents() {
         this.titleLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
         this.userLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
         this.userLabel.setText(userService.getConnectedUser().getFirstname() + " " + userService.getConnectedUser().getLastname());

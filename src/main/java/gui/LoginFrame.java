@@ -35,26 +35,20 @@ public class LoginFrame extends AppFrame {
         this.userService = UserService.getInstance();
         this.setContentPane(this.mainPanel);
         initFrame();
-        initPanels();
-        initLabels();
+        initComponents();
         configListeners();
         this.setVisible(true);
     }
 
-    public void initPanels() {
-        this.bodyPanel.setBorder(new EmptyBorder(30, 30, 30, 30));
-    }
-
-    public void initLabels() {
+    public void initComponents() {
         this.titleLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
         ImageIcon icon = new ImageIcon(getClass().getResource("/img/logo.png"));
         this.logoLabel.setIcon(icon);
+        this.bodyPanel.setBorder(new EmptyBorder(30, 30, 30, 30));
     }
 
     public void configListeners() {
-        connectButton.addActionListener(e -> {
-            connect();
-        });
+        connectButton.addActionListener((ActionEvent e) -> connect());
 
         KeyListener keyListener = new KeyListener() {
             @Override
