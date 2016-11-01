@@ -37,7 +37,7 @@ public class LoginFrame extends AppFrame {
         initFrame();
         initPanels();
         initLabels();
-        configConnectButton();
+        configListeners();
         this.setVisible(true);
     }
 
@@ -51,18 +51,42 @@ public class LoginFrame extends AppFrame {
         this.logoLabel.setIcon(icon);
     }
 
-    public void configConnectButton() {
-        connectButton.addActionListener(event -> {
-            if (!fieldEmpty()) {
-                try {
-                    checkUser(this.userService.findByCredentials(this.loginField.getText(), new String(this.passwordField.getPassword())));
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                this.errorLabel.setText("Veuillez remplir l'ensemble des champs");
-            }
+    public void configListeners() {
+        connectButton.addActionListener(e -> {
+            connect();
         });
+
+        KeyListener keyListener = new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    connect();
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+            }
+        };
+
+        loginField.addKeyListener(keyListener);
+        passwordField.addKeyListener(keyListener);
+    }
+
+    private void connect() {
+        if (!fieldEmpty()) {
+            try {
+                checkUser(this.userService.findByCredentials(this.loginField.getText(), new String(this.passwordField.getPassword())));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } else {
+            this.errorLabel.setText("Veuillez remplir l'ensemble des champs");
+        }
     }
 
     public boolean fieldEmpty() {
