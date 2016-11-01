@@ -20,21 +20,13 @@ INSERT INTO HOBBY VALUES (default, 4, "Tragedie");
 INSERT INTO HOBBY VALUES (default, 4, "Moliere");
 
 /****************** Insertion compte utilisateur ******************/
--- compte administrateur
+-- Compte administrateur
 INSERT INTO USER VALUES (default, "admin", "toto", "titi", "admin", "USER_ADMIN");
 
--- compte utilisateur
-INSERT INTO USER VALUES (default, "TonyLandschoot", "Tony", "Landschoot", "123456", "USER_DEFAULT");
-INSERT INTO USER_HOBBIES VALUES (default, 2, 1);
-INSERT INTO USER_HOBBY VALUES (default, 2, 5);
-
+-- Comptes utilisateur
 INSERT INTO USER VALUES (default, "SegoleneFrison", "Segolene", "Frison", "123456", "USER_DEFAULT");
 INSERT INTO USER_HOBBIES VALUES (default, 3, 1);
 INSERT INTO USER_HOBBIES VALUES (default, 3, 3);
-
-INSERT INTO USER VALUES (default, "BeatriceDailly", "Beatrice", "Dailly", "123456", "USER_DEFAULT");
-INSERT INTO USER_HOBBY VALUES (default, 4, 2);
-INSERT INTO USER_HOBBY VALUES (default, 4, 9);
 
 INSERT INTO USER VALUES (default, "lauthieb", "Laurent", "Thiebault", "MDP2lauthieb", "USER_DEFAULT");
 INSERT INTO USER_HOBBIES VALUES (default, 2, 1);
