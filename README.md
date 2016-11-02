@@ -10,12 +10,11 @@ Il existe un compte unique nommé Administrateur qui dispose de droits étendus 
 
 ## Cas d'utilisation
 * CU1 - Connexion / Déconnexion ✓
-* CU2 - Création et suppression de compte utilisateur ✖
-* CU3 - Modification de compte utilisateur ✖
-* CU4 - Création d'un groupe ✖
-* CU5 - Affichage de la liste des discussions disponibles ✖
-* CU6 - Modération d'un groupe ✖
-* CU7 - Envoi et réception de messages ✖
+* CU2 - CRUD utilisateur ✖
+* CU3 - Création d'un groupe ✖
+* CU4 - Affichage de la liste des discussions disponibles ✖
+* CU5 - Modération d'un groupe ✖
+* CU6 - Envoi et réception de messages ✖
 
 ## Architecture
 * gui : IHM - Intéraction de l'utilisateur en Swing et appels de services
