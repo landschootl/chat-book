@@ -4,10 +4,6 @@ import domain.User;
 import lombok.Data;
 import persistence.UserMapper;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
-
 @Data
 public class UserService {
     public static UserService instance = null;

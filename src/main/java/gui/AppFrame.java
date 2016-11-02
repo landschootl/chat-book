@@ -10,4 +10,6 @@ public abstract class AppFrame extends JFrame {
         this.setLocationRelativeTo(null);
         this.setResizable(false);
     }
+
+    public abstract void initComponents();
 }
