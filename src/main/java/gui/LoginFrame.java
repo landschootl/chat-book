@@ -75,7 +75,7 @@ public class LoginFrame extends AppFrame {
         if (!fieldEmpty()) {
             try {
                 checkUser(this.userService.findByCredentials(this.loginField.getText(), new String(this.passwordField.getPassword())));
-            } catch (SQLException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {

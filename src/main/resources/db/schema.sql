@@ -12,7 +12,7 @@ CREATE TABLE USER (
 	login varchar(15) NOT NULL UNIQUE,
 	firstname varchar(11) NOT NULL,
 	lastname varchar(11) NOT NULL,
-	password varchar(15) NOT NULL,
+	password varchar(100) NOT NULL,
 	role varchar(12) NOT NULL,
 	constraint u_role_enum check(role in ('USER_DEFAULT','USER_ADMIN'))
 );
