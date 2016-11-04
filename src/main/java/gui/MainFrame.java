@@ -3,10 +3,13 @@ package gui;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import domain.User;
 import service.UserService;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
@@ -26,6 +29,8 @@ public class MainFrame extends AppFrame {
     private JPanel accountsPanel;
     private JPanel groupsPanel;
     private JList accountsList;
+    private JLabel loginAccount;
+    private JLabel nameAccount;
 
     private UserService userService;
 
@@ -57,11 +62,22 @@ public class MainFrame extends AppFrame {
         userLabel.setText(userService.getConnectedUser().getFirstname() + " " + userService.getConnectedUser().getLastname());
         dashboardPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         checkComponentRoles();
+        initAccountsList();
+    }
+
+    public void initAccountsList() {
         try {
             accountsList = new JList(userService.findAll().toArray());
             accountsList.setVisibleRowCount(10);
             accountsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             accountsPanel.add(new JScrollPane(accountsList));
+            accountsList.addListSelectionListener((ListSelectionEvent e) -> {
+                if (!e.getValueIsAdjusting()) {
+                    User userSelected = (User) accountsList.getSelectedValue();
+                    loginAccount.setText(userSelected.getLogin());
+                    nameAccount.setText(userSelected.getFirstname() + " " + userSelected.getLastname());
+                }
+            });
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -151,17 +167,27 @@ public class MainFrame extends AppFrame {
         accountsPanel = new JPanel();
         accountsPanel.setLayout(new BorderLayout(0, 0));
         contentPanel.add(accountsPanel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        final JLabel label1 = new JLabel();
-        label1.setText("GESTION DES COMPTES");
-        accountsPanel.add(label1, BorderLayout.NORTH);
+        final JPanel panel1 = new JPanel();
+        panel1.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
+        accountsPanel.add(panel1, BorderLayout.EAST);
+        loginAccount = new JLabel();
+        loginAccount.setFont(new Font(loginAccount.getFont().getName(), loginAccount.getFont().getStyle(), 18));
+        loginAccount.setText("Label");
+        panel1.add(loginAccount, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_NORTHWEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        nameAccount = new JLabel();
+        nameAccount.setText("Label");
+        panel1.add(nameAccount, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_NORTHWEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JPanel panel2 = new JPanel();
+        panel2.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        accountsPanel.add(panel2, BorderLayout.CENTER);
         accountsList = new JList();
-        accountsPanel.add(accountsList, BorderLayout.CENTER);
+        panel2.add(accountsList, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         groupsPanel = new JPanel();
         groupsPanel.setLayout(new GridLayoutManager(2, 2, new Insets(0, 0, 0, 0), -1, -1));
         contentPanel.add(groupsPanel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        final JLabel label2 = new JLabel();
-        label2.setText("GESTION DES GROUPES");
-        groupsPanel.add(label2, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label1 = new JLabel();
+        label1.setText("GESTION DES GROUPES");
+        groupsPanel.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
         groupsPanel.add(spacer1, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         final Spacer spacer2 = new Spacer();
