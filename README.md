@@ -27,6 +27,17 @@ Il existe un compte unique nommé Administrateur qui dispose de droits étendus 
 * `mvn exec:java` : Execution du projet
 * `mvn clean compile assembly:single` : Génération d'un fichier JAR exécutable
 
+# Ne pas oublier
+* Installer le plugin Lombok sur IntelliJ
+* Dans GUI Designer d'IntelliJ, générer en code Java
+* Ajouter un fichier config.yml dans resources contenant :  
+db:
+    driver: jdbc:mysql
+    hote: localhost:8889
+    base: chat_book
+    login: root
+    password: root
+
 ## Suivi
 Trello : https://trello.com/b/fks7bbBR/chat-book
 
