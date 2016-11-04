@@ -4,6 +4,9 @@ import domain.User;
 import lombok.Data;
 import persistence.UserMapper;
 
+import java.sql.SQLException;
+import java.util.List;
+
 @Data
 public class UserService {
     public static UserService instance = null;
@@ -27,5 +30,9 @@ public class UserService {
     public User findByCredentials(String login, String password) throws Exception {
         this.connectedUser = userMapper.findByCredentials(login, securityService.encrypt(password));
         return this.connectedUser;
+    }
+
+    public List<User> findAll() throws SQLException {
+        return userMapper.findAll();
     }
 }

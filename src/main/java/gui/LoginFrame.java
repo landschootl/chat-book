@@ -88,11 +88,7 @@ public class LoginFrame extends AppFrame {
     public void checkUser(User user) {
         if (user != null) {
             this.setVisible(false);
-            if (user.getRole().equals("USER_ADMIN")) {
-                new AdminFrame();
-            } else {
-                new UserFrame();
-            }
+            new MainFrame();
         } else {
             this.errorLabel.setText("Identifiant / Mot de passe incorrects");
         }

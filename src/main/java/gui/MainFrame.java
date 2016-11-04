@@ -2,14 +2,16 @@ package gui;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
+import com.intellij.uiDesigner.core.Spacer;
 import service.UserService;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.sql.SQLException;
 
-public class AdminFrame extends AppFrame {
+public class MainFrame extends AppFrame {
     private JPanel navPanel;
     private JLabel titleLabel;
     private JPanel mainPanel;
@@ -23,10 +25,11 @@ public class AdminFrame extends AppFrame {
     private JPanel contentPanel;
     private JPanel accountsPanel;
     private JPanel groupsPanel;
+    private JList accountsList;
 
     private UserService userService;
 
-    public AdminFrame() {
+    public MainFrame() {
         this.userService = UserService.getInstance();
         this.setContentPane(this.mainPanel);
         cleanPanels();
@@ -34,7 +37,12 @@ public class AdminFrame extends AppFrame {
         initComponents();
         configDeconnectButton();
         configDashboard();
-        this.setTitle("Chatbook - Admin");
+        if (userService.getConnectedUser().getRole().equals("USER_ADMIN")) {
+            this.setTitle("Chatbook - Admin");
+            this.titleLabel.setText("chatbook - admin");
+        } else {
+            this.setTitle("Chatbook - " + userService.getConnectedUser().getFirstname() + " " + userService.getConnectedUser().getLastname());
+        }
         this.setVisible(true);
     }
 
@@ -48,6 +56,21 @@ public class AdminFrame extends AppFrame {
         userLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
         userLabel.setText(userService.getConnectedUser().getFirstname() + " " + userService.getConnectedUser().getLastname());
         dashboardPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        checkComponentRoles();
+        try {
+            accountsList = new JList(userService.findAll().toArray());
+            accountsList.setVisibleRowCount(10);
+            accountsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            accountsPanel.add(new JScrollPane(accountsList));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void checkComponentRoles() {
+        if (userService.getConnectedUser().getRole().equals("USER_DEFAULT")) {
+            accountsButton.setVisible(false);
+        }
     }
 
     public void configDashboard() {
@@ -96,7 +119,7 @@ public class AdminFrame extends AppFrame {
         titleLabel.setFont(new Font("Lucida Grande", Font.BOLD, 24));
         titleLabel.setForeground(new Color(-1705985));
         titleLabel.setHorizontalAlignment(2);
-        titleLabel.setText("chatbook - admin");
+        titleLabel.setText("chatbook");
         navPanel.add(titleLabel, BorderLayout.WEST);
         userPanel = new JPanel();
         userPanel.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
@@ -131,12 +154,18 @@ public class AdminFrame extends AppFrame {
         final JLabel label1 = new JLabel();
         label1.setText("GESTION DES COMPTES");
         accountsPanel.add(label1, BorderLayout.NORTH);
+        accountsList = new JList();
+        accountsPanel.add(accountsList, BorderLayout.CENTER);
         groupsPanel = new JPanel();
-        groupsPanel.setLayout(new BorderLayout(0, 0));
+        groupsPanel.setLayout(new GridLayoutManager(2, 2, new Insets(0, 0, 0, 0), -1, -1));
         contentPanel.add(groupsPanel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JLabel label2 = new JLabel();
         label2.setText("GESTION DES GROUPES");
-        groupsPanel.add(label2, BorderLayout.NORTH);
+        groupsPanel.add(label2, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final Spacer spacer1 = new Spacer();
+        groupsPanel.add(spacer1, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        final Spacer spacer2 = new Spacer();
+        groupsPanel.add(spacer2, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
     }
 
     /**
