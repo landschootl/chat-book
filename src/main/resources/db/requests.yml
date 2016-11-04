@@ -2,3 +2,6 @@ select:
   user.by.credentials: SELECT id, login, firstname, lastname, role
                         FROM USER
                         WHERE login = ? AND password = ?;
+
+  all.users: SELECT id, login, firstname, lastname, role
+              FROM USER;
