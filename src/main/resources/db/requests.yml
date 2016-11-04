@@ -1,11 +1,3 @@
-# CONFIG DB
-db:
-  driver: jdbc:mysql
-  hote: localhost:8889
-  base: chat_book
-  login: root
-  password: root
-
 select:
   user.by.credentials: SELECT id, login, firstname, lastname, role
                         FROM USER

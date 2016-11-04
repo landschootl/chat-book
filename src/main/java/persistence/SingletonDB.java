@@ -37,7 +37,7 @@ public class SingletonDB {
     }
 
     private void loadConfig() {
-        ResourceBundle bundle = ResourceBundle.getBundle("chatbook", YamlResourceBundle.Control.INSTANCE);
+        ResourceBundle bundle = ResourceBundle.getBundle("config", YamlResourceBundle.Control.INSTANCE);
         this.DB_DRIVER = bundle.getString("db.driver");
         this.DB_HOTE = bundle.getString("db.hote");
         this.DB_BASE = bundle.getString("db.base");

@@ -17,7 +17,7 @@ public class UserMapper {
 
     private UserMapper() {
         this.db = SingletonDB.getInstance().getDb();
-        this.bundle = ResourceBundle.getBundle("chatbook", YamlResourceBundle.Control.INSTANCE);
+        this.bundle = ResourceBundle.getBundle("requests", YamlResourceBundle.Control.INSTANCE);
     }
 
     public static UserMapper getInstance() {
