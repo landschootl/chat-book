@@ -8,7 +8,7 @@ public abstract class AppFrame extends JFrame {
         this.setSize(800, 600);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
-        this.setResizable(true);
+        this.setResizable(false);
     }
 
     public abstract void initComponents();
