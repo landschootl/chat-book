@@ -1,22 +1,19 @@
 package persistence;
 
 import domain.User;
-import net.rakugakibox.util.YamlResourceBundle;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
-public class UserMapper {
+public class UserMapper extends Mapper {
     public static UserMapper instance = null;
 
-    protected Connection db;
-    protected ResourceBundle bundle;
-
     private UserMapper() {
-        this.db = SingletonDB.getInstance().getDb();
-        this.bundle = ResourceBundle.getBundle("db/requests", YamlResourceBundle.Control.INSTANCE);
+        super();
     }
 
     public static UserMapper getInstance() {
