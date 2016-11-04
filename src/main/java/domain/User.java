@@ -17,7 +17,7 @@ public class User {
         return login + " - " +
                 firstname + " " +
                 lastname + " - " +
-                role;
+                getRole();
     }
 
     public String getRole() {
@@ -27,5 +27,6 @@ public class User {
             case "USER_DEFAULT":
                 return "Utilisateur";
         }
+        return "Utilisateur";
     }
 }
