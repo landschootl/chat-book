@@ -4,6 +4,7 @@ import domain.Group;
 import domain.User;
 import persistence.GroupMapper;
 
+import java.sql.SQLException;
 import java.util.List;
 
 
@@ -26,7 +27,7 @@ public class GroupService {
         return instance;
     }
 
-    public List<Group> findAll(){
+    public List<Group> findAll() throws SQLException {
         return groupMapper.findAll();
     }
 

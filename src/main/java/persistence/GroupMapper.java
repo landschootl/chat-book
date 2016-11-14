@@ -5,8 +5,13 @@ import domain.User;
 import net.rakugakibox.util.YamlResourceBundle;
 import org.omg.CORBA.NO_IMPLEMENT;
 import service.GroupService;
+import service.UserService;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -27,8 +32,21 @@ public class GroupMapper extends Mapper {
         return instance;
     }
 
-    public List<Group> findAll() {
-        throw new NO_IMPLEMENT();
+    public List<Group> findAll() throws SQLException {
+        List <Group> groups = new ArrayList<>();
+        Statement statement = db.createStatement();
+        ResultSet rs = statement.executeQuery(this.bundle.getString("select.all.groups"));
+
+        while(rs.next()) {
+            groups.add(Group.builder()
+                    .id(rs.getInt(1))
+                    .admin(rs.getString(2))
+                    .name(rs.getString(3))
+                    .build());
+        }
+        rs.close();
+
+        return groups;
     }
 
     public Group findById(int id) {

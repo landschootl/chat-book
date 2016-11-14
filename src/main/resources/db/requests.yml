@@ -1,7 +1,10 @@
 select:
-  user.by.credentials: SELECT id, login, firstname, lastname, role
-                        FROM USER
-                        WHERE login = ? AND password = ?;
+    user.by.credentials: SELECT id, login, firstname, lastname, role
+        FROM USER
+        WHERE login = ? AND password = ?;
 
-  all.users: SELECT id, login, firstname, lastname, role
-              FROM USER;
+    all.users: SELECT id, login, firstname, lastname, role
+        FROM USER;
+
+    all.groups: SELECT id, id_mod, name
+        FROM CONNECTION;

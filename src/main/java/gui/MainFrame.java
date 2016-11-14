@@ -2,8 +2,8 @@ package gui;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import com.intellij.uiDesigner.core.Spacer;
 import domain.User;
+import service.GroupService;
 import service.UserService;
 
 import javax.swing.*;
@@ -37,9 +37,11 @@ public class MainFrame extends AppFrame {
     private JPanel groupsPanelRight;
 
     private UserService userService;
+    private GroupService groupService;
 
     public MainFrame() {
         this.userService = UserService.getInstance();
+        this.groupService = GroupService.getInstance();
         this.setContentPane(this.mainPanel);
         cleanPanels();
         initFrame();
@@ -67,6 +69,7 @@ public class MainFrame extends AppFrame {
         dashboardPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         checkComponentRoles();
         initAccountsList();
+        initGroupsList();
     }
 
     public void initAccountsList() {
@@ -82,6 +85,24 @@ public class MainFrame extends AppFrame {
                     nameAccount.setText(userSelected.getFirstname() + " " + userSelected.getLastname());
                 }
             });
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void initGroupsList() {
+        try {
+            groupsList = new JList(groupService.findAll().toArray());
+            groupsList.setVisibleRowCount(10);
+            groupsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            groupsPanel.add(new JScrollPane(groupsList));
+//            groupsPanel.addListSelectionListener((ListSelectionEvent e) -> {
+//                if (!e.getValueIsAdjusting()) {
+//                    User userSelected = (User) accountsList.getSelectedValue();
+//                    loginAccount.setText(userSelected.getLogin());
+//                    nameAccount.setText(userSelected.getFirstname() + " " + userSelected.getLastname());
+//                }
+//            });
         } catch (SQLException e) {
             e.printStackTrace();
         }
