@@ -2,6 +2,7 @@ package gui;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
+import domain.Group;
 import domain.User;
 import service.GroupService;
 import service.UserService;
@@ -35,6 +36,8 @@ public class MainFrame extends AppFrame {
     private JList groupsList;
     private JPanel groupsPanelLeft;
     private JPanel groupsPanelRight;
+    private JLabel adminGroup;
+    private JLabel nameGroup;
 
     private UserService userService;
     private GroupService groupService;
@@ -92,24 +95,28 @@ public class MainFrame extends AppFrame {
 
     public void initGroupsList() {
         try {
-            groupsList = new JList(groupService.findAll().toArray());
+            if ("Administrateur".equals(userService.getConnectedUser().getRole())) {
+                groupsList = new JList(groupService.findAll().toArray());
+            } else {
+                groupsList = new JList(groupService.findByUser().toArray());
+            }
             groupsList.setVisibleRowCount(10);
             groupsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             groupsPanel.add(new JScrollPane(groupsList));
-//            groupsPanel.addListSelectionListener((ListSelectionEvent e) -> {
-//                if (!e.getValueIsAdjusting()) {
-//                    User userSelected = (User) accountsList.getSelectedValue();
-//                    loginAccount.setText(userSelected.getLogin());
-//                    nameAccount.setText(userSelected.getFirstname() + " " + userSelected.getLastname());
-//                }
-//            });
+            groupsList.addListSelectionListener((ListSelectionEvent e) -> {
+                if (!e.getValueIsAdjusting()) {
+                    Group groupSelected = (Group) groupsList.getSelectedValue();
+                    nameGroup.setText(groupSelected.getName());
+                    adminGroup.setText(groupSelected.getAdmin());
+                }
+            });
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     public void checkComponentRoles() {
-        if (userService.getConnectedUser().getRole().equals("USER_DEFAULT")) {
+        if ("Utilisateur".equals(userService.getConnectedUser().getRole())) {
             accountsButton.setVisible(false);
         }
     }
@@ -223,10 +230,17 @@ public class MainFrame extends AppFrame {
         groupsList = new JList();
         groupsPanelLeft.add(groupsList, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         groupsPanelRight = new JPanel();
-        groupsPanelRight.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        groupsPanelRight.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         groupsPanelRight.setOpaque(true);
         groupsPanelRight.setPreferredSize(new Dimension(400, 50));
         groupsPanel.add(groupsPanelRight, BorderLayout.EAST);
+        nameGroup = new JLabel();
+        nameGroup.setFont(new Font(nameGroup.getFont().getName(), nameGroup.getFont().getStyle(), 18));
+        nameGroup.setText("");
+        groupsPanelRight.add(nameGroup, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_NORTHWEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        adminGroup = new JLabel();
+        adminGroup.setText("");
+        groupsPanelRight.add(adminGroup, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_NORTHWEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**

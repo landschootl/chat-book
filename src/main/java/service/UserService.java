@@ -35,4 +35,5 @@ public class UserService {
     public List<User> findAll() throws SQLException {
         return userMapper.findAll();
     }
+    
 }

@@ -25,13 +25,10 @@ public class UserMapper extends Mapper {
 
     public User findByCredentials(String login, String password) throws SQLException {
         User user = null;
-        PreparedStatement preparedStatement;
-        ResultSet rs;
-
         preparedStatement = db.prepareStatement(this.bundle.getString("select.user.by.credentials"));
         preparedStatement.setString(1, login);
         preparedStatement.setString(2, password);
-        rs = preparedStatement.executeQuery();
+        ResultSet rs = preparedStatement.executeQuery();
 
         while(rs.next()) {
             user = User.builder()
@@ -49,11 +46,7 @@ public class UserMapper extends Mapper {
 
     public List<User> findAll() throws SQLException {
         List<User> users = new ArrayList<>();
-        Statement statement;
-        ResultSet rs;
-
-        statement = db.createStatement();
-        rs = statement.executeQuery(this.bundle.getString("select.all.users"));
+        ResultSet rs = statement.executeQuery(this.bundle.getString("select.all.users"));
 
         while(rs.next()) {
             users.add(User.builder()
