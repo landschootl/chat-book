@@ -34,7 +34,7 @@ public class GroupMapper extends Mapper {
 
     public List<Group> findAll() throws SQLException {
         List <Group> groups = new ArrayList<>();
-        ResultSet rs = statement.executeQuery(this.bundle.getString("select.all.groups"));
+        ResultSet rs = statement.executeQuery(this.bundle.getString("select.groups.all"));
 
         while(rs.next()) {
             groups.add(Group.builder()
@@ -50,7 +50,7 @@ public class GroupMapper extends Mapper {
 
     public List<Group> findByUser() throws SQLException {
         List <Group> groups = new ArrayList<>();
-        ResultSet rs = statement.executeQuery(this.bundle.getString("select.by.user"));
+        ResultSet rs = statement.executeQuery(this.bundle.getString("select.groups.by.user"));
 
         while(rs.next()) {
             groups.add(Group.builder()

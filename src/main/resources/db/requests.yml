@@ -6,5 +6,8 @@ select:
     all.users: SELECT id, login, firstname, lastname, role
         FROM USER;
 
-    all.groups: SELECT id, id_mod, name
+    groups.all: SELECT id, id_mod, name
+        FROM CONNECTION;
+
+    groups.by.user: SELECT id, id_mod, name
         FROM CONNECTION;
