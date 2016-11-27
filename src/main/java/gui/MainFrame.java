@@ -30,7 +30,6 @@ public class MainFrame extends AppFrame {
     private JPanel groupsPanel;
     private JList accountsList;
     private JLabel loginAccount;
-    private JLabel nameAccount;
     private JPanel accountsPanelRight;
     private JPanel accountsPanelLeft;
     private JList groupsList;
@@ -38,6 +37,12 @@ public class MainFrame extends AppFrame {
     private JPanel groupsPanelRight;
     private JLabel adminGroup;
     private JLabel nameGroup;
+
+    private JTextField nameAccountField;
+    private JTextField firstnameAccountField;
+    JRadioButton adminButton;
+    JRadioButton userButton;
+    ButtonGroup rolesGroup;
 
     private UserService userService;
     private GroupService groupService;
@@ -72,6 +77,7 @@ public class MainFrame extends AppFrame {
         dashboardPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         checkComponentRoles();
         initAccountsList();
+        initAccountsPanelRight();
         initGroupsList();
     }
 
@@ -85,12 +91,45 @@ public class MainFrame extends AppFrame {
                 if (!e.getValueIsAdjusting()) {
                     User userSelected = (User) accountsList.getSelectedValue();
                     loginAccount.setText(userSelected.getLogin());
-                    nameAccount.setText(userSelected.getFirstname() + " " + userSelected.getLastname());
+                    nameAccountField.setText(userSelected.getLastname());
+                    firstnameAccountField.setText(userSelected.getFirstname());
+                    System.out.println(userSelected.getRole());
+                    if (userSelected.getRole().equals("Administrateur")) {
+                        adminButton.setSelected(true);
+                        userButton.setSelected(false);
+                    } else {
+                        userButton.setSelected(true);
+                        adminButton.setSelected(false);
+                    }
                 }
             });
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void initAccountsPanelRight() {
+        accountsPanelRight.setLayout(new BoxLayout(accountsPanelRight, BoxLayout.Y_AXIS));
+        accountsPanelRight.setBorder(new EmptyBorder(0, 10, 10, 10));
+        loginAccount.setBorder(new EmptyBorder(0, 0, 10, 0));
+        JPanel infosAccountPanel = new JPanel();
+        nameAccountField = new JTextField();
+        firstnameAccountField = new JTextField();
+        infosAccountPanel.setLayout(new GridLayout(3, 3));
+        infosAccountPanel.add(new JLabel("Nom"));
+        infosAccountPanel.add(nameAccountField);
+        infosAccountPanel.add(new JLabel("Prénom"));
+        infosAccountPanel.add(firstnameAccountField);
+        accountsPanelRight.add(infosAccountPanel);
+        adminButton = new JRadioButton("Admin");
+        adminButton.setActionCommand("USER_ADMIN");
+        userButton = new JRadioButton("Utilisateur");
+        userButton.setActionCommand("USER_DEFAULT");
+        rolesGroup = new ButtonGroup();
+        rolesGroup.add(adminButton);
+        rolesGroup.add(userButton);
+        accountsPanelRight.add(adminButton);
+        accountsPanelRight.add(userButton);
     }
 
     public void initGroupsList() {
@@ -200,7 +239,7 @@ public class MainFrame extends AppFrame {
         accountsPanel.setLayout(new BorderLayout(0, 0));
         contentPanel.add(accountsPanel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         accountsPanelRight = new JPanel();
-        accountsPanelRight.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
+        accountsPanelRight.setLayout(new BorderLayout(0, 0));
         accountsPanelRight.setOpaque(true);
         accountsPanelRight.setPreferredSize(new Dimension(400, 50));
         accountsPanel.add(accountsPanelRight, BorderLayout.EAST);
@@ -210,12 +249,7 @@ public class MainFrame extends AppFrame {
         loginAccount.setText("");
         loginAccount.setVerticalAlignment(1);
         loginAccount.setVerticalTextPosition(1);
-        accountsPanelRight.add(loginAccount, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_NORTHWEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        nameAccount = new JLabel();
-        nameAccount.setText("");
-        nameAccount.setVerticalAlignment(1);
-        nameAccount.setVerticalTextPosition(1);
-        accountsPanelRight.add(nameAccount, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_NORTHWEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        accountsPanelRight.add(loginAccount, BorderLayout.WEST);
         accountsPanelLeft = new JPanel();
         accountsPanelLeft.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         accountsPanel.add(accountsPanelLeft, BorderLayout.WEST);

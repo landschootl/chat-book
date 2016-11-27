@@ -99,8 +99,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <grid id="9c3a9" binding="accountsPanelRight" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                    <margin top="0" left="0" bottom="0" right="0"/>
+                  <grid id="9c3a9" binding="accountsPanelRight" layout-manager="BorderLayout" hgap="0" vgap="0">
                     <constraints border-constraint="East"/>
                     <properties>
                       <opaque value="true"/>
@@ -109,22 +108,10 @@
                     <border type="none"/>
                     <children>
                       <component id="e7800" class="javax.swing.JLabel" binding="loginAccount">
-                        <constraints>
-                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
+                        <constraints border-constraint="West"/>
                         <properties>
                           <font size="18"/>
                           <horizontalTextPosition value="11"/>
-                          <text value=""/>
-                          <verticalAlignment value="1"/>
-                          <verticalTextPosition value="1"/>
-                        </properties>
-                      </component>
-                      <component id="86e7f" class="javax.swing.JLabel" binding="nameAccount">
-                        <constraints>
-                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
                           <text value=""/>
                           <verticalAlignment value="1"/>
                           <verticalTextPosition value="1"/>
