@@ -34,7 +34,7 @@ public class GroupMapper extends Mapper {
         while(rs.next()) {
             groups.add(Group.builder()
                     .id(rs.getInt(1))
-                    .admin(rs.getString(2))
+                    .admin(rs.getInt(2))
                     .name(rs.getString(3))
                     .build());
         }
@@ -50,7 +50,7 @@ public class GroupMapper extends Mapper {
         while(rs.next()) {
             groups.add(Group.builder()
                     .id(rs.getInt(1))
-                    .admin(rs.getString(2))
+                    .admin(rs.getInt(2))
                     .name(rs.getString(3))
                     .build());
         }
