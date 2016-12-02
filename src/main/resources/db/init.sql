@@ -39,6 +39,6 @@ INSERT INTO USER_HOBBIES VALUES (default, 3, 1);
 INSERT INTO USER_HOBBIES VALUES (default, 3, 3);
 
 /****************** Insertion groupe ******************/
-INSERT INTO CONNECTION VALUES (default, 1, "ludo-lauthieb");
-INSERT INTO USER_CONNECTION VALUES (default, (SELECT id FROM CONNECTION WHERE name="ludo-laut"), 1);
-INSERT INTO USER_CONNECTION VALUES (default, (SELECT id FROM CONNECTION WHERE name="ludo-laut"), 2);
+INSERT INTO CONNECTION VALUES (default, 1, "ludothieb");
+INSERT INTO USER_CONNECTION VALUES (default, (SELECT id FROM CONNECTION WHERE name="ludothieb"), 1);
+INSERT INTO USER_CONNECTION VALUES (default, (SELECT id FROM CONNECTION WHERE name="ludothieb"), 2);
