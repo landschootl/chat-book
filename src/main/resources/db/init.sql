@@ -1,5 +1,5 @@
 /****************** Insertion centres intêrets ******************/
-INSERT INTO HOBBIES VALUES (default, "Sport");
+/*INSERT INTO HOBBIES VALUES (default, "Sport");
 INSERT INTO HOBBY VALUES (default, 1, "Football");
 INSERT INTO HOBBY VALUES (default, 1, "Rugby");
 INSERT INTO HOBBY VALUES (default, 1, "Natation");
@@ -17,7 +17,7 @@ INSERT INTO HOBBY VALUES (default, 3, "Allemagne");
 INSERT INTO HOBBIES VALUES (default, "Theatre");
 INSERT INTO HOBBY VALUES (default, 4, "Comedie");
 INSERT INTO HOBBY VALUES (default, 4, "Tragedie");
-INSERT INTO HOBBY VALUES (default, 4, "Moliere");
+INSERT INTO HOBBY VALUES (default, 4, "Moliere");*/
 
 /****************** Insertion compte utilisateur ******************/
 -- Compte administrateur

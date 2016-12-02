@@ -2,7 +2,7 @@ package service;
 
 import domain.Group;
 import domain.User;
-import persistence.GroupMapper;
+import persistence.db.GroupMapper;
 
 import java.sql.SQLException;
 import java.util.List;

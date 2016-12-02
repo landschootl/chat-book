@@ -1,4 +1,4 @@
-package persistence;
+package persistence.db;
 
 import net.rakugakibox.util.YamlResourceBundle;
 

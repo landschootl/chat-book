@@ -93,7 +93,6 @@ public class MainFrame extends AppFrame {
                     loginAccount.setText(userSelected.getLogin());
                     nameAccountField.setText(userSelected.getLastname());
                     firstnameAccountField.setText(userSelected.getFirstname());
-                    System.out.println(userSelected.getRole());
                     if (userSelected.getRole().equals("Administrateur")) {
                         adminButton.setSelected(true);
                         userButton.setSelected(false);

@@ -2,7 +2,7 @@ package service;
 
 import domain.User;
 import lombok.Data;
-import persistence.UserMapper;
+import persistence.db.UserMapper;
 
 import java.sql.SQLException;
 import java.util.List;

@@ -18,7 +18,7 @@ CREATE TABLE USER (
 );
 
 -- Table des groupes de centres d'intêrets
-DROP TABLE IF EXISTS HOBBIES;
+/*DROP TABLE IF EXISTS HOBBIES;
 CREATE TABLE HOBBIES (
 	id int NOT NULL AUTO_INCREMENT primary key,
 	name varchar(9) NOT NULL
@@ -51,7 +51,7 @@ CREATE TABLE USER_HOBBY (
 	id_hobby int NOT NULL,
 	foreign key (id_user) REFERENCES USER(id),
 	foreign key (id_hobby) REFERENCES HOBBY(id)
-);
+);*/
 
 -- Table de relation entre deux utilisateurs amis
 DROP TABLE IF EXISTS FRIEND;

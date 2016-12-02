@@ -1,4 +1,4 @@
-package persistence;
+package persistence.db;
 
 import net.rakugakibox.util.YamlResourceBundle;
 
@@ -7,8 +7,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
-
-import static javafx.scene.input.KeyCode.T;
 
 /**
  * Created by landschoot on 04/11/16.

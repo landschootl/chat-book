@@ -1,16 +1,11 @@
-package persistence;
+package persistence.db;
 
 import domain.Group;
 import domain.User;
-import net.rakugakibox.util.YamlResourceBundle;
 import org.omg.CORBA.NO_IMPLEMENT;
-import service.GroupService;
-import service.UserService;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.*;
 
 /**
