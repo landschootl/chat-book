@@ -10,6 +10,6 @@ import lombok.Data;
 @Builder
 public class Group {
     private int id;
-    private int admin;
+    private IUser mod;
     private String name;
 }

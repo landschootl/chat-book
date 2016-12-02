@@ -1,5 +1,6 @@
 package persistence.db;
 
+import domain.IUser;
 import domain.User;
 import domain.enums.Role;
 import persistence.uow.UnitOfWork;
@@ -67,6 +68,28 @@ public class UserMapper extends Mapper {
         rs.close();
 
         return users;
+    }
+
+    public IUser findByIdentifiant(String identifiant) throws SQLException {
+        IUser user = null;
+        preparedStatement = db.prepareStatement(this.bundle.getString("select.user.by.identifiant"));
+        preparedStatement.setString(1, identifiant);
+        ResultSet rs = preparedStatement.executeQuery();
+
+        while(rs.next()) {
+            user = (User) User.builder()
+                    .id(rs.getInt(1))
+                    .login(rs.getString(2))
+                    .firstname(rs.getString(3))
+                    .lastname(rs.getString(4))
+                    .role(Role.valueOf(rs.getString(5)))
+                    .obs(new ArrayList<>())
+                    .build();
+            user.add(UnitOfWork.getInstance());
+        }
+        rs.close();
+
+        return user;
     }
 
     public void update(User user) {

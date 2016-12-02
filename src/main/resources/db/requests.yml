@@ -3,6 +3,10 @@ select:
         FROM USER
         WHERE login = ? AND password = ?;
 
+    user.by.identifiant: SELECT id, login, firstname, lastname, role
+            FROM USER
+            WHERE id = ?;
+
     all.users: SELECT id, login, firstname, lastname, role
         FROM USER;
 

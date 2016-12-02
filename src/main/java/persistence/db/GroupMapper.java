@@ -1,8 +1,11 @@
 package persistence.db;
 
 import domain.Group;
+import domain.IUser;
 import domain.User;
 import org.omg.CORBA.NO_IMPLEMENT;
+import persistence.vp.UserFactory;
+import persistence.vp.VirtualProxyBuilder;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -33,9 +36,9 @@ public class GroupMapper extends Mapper {
 
         while(rs.next()) {
             groups.add(Group.builder()
-                    .id(rs.getInt(1))
-                    .admin(rs.getString(2))
-                    .name(rs.getString(3))
+                    .id(rs.getInt("id"))
+                    .mod(new VirtualProxyBuilder<>(IUser.class, new UserFactory(rs.getString("id_mod"))).getProxy())
+                    .name(rs.getString("name"))
                     .build());
         }
         rs.close();
@@ -49,9 +52,9 @@ public class GroupMapper extends Mapper {
 
         while(rs.next()) {
             groups.add(Group.builder()
-                    .id(rs.getInt(1))
-                    .admin(rs.getString(2))
-                    .name(rs.getString(3))
+                    .id(rs.getInt("id"))
+                    .mod(new VirtualProxyBuilder<>(IUser.class, new UserFactory(rs.getString("id_mod"))).getProxy())
+                    .name(rs.getString("name"))
                     .build());
         }
         rs.close();

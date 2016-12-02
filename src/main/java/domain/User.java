@@ -10,7 +10,7 @@ import java.util.List;
 
 @Builder
 @Getter
-public class User implements IDomainObject {
+public class User implements IUser{
     List<Observer> obs;
 
     private int id;
@@ -52,6 +52,12 @@ public class User implements IDomainObject {
 
     public void setRole(Role role) {
         this.role = role;
+        notif();
+    }
+
+    @Override
+    public void setLogin(String login) {
+        this.login = login;
         notif();
     }
 }
