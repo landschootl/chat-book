@@ -59,4 +59,8 @@ public class UserMapper extends Mapper {
 
         return users;
     }
+
+    public void update(User u) {
+
+    }
 }
