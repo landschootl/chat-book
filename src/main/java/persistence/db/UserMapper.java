@@ -104,4 +104,14 @@ public class UserMapper extends Mapper {
             e.printStackTrace();
         }
     }
+
+    public void delete(User user) {
+        try {
+            PreparedStatement preparedStatement = db.prepareStatement(this.bundle.getString("delete.user.by.identifiant"));
+            preparedStatement.setInt(1, user.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

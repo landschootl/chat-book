@@ -23,3 +23,8 @@ update:
     lastname = ?,
     role = ?
     WHERE id = ?;
+
+delete:
+  user.by.identifiant:
+    DELETE FROM USER
+    WHERE id = ?;

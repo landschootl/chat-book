@@ -35,5 +35,9 @@ public class UserService {
     public List<User> findAll() throws SQLException {
         return userMapper.findAll();
     }
+
+    public void delete(User user) {
+        userMapper.delete(user);
+    }
     
 }

@@ -51,6 +51,7 @@ public class MainFrame extends AppFrame {
     private JRadioButton adminButton;
     private JRadioButton userButton;
     private JButton updateAccountButton;
+    private JButton deleteAccountButton;
     private ButtonGroup rolesGroup;
 
     private JTextField zoneTextDiscution;
@@ -173,6 +174,16 @@ public class MainFrame extends AppFrame {
             JOptionPane.showMessageDialog(new JFrame(), "Mise à jour effectuée.");
         });
         accountsPanelRight.add(updateAccountButton);
+
+        deleteAccountButton = new JButton("Supprimer");
+        deleteAccountButton.addActionListener((ActionEvent e) -> {
+            /**
+             * TODO: Supprimer de la JList
+             */
+            this.userService.delete(userSelected);
+            JOptionPane.showMessageDialog(new JFrame(), "Suppression effectuée.");
+        });
+        accountsPanelRight.add(deleteAccountButton);
     }
 
     public void initGroupsList() {
