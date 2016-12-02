@@ -1,14 +1,15 @@
 package domain;
 
+import domain.enums.Role;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import persistence.uow.Observer;
 import persistence.uow.Visitor;
 
 import java.util.List;
 
-@Data
 @Builder
+@Getter
 public class User implements IDomainObject {
     List<Observer> obs;
 
@@ -16,23 +17,11 @@ public class User implements IDomainObject {
     private String login;
     private String firstname;
     private String lastname;
-    private String role;
+    private Role role;
 
     @Override
     public String toString() {
-        return firstname + " " +
-                lastname + " - " +
-                getRole();
-    }
-
-    public String getRole() {
-        switch(role) {
-            case "USER_ADMIN":
-                return "Administrateur";
-            case "USER_DEFAULT":
-                return "Utilisateur";
-        }
-        return "Utilisateur";
+        return firstname + " " + lastname;
     }
 
     @Override
@@ -49,5 +38,20 @@ public class User implements IDomainObject {
     public void notif() {
         for (Observer o : obs)
             o.action(this);
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+        notif();
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+        notif();
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+        notif();
     }
 }

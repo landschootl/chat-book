@@ -10,8 +10,8 @@ DROP TABLE IF EXISTS USER;
 CREATE TABLE USER (
 	id int NOT NULL AUTO_INCREMENT primary key,
 	login varchar(15) NOT NULL UNIQUE,
-	firstname varchar(11) NOT NULL,
-	lastname varchar(11) NOT NULL,
+	firstname varchar(50) NOT NULL,
+	lastname varchar(50) NOT NULL,
 	password varchar(100) NOT NULL,
 	role varchar(12) NOT NULL,
 	constraint u_role_enum check(role in ('USER_DEFAULT','USER_ADMIN'))

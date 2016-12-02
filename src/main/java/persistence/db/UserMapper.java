@@ -1,7 +1,10 @@
 package persistence.db;
 
 import domain.User;
+import domain.enums.Role;
+import persistence.uow.UnitOfWork;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -34,8 +37,10 @@ public class UserMapper extends Mapper {
                     .login(rs.getString(2))
                     .firstname(rs.getString(3))
                     .lastname(rs.getString(4))
-                    .role(rs.getString(5))
+                    .role(Role.valueOf(rs.getString(5)))
+                    .obs(new ArrayList<>())
                     .build();
+            user.add(UnitOfWork.getInstance());
         }
         rs.close();
 
@@ -47,20 +52,33 @@ public class UserMapper extends Mapper {
         ResultSet rs = statement.executeQuery(this.bundle.getString("select.all.users"));
 
         while(rs.next()) {
-            users.add(User.builder()
+            User user = User.builder()
                     .id(rs.getInt(1))
                     .login(rs.getString(2))
                     .firstname(rs.getString(3))
                     .lastname(rs.getString(4))
-                    .role(rs.getString(5))
-                    .build());
+                    .role(Role.valueOf(rs.getString(5)))
+                    .obs(new ArrayList<>())
+                    .build();
+            user.add(UnitOfWork.getInstance());
+
+            users.add(user);
         }
         rs.close();
 
         return users;
     }
 
-    public void update(User u) {
-
+    public void update(User user) {
+        try {
+            PreparedStatement preparedStatement = db.prepareStatement(this.bundle.getString("update.user.by.identifiant"));
+            preparedStatement.setString(1, user.getFirstname());
+            preparedStatement.setString(2, user.getLastname());
+            preparedStatement.setString(3, user.getRole().toString());
+            preparedStatement.setInt(4, user.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

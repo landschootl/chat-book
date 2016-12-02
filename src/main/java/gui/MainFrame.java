@@ -4,6 +4,8 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import domain.Group;
 import domain.User;
+import domain.enums.Role;
+import persistence.uow.UnitOfWork;
 import service.GroupService;
 import service.UserService;
 
@@ -40,14 +42,20 @@ public class MainFrame extends AppFrame {
 
     private JTextField nameAccountField;
     private JTextField firstnameAccountField;
-    JRadioButton adminButton;
-    JRadioButton userButton;
-    ButtonGroup rolesGroup;
+    private JRadioButton adminButton;
+    private JRadioButton userButton;
+    private JButton updateAccountButton;
+    private ButtonGroup rolesGroup;
 
     private UserService userService;
     private GroupService groupService;
 
+    private UnitOfWork unitOfWork;
+
+    private User userSelected;
+
     public MainFrame() {
+        this.unitOfWork = UnitOfWork.getInstance();
         this.userService = UserService.getInstance();
         this.groupService = GroupService.getInstance();
         this.setContentPane(this.mainPanel);
@@ -56,7 +64,7 @@ public class MainFrame extends AppFrame {
         initComponents();
         configDeconnectButton();
         configDashboard();
-        if (userService.getConnectedUser().getRole().equals("USER_ADMIN")) {
+        if (userService.getConnectedUser().getRole().equals(Role.USER_ADMIN)) {
             this.setTitle("Chatbook - Admin");
             this.titleLabel.setText("chatbook - admin");
         } else {
@@ -89,11 +97,14 @@ public class MainFrame extends AppFrame {
             accountsPanel.add(new JScrollPane(accountsList));
             accountsList.addListSelectionListener((ListSelectionEvent e) -> {
                 if (!e.getValueIsAdjusting()) {
-                    User userSelected = (User) accountsList.getSelectedValue();
+                    if (this.userSelected != null) {
+                        updateUserInfos();
+                    }
+                    userSelected = (User) accountsList.getSelectedValue();
                     loginAccount.setText(userSelected.getLogin());
                     nameAccountField.setText(userSelected.getLastname());
                     firstnameAccountField.setText(userSelected.getFirstname());
-                    if (userSelected.getRole().equals("Administrateur")) {
+                    if (userSelected.getRole().equals(Role.USER_ADMIN)) {
                         adminButton.setSelected(true);
                         userButton.setSelected(false);
                     } else {
@@ -107,33 +118,56 @@ public class MainFrame extends AppFrame {
         }
     }
 
+    private void updateUserInfos() {
+        this.userSelected.setFirstname(this.firstnameAccountField.getText());
+        this.userSelected.setLastname(this.nameAccountField.getText());
+        if (this.adminButton.isSelected()) {
+            this.userSelected.setRole(Role.USER_ADMIN);
+        } else {
+            this.userSelected.setRole(Role.USER_DEFAULT);
+        }
+    }
+
     public void initAccountsPanelRight() {
         accountsPanelRight.setLayout(new BoxLayout(accountsPanelRight, BoxLayout.Y_AXIS));
         accountsPanelRight.setBorder(new EmptyBorder(0, 10, 10, 10));
         loginAccount.setBorder(new EmptyBorder(0, 0, 10, 0));
+
         JPanel infosAccountPanel = new JPanel();
         nameAccountField = new JTextField();
         firstnameAccountField = new JTextField();
+
         infosAccountPanel.setLayout(new GridLayout(3, 3));
         infosAccountPanel.add(new JLabel("Nom"));
         infosAccountPanel.add(nameAccountField);
         infosAccountPanel.add(new JLabel("Prénom"));
         infosAccountPanel.add(firstnameAccountField);
         accountsPanelRight.add(infosAccountPanel);
-        adminButton = new JRadioButton("Admin");
-        adminButton.setActionCommand("USER_ADMIN");
+
+        adminButton = new JRadioButton("Administrateur");
+        adminButton.setActionCommand(Role.USER_ADMIN.toString());
         userButton = new JRadioButton("Utilisateur");
-        userButton.setActionCommand("USER_DEFAULT");
+        userButton.setActionCommand(Role.USER_DEFAULT.toString());
         rolesGroup = new ButtonGroup();
         rolesGroup.add(adminButton);
         rolesGroup.add(userButton);
         accountsPanelRight.add(adminButton);
         accountsPanelRight.add(userButton);
+
+        updateAccountButton = new JButton("Enregistrer");
+        updateAccountButton.addActionListener((ActionEvent e) -> {
+            if (this.userSelected != null) {
+                updateUserInfos();
+            }
+            this.unitOfWork.commit();
+            JOptionPane.showMessageDialog(new JFrame(), "Mise à jour effectuée.");
+        });
+        accountsPanelRight.add(updateAccountButton);
     }
 
     public void initGroupsList() {
         try {
-            if ("Administrateur".equals(userService.getConnectedUser().getRole())) {
+            if (Role.USER_ADMIN.equals(userService.getConnectedUser().getRole())) {
                 groupsList = new JList(groupService.findAll().toArray());
             } else {
                 groupsList = new JList(groupService.findByUser().toArray());
@@ -154,7 +188,7 @@ public class MainFrame extends AppFrame {
     }
 
     public void checkComponentRoles() {
-        if ("Utilisateur".equals(userService.getConnectedUser().getRole())) {
+        if (!Role.USER_ADMIN.equals(userService.getConnectedUser().getRole())) {
             accountsButton.setVisible(false);
         }
     }
@@ -174,6 +208,7 @@ public class MainFrame extends AppFrame {
         deconnectButton.addActionListener(e -> {
             this.userService.setConnectedUser(null);
             this.setVisible(false);
+            this.unitOfWork.rollback();
             new LoginFrame();
         });
     }

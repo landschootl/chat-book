@@ -11,3 +11,11 @@ select:
 
     groups.by.user: SELECT id, id_mod, name
         FROM CONNECTION;
+
+update:
+  user.by.identifiant:
+    UPDATE USER
+    SET firstname = ?,
+    lastname = ?,
+    role = ?
+    WHERE id = ?;
