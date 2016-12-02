@@ -12,4 +12,9 @@ public class Group {
     private int id;
     private IUser mod;
     private String name;
+
+    @Override
+    public String toString() {
+        return "nom : "+name+" | moderateur : "+mod.getLogin();
+    }
 }
