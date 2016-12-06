@@ -1,5 +1,6 @@
 package persistence.db;
 
+import com.sun.corba.se.impl.orbutil.graph.NodeData;
 import domain.IUser;
 import domain.User;
 import domain.enums.Role;
@@ -70,13 +71,13 @@ public class UserMapper extends Mapper {
         return users;
     }
 
-    public IUser findByIdentifiant(String identifiant) throws SQLException {
+    public IUser findByIdentifiant(String identifiant) throws SQLException, NoDataFoundException {
         IUser user = null;
         preparedStatement = db.prepareStatement(this.bundle.getString("select.user.by.identifiant"));
         preparedStatement.setString(1, identifiant);
         ResultSet rs = preparedStatement.executeQuery();
 
-        while(rs.next()) {
+        if(rs.next()) {
             user = (User) User.builder()
                     .id(rs.getInt(1))
                     .login(rs.getString(2))
@@ -86,6 +87,8 @@ public class UserMapper extends Mapper {
                     .obs(new ArrayList<>())
                     .build();
             user.add(UnitOfWork.getInstance());
+        } else {
+            throw new NoDataFoundException("Utilisateur introuvable");
         }
         rs.close();
 

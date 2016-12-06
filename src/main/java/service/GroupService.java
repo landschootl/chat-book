@@ -31,8 +31,8 @@ public class GroupService {
         return groupMapper.findAll();
     }
 
-    public List<Group> findByUser() throws SQLException {
-        return groupMapper.findByUser();
+    public List<Group> findByUser(User user) throws SQLException {
+        return groupMapper.findByUser(user);
     }
 
     public Group findById(int id){

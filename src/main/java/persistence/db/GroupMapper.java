@@ -46,9 +46,11 @@ public class GroupMapper extends Mapper {
         return groups;
     }
 
-    public List<Group> findByUser() throws SQLException {
+    public List<Group> findByUser(User user) throws SQLException {
         List <Group> groups = new ArrayList<>();
-        ResultSet rs = statement.executeQuery(this.bundle.getString("select.groups.by.user"));
+        preparedStatement = db.prepareStatement(this.bundle.getString("select.groups.by.user"));
+        preparedStatement.setInt(1, user.getId());
+        ResultSet rs = preparedStatement.executeQuery();
 
         while(rs.next()) {
             groups.add(Group.builder()

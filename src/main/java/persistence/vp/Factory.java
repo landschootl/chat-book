@@ -1,5 +1,7 @@
 package persistence.vp;
 
+import persistence.db.NoDataFoundException;
+
 import java.sql.SQLException;
 
 /**
@@ -15,5 +17,5 @@ public interface Factory<T> {
      * @return
      * @throws SQLException
      */
-    T create() throws SQLException;
+    T create() throws SQLException, NoDataFoundException;
 }

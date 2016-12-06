@@ -2,7 +2,6 @@ package gui;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import com.intellij.uiDesigner.core.Spacer;
 import domain.Group;
 import domain.User;
 import domain.enums.Role;
@@ -16,6 +15,7 @@ import javax.swing.event.ListSelectionEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
+import java.util.List;
 
 public class MainFrame extends AppFrame {
     //header
@@ -41,6 +41,7 @@ public class MainFrame extends AppFrame {
     private JPanel accountsPanelRight;
     private JPanel accountsPanelLeft;
     private JList groupsList;
+    private DefaultListModel<Group> groupsListModel;
     private JPanel groupsPanelLeft;
     private JPanel groupsPanelRight;
     private JLabel nameGroup;
@@ -54,8 +55,8 @@ public class MainFrame extends AppFrame {
     private JButton deleteAccountButton;
     private ButtonGroup rolesGroup;
 
-    private JTextField zoneTextDiscution;
-    private JButton button1;
+    private JTextField newMessageTextField;
+    private JButton sendButton;
 
 
     private UserService userService;
@@ -188,10 +189,16 @@ public class MainFrame extends AppFrame {
 
     public void initGroupsList() {
         try {
+            groupsListModel = new DefaultListModel<>();
+            groupsList = new JList(groupsListModel);
+            List<Group> listGroup;
             if (Role.USER_ADMIN.equals(userService.getConnectedUser().getRole())) {
-                groupsList = new JList(groupService.findAll().toArray());
+                listGroup = groupService.findAll();
             } else {
-                groupsList = new JList(groupService.findByUser().toArray());
+                listGroup = groupService.findByUser(userService.getConnectedUser());
+            }
+            for(Group group : listGroup){
+                groupsListModel.addElement(group);
             }
             groupsList.setVisibleRowCount(10);
             groupsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -331,12 +338,12 @@ public class MainFrame extends AppFrame {
         final JPanel panel1 = new JPanel();
         panel1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         groupsPanelRight.add(panel1, BorderLayout.SOUTH);
-        zoneTextDiscution = new JTextField();
-        zoneTextDiscution.setText("Taper votre message...");
-        panel1.add(zoneTextDiscution);
-        button1 = new JButton();
-        button1.setText("Button");
-        panel1.add(button1);
+        newMessageTextField = new JTextField();
+        newMessageTextField.setText("Taper votre message...");
+        panel1.add(newMessageTextField);
+        sendButton = new JButton();
+        sendButton.setText("Button");
+        panel1.add(sendButton);
     }
 
     /**

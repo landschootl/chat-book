@@ -13,8 +13,10 @@ select:
     groups.all: SELECT id, id_mod, name
         FROM CONNECTION;
 
-    groups.by.user: SELECT id, id_mod, name
-        FROM CONNECTION;
+    groups.by.user: SELECT c.id, c.id_mod, c.name
+        FROM CONNECTION c
+        JOIN USER_CONNECTION uc ON c.id = uc.id_connection
+        WHERE uc.id_user = ?;
 
 update:
   user.by.identifiant:

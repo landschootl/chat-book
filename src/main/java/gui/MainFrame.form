@@ -178,16 +178,16 @@
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <component id="53457" class="javax.swing.JTextField" binding="zoneTextDiscution">
+                          <component id="53457" class="javax.swing.JTextField" binding="newMessageTextField">
                             <constraints/>
                             <properties>
                               <text value="Taper votre message..."/>
                             </properties>
                           </component>
-                          <component id="25fa7" class="javax.swing.JButton" binding="button1" default-binding="true">
+                          <component id="25fa7" class="javax.swing.JButton" binding="sendButton">
                             <constraints/>
                             <properties>
-                              <text value="Button"/>
+                              <text value="Envoyer"/>
                             </properties>
                           </component>
                         </children>
