@@ -1,4 +1,4 @@
-package gui;
+package gui.accounts;
 
 import domain.User;
 import domain.enums.Role;

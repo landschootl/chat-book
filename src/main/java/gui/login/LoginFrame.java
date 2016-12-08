@@ -1,8 +1,10 @@
-package gui;
+package gui.login;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import domain.User;
+import gui.AppFrame;
+import gui.MainFrame;
 import service.UserService;
 
 import javax.swing.*;
