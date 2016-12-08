@@ -33,8 +33,17 @@ public class MainFrame extends AppFrame {
     private JPanel userPanel;
     private JPanel contentPanel;
     private JPanel accountsPanel;
-    private JList accountsList;
+    private DefaultListModel<User> accountsListModel;
+    private JList accountsJList;
     private JLabel loginAccount;
+    private JPanel infosAccountPanel;
+    private JTextField nameAccountField;
+    private JTextField firstnameAccountField;
+    private JRadioButton adminButton;
+    private JRadioButton userButton;
+    private JButton updateAccountButton;
+    private JButton deleteAccountButton;
+    private ButtonGroup rolesGroup;
 
     //groupe panel
     private JPanel groupsPanel;
@@ -45,15 +54,6 @@ public class MainFrame extends AppFrame {
     private JPanel groupsPanelLeft;
     private JPanel groupsPanelRight;
     private JLabel nameGroup;
-
-
-    private JTextField nameAccountField;
-    private JTextField firstnameAccountField;
-    private JRadioButton adminButton;
-    private JRadioButton userButton;
-    private JButton updateAccountButton;
-    private JButton deleteAccountButton;
-    private ButtonGroup rolesGroup;
 
     private JTextField newMessageTextField;
     private JButton sendButton;
@@ -103,25 +103,37 @@ public class MainFrame extends AppFrame {
 
     public void initAccountsList() {
         try {
-            accountsList = new JList(userService.findAll().toArray());
-            accountsList.setVisibleRowCount(10);
-            accountsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-            accountsPanel.add(new JScrollPane(accountsList));
-            accountsList.addListSelectionListener((ListSelectionEvent e) -> {
+            accountsListModel = new DefaultListModel<>();
+            accountsJList = new JList(accountsListModel);
+            List<User> accountsList = userService.findAll();
+
+            for (User user : accountsList) {
+                accountsListModel.addElement(user);
+            }
+            accountsJList.setVisibleRowCount(10);
+            accountsJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            accountsPanel.add(new JScrollPane(accountsJList));
+            accountsJList.addListSelectionListener((ListSelectionEvent e) -> {
                 if (!e.getValueIsAdjusting()) {
                     if (this.userSelected != null) {
                         updateUserInfos();
                     }
-                    userSelected = (User) accountsList.getSelectedValue();
-                    loginAccount.setText(userSelected.getLogin());
-                    nameAccountField.setText(userSelected.getLastname());
-                    firstnameAccountField.setText(userSelected.getFirstname());
-                    if (userSelected.getRole().equals(Role.USER_ADMIN)) {
-                        adminButton.setSelected(true);
-                        userButton.setSelected(false);
+                    userSelected = (User) accountsJList.getSelectedValue();
+
+                    if (userSelected != null) {
+                        setVisibleAccountInfos(true);
+                        loginAccount.setText(userSelected.getLogin());
+                        nameAccountField.setText(userSelected.getLastname());
+                        firstnameAccountField.setText(userSelected.getFirstname());
+                        if (userSelected.getRole().equals(Role.USER_ADMIN)) {
+                            adminButton.setSelected(true);
+                            userButton.setSelected(false);
+                        } else {
+                            userButton.setSelected(true);
+                            adminButton.setSelected(false);
+                        }
                     } else {
-                        userButton.setSelected(true);
-                        adminButton.setSelected(false);
+                        setVisibleAccountInfos(false);
                     }
                 }
             });
@@ -145,7 +157,7 @@ public class MainFrame extends AppFrame {
         accountsPanelRight.setBorder(new EmptyBorder(0, 10, 10, 10));
         loginAccount.setBorder(new EmptyBorder(0, 0, 10, 0));
 
-        JPanel infosAccountPanel = new JPanel();
+        infosAccountPanel = new JPanel();
         nameAccountField = new JTextField();
         firstnameAccountField = new JTextField();
 
@@ -178,13 +190,22 @@ public class MainFrame extends AppFrame {
 
         deleteAccountButton = new JButton("Supprimer");
         deleteAccountButton.addActionListener((ActionEvent e) -> {
-            /**
-             * TODO: Supprimer de la JList
-             */
             this.userService.delete(userSelected);
+            this.accountsListModel.remove(accountsJList.getSelectedIndex());
             JOptionPane.showMessageDialog(new JFrame(), "Suppression effectuée.");
         });
         accountsPanelRight.add(deleteAccountButton);
+
+        setVisibleAccountInfos(false);
+    }
+
+    private void setVisibleAccountInfos(boolean visible) {
+        loginAccount.setVisible(visible);
+        infosAccountPanel.setVisible(visible);
+        userButton.setVisible(visible);
+        adminButton.setVisible(visible);
+        updateAccountButton.setVisible(visible);
+        deleteAccountButton.setVisible(visible);
     }
 
     public void initGroupsList() {
@@ -197,7 +218,7 @@ public class MainFrame extends AppFrame {
             } else {
                 listGroup = groupService.findByUser(userService.getConnectedUser());
             }
-            for(Group group : listGroup){
+            for (Group group : listGroup) {
                 groupsListModel.addElement(group);
             }
             groupsList.setVisibleRowCount(10);
@@ -314,8 +335,8 @@ public class MainFrame extends AppFrame {
         accountsPanelLeft = new JPanel();
         accountsPanelLeft.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         accountsPanel.add(accountsPanelLeft, BorderLayout.WEST);
-        accountsList = new JList();
-        accountsPanelLeft.add(accountsList, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        accountsJList = new JList();
+        accountsPanelLeft.add(accountsJList, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         groupsPanel = new JPanel();
         groupsPanel.setLayout(new BorderLayout(0, 0));
         contentPanel.add(groupsPanel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
@@ -342,7 +363,7 @@ public class MainFrame extends AppFrame {
         newMessageTextField.setText("Taper votre message...");
         panel1.add(newMessageTextField);
         sendButton = new JButton();
-        sendButton.setText("Button");
+        sendButton.setText("Envoyer");
         panel1.add(sendButton);
     }
 
