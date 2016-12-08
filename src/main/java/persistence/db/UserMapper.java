@@ -1,6 +1,5 @@
 package persistence.db;
 
-import com.sun.corba.se.impl.orbutil.graph.NodeData;
 import domain.IUser;
 import domain.User;
 import domain.enums.Role;

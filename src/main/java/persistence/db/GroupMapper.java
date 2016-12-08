@@ -9,7 +9,10 @@ import persistence.vp.VirtualProxyBuilder;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by landschoot on 04/11/16.

@@ -1,9 +1,6 @@
 package domain;
 
 import domain.enums.Role;
-import persistence.uow.Observer;
-
-import java.util.List;
 
 /**
  * Created by landschoot on 02/12/16.
