@@ -72,7 +72,7 @@ public class LoginFrame extends AppFrame {
     }
 
     private void connect() {
-        if (!fieldEmpty()) {
+        if (!fieldsEmpty()) {
             try {
                 checkUser(this.userService.findByCredentials(this.loginField.getText(), new String(this.passwordField.getPassword())));
             } catch (Exception e) {
@@ -83,7 +83,7 @@ public class LoginFrame extends AppFrame {
         }
     }
 
-    public boolean fieldEmpty() {
+    public boolean fieldsEmpty() {
         return this.loginField.getText() == "" || this.passwordField.getPassword().length == 0;
     }
 

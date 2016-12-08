@@ -1,4 +1,6 @@
 package gui.discussions;
 
-public class DiscussionsPanel {
+import javax.swing.*;
+
+public class DiscussionsPanel extends JPanel {
 }

@@ -28,6 +28,7 @@ public class AccountsPanel extends JPanel {
     private JTextField firstnameAccountField;
     private JRadioButton adminButton;
     private JRadioButton userButton;
+    private JButton createAccountButton;
     private JButton updateAccountButton;
     private JButton deleteAccountButton;
     private ButtonGroup rolesGroup;
@@ -37,8 +38,15 @@ public class AccountsPanel extends JPanel {
         this.unitOfWork = UnitOfWork.getInstance();
         this.setLayout(new BorderLayout(0, 0));
 
+        initCreateAccountButton();
         initAccountsList();
         initAccountsPanelRight();
+    }
+
+    private void initCreateAccountButton() {
+        createAccountButton = new JButton("Créer un nouvel utilisateur");
+        createAccountButton.addActionListener((ActionEvent e) -> new CreateAccountFrame());
+        this.add(createAccountButton, BorderLayout.NORTH);
     }
 
     public void initAccountsList() {
