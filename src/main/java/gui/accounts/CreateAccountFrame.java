@@ -3,6 +3,8 @@ package gui.accounts;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import domain.User;
+import domain.enums.Role;
 import gui.AppFrame;
 import service.UserService;
 
@@ -16,6 +18,7 @@ import java.awt.event.ActionEvent;
  */
 public class CreateAccountFrame extends AppFrame {
     private UserService userService;
+    private DefaultListModel accountsListModel;
 
     private JPanel mainPanel;
     private JTextField loginTextField;
@@ -26,7 +29,8 @@ public class CreateAccountFrame extends AppFrame {
     private JButton cancelButton;
     private JLabel errorLabel;
 
-    public CreateAccountFrame() {
+    public CreateAccountFrame(DefaultListModel accountsListModel) {
+        this.accountsListModel = accountsListModel;
         this.userService = UserService.getInstance();
         initComponents();
         initButtons();
@@ -36,6 +40,22 @@ public class CreateAccountFrame extends AppFrame {
     public void initButtons() {
         createAccountButton.addActionListener((ActionEvent e) -> {
             if (!fieldsEmpty()) {
+                User user = User.builder()
+                                .login(loginTextField.getText())
+                                .lastname(lastnameTextField.getText())
+                                .firstname(firstNameTextField.getText())
+                                .password(passwordTextField.getText())
+                                .role(Role.USER_DEFAULT)
+                                .build();
+                try {
+                    userService.create(user);
+                    this.accountsListModel.addElement(user);
+                    this.dispose();
+                    JOptionPane.showMessageDialog(new JFrame(), "Utilisateur créé avec succès.");
+                } catch (Exception e1) {
+                    JOptionPane.showMessageDialog(new JFrame(), "Erreur lors de la création de l'utilisateur.");
+                    e1.printStackTrace();
+                }
             } else {
                 JOptionPane.showMessageDialog(new JFrame(), "Veuillez remplir l'ensemble des champs.");
             }

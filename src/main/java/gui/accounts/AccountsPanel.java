@@ -45,7 +45,7 @@ public class AccountsPanel extends JPanel {
 
     private void initCreateAccountButton() {
         createAccountButton = new JButton("Créer un nouvel utilisateur");
-        createAccountButton.addActionListener((ActionEvent e) -> new CreateAccountFrame());
+        createAccountButton.addActionListener((ActionEvent e) -> new CreateAccountFrame(accountsListModel));
         this.add(createAccountButton, BorderLayout.NORTH);
     }
 

@@ -8,6 +8,7 @@ import persistence.uow.UnitOfWork;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +47,20 @@ public class UserMapper extends Mapper {
         rs.close();
 
         return user;
+    }
+
+    public void create(User user) {
+        try {
+            PreparedStatement preparedStatement = db.prepareStatement(this.bundle.getString("create.user"));
+            preparedStatement.setString(1, user.getLogin());
+            preparedStatement.setString(2, user.getFirstname());
+            preparedStatement.setString(3, user.getLastname());
+            preparedStatement.setString(4, user.getPassword());
+            preparedStatement.setString(5, user.getRole().toString());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public List<User> findAll() throws SQLException {

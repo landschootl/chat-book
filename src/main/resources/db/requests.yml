@@ -18,6 +18,10 @@ select:
         JOIN USER_CONNECTION uc ON c.id = uc.id_connection
         WHERE uc.id_user = ?;
 
+create:
+  user:
+    INSERT INTO USER VALUES (default, ?, ?, ?, ?, ?);
+
 update:
   user.by.identifiant:
     UPDATE USER

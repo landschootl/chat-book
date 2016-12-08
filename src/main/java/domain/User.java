@@ -17,6 +17,7 @@ public class User implements IUser{
     private String login;
     private String firstname;
     private String lastname;
+    private String password;
     private Role role;
 
     @Override
@@ -48,6 +49,10 @@ public class User implements IUser{
     public void setLastname(String lastname) {
         this.lastname = lastname;
         notif();
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public void setRole(Role role) {
