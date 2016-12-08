@@ -33,21 +33,9 @@ public class MainFrame extends AppFrame {
     private JPanel userPanel;
     private JPanel contentPanel;
     private JPanel accountsPanel;
-    private DefaultListModel<User> accountsListModel;
-    private JList accountsJList;
-    private JLabel loginAccount;
-    private JPanel infosAccountPanel;
-    private JTextField nameAccountField;
-    private JTextField firstnameAccountField;
-    private JRadioButton adminButton;
-    private JRadioButton userButton;
-    private JButton updateAccountButton;
-    private JButton deleteAccountButton;
-    private ButtonGroup rolesGroup;
 
     //groupe panel
     private JPanel groupsPanel;
-    private JPanel accountsPanelRight;
     private JList groupsList;
     private DefaultListModel<Group> groupsListModel;
     private JPanel groupsPanelLeft;
@@ -62,8 +50,6 @@ public class MainFrame extends AppFrame {
     private GroupService groupService;
 
     private UnitOfWork unitOfWork;
-
-    private User userSelected;
 
     public MainFrame() {
         this.unitOfWork = UnitOfWork.getInstance();
