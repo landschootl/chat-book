@@ -48,7 +48,6 @@ public class MainFrame extends AppFrame {
     //groupe panel
     private JPanel groupsPanel;
     private JPanel accountsPanelRight;
-    private JPanel accountsPanelLeft;
     private JList groupsList;
     private DefaultListModel<Group> groupsListModel;
     private JPanel groupsPanelLeft;
@@ -71,6 +70,7 @@ public class MainFrame extends AppFrame {
         this.userService = UserService.getInstance();
         this.groupService = GroupService.getInstance();
         this.setContentPane(this.mainPanel);
+        initPanels();
         cleanPanels();
         initFrame();
         initComponents();
@@ -85,6 +85,11 @@ public class MainFrame extends AppFrame {
         this.setVisible(true);
     }
 
+    public void initPanels() {
+        this.accountsPanel = new AccountsPanel();
+        this.contentPanel.add(accountsPanel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+    }
+
     public void cleanPanels() {
         this.accountsPanel.setVisible(false);
         this.groupsPanel.setVisible(false);
@@ -96,116 +101,7 @@ public class MainFrame extends AppFrame {
         userLabel.setText(userService.getConnectedUser().getFirstname() + " " + userService.getConnectedUser().getLastname());
         dashboardPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         checkComponentRoles();
-        initAccountsList();
-        initAccountsPanelRight();
         initGroupsList();
-    }
-
-    public void initAccountsList() {
-        try {
-            accountsListModel = new DefaultListModel<>();
-            accountsJList = new JList(accountsListModel);
-            List<User> accountsList = userService.findAll();
-
-            for (User user : accountsList) {
-                accountsListModel.addElement(user);
-            }
-            accountsJList.setVisibleRowCount(10);
-            accountsJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-            accountsPanel.add(new JScrollPane(accountsJList));
-            accountsJList.addListSelectionListener((ListSelectionEvent e) -> {
-                if (!e.getValueIsAdjusting()) {
-                    if (this.userSelected != null) {
-                        updateUserInfos();
-                    }
-                    userSelected = (User) accountsJList.getSelectedValue();
-
-                    if (userSelected != null) {
-                        setVisibleAccountInfos(true);
-                        loginAccount.setText(userSelected.getLogin());
-                        nameAccountField.setText(userSelected.getLastname());
-                        firstnameAccountField.setText(userSelected.getFirstname());
-                        if (userSelected.getRole().equals(Role.USER_ADMIN)) {
-                            adminButton.setSelected(true);
-                            userButton.setSelected(false);
-                        } else {
-                            userButton.setSelected(true);
-                            adminButton.setSelected(false);
-                        }
-                    } else {
-                        setVisibleAccountInfos(false);
-                    }
-                }
-            });
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void updateUserInfos() {
-        this.userSelected.setFirstname(this.firstnameAccountField.getText());
-        this.userSelected.setLastname(this.nameAccountField.getText());
-        if (this.adminButton.isSelected()) {
-            this.userSelected.setRole(Role.USER_ADMIN);
-        } else {
-            this.userSelected.setRole(Role.USER_DEFAULT);
-        }
-    }
-
-    public void initAccountsPanelRight() {
-        accountsPanelRight.setLayout(new BoxLayout(accountsPanelRight, BoxLayout.Y_AXIS));
-        accountsPanelRight.setBorder(new EmptyBorder(0, 10, 10, 10));
-        loginAccount.setBorder(new EmptyBorder(0, 0, 10, 0));
-
-        infosAccountPanel = new JPanel();
-        nameAccountField = new JTextField();
-        firstnameAccountField = new JTextField();
-
-        infosAccountPanel.setLayout(new GridLayout(3, 3));
-        infosAccountPanel.add(new JLabel("Nom"));
-        infosAccountPanel.add(nameAccountField);
-        infosAccountPanel.add(new JLabel("Prénom"));
-        infosAccountPanel.add(firstnameAccountField);
-        accountsPanelRight.add(infosAccountPanel);
-
-        adminButton = new JRadioButton("Administrateur");
-        adminButton.setActionCommand(Role.USER_ADMIN.toString());
-        userButton = new JRadioButton("Utilisateur");
-        userButton.setActionCommand(Role.USER_DEFAULT.toString());
-        rolesGroup = new ButtonGroup();
-        rolesGroup.add(adminButton);
-        rolesGroup.add(userButton);
-        accountsPanelRight.add(adminButton);
-        accountsPanelRight.add(userButton);
-
-        updateAccountButton = new JButton("Enregistrer");
-        updateAccountButton.addActionListener((ActionEvent e) -> {
-            if (this.userSelected != null) {
-                updateUserInfos();
-            }
-            this.unitOfWork.commit();
-            JOptionPane.showMessageDialog(new JFrame(), "Mise à jour effectuée.");
-        });
-        accountsPanelRight.add(updateAccountButton);
-
-        deleteAccountButton = new JButton("Supprimer");
-        deleteAccountButton.addActionListener((ActionEvent e) -> {
-            this.userService.delete(userSelected);
-            this.accountsListModel.remove(accountsJList.getSelectedIndex());
-            JOptionPane.showMessageDialog(new JFrame(), "Suppression effectuée.");
-        });
-        accountsPanelRight.add(deleteAccountButton);
-
-        setVisibleAccountInfos(false);
-    }
-
-    private void setVisibleAccountInfos(boolean visible) {
-        loginAccount.setVisible(visible);
-        infosAccountPanel.setVisible(visible);
-        userButton.setVisible(visible);
-        adminButton.setVisible(visible);
-        updateAccountButton.setVisible(visible);
-        deleteAccountButton.setVisible(visible);
     }
 
     public void initGroupsList() {
@@ -315,31 +211,11 @@ public class MainFrame extends AppFrame {
         groupsButton.setText("Gestion des groupes");
         dashboardPanel.add(groupsButton, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         contentPanel = new JPanel();
-        contentPanel.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
+        contentPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         bodyPanel.add(contentPanel, BorderLayout.CENTER);
-        accountsPanel = new JPanel();
-        accountsPanel.setLayout(new BorderLayout(0, 0));
-        contentPanel.add(accountsPanel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        accountsPanelRight = new JPanel();
-        accountsPanelRight.setLayout(new BorderLayout(0, 0));
-        accountsPanelRight.setOpaque(true);
-        accountsPanelRight.setPreferredSize(new Dimension(400, 50));
-        accountsPanel.add(accountsPanelRight, BorderLayout.EAST);
-        loginAccount = new JLabel();
-        loginAccount.setFont(new Font(loginAccount.getFont().getName(), loginAccount.getFont().getStyle(), 18));
-        loginAccount.setHorizontalTextPosition(11);
-        loginAccount.setText("");
-        loginAccount.setVerticalAlignment(1);
-        loginAccount.setVerticalTextPosition(1);
-        accountsPanelRight.add(loginAccount, BorderLayout.WEST);
-        accountsPanelLeft = new JPanel();
-        accountsPanelLeft.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-        accountsPanel.add(accountsPanelLeft, BorderLayout.WEST);
-        accountsJList = new JList();
-        accountsPanelLeft.add(accountsJList, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         groupsPanel = new JPanel();
         groupsPanel.setLayout(new BorderLayout(0, 0));
-        contentPanel.add(groupsPanel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        contentPanel.add(groupsPanel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         groupsPanelLeft = new JPanel();
         groupsPanelLeft.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         groupsPanel.add(groupsPanelLeft, BorderLayout.WEST);
