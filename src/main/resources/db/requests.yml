@@ -10,10 +10,10 @@ select:
     all.users: SELECT id, login, firstname, lastname, role
         FROM USER;
 
-    groups.all: SELECT id, id_mod, name
+    discussions.all: SELECT id, id_mod, name
         FROM CONNECTION;
 
-    groups.by.user: SELECT c.id, c.id_mod, c.name
+    discussions.by.user: SELECT c.id, c.id_mod, c.name
         FROM CONNECTION c
         JOIN USER_CONNECTION uc ON c.id = uc.id_connection
         WHERE uc.id_user = ?;

@@ -1,6 +1,6 @@
 package persistence.db;
 
-import domain.Group;
+import domain.Discussion;
 import domain.IUser;
 import domain.User;
 import org.omg.CORBA.NO_IMPLEMENT;
@@ -17,28 +17,28 @@ import java.util.Map;
 /**
  * Created by landschoot on 04/11/16.
  */
-public class GroupMapper extends Mapper {
-    public static GroupMapper instance = null;
-    private Map<Integer, Group> cache;
+public class DiscussionMapper extends Mapper {
+    public static DiscussionMapper instance = null;
+    private Map<Integer, Discussion> cache;
 
-    public GroupMapper(){
+    public DiscussionMapper(){
         super();
         this.cache = new HashMap<>();
     }
 
-    public static GroupMapper getInstance() {
+    public static DiscussionMapper getInstance() {
         if (instance == null) {
-            instance = new GroupMapper();
+            instance = new DiscussionMapper();
         }
         return instance;
     }
 
-    public List<Group> findAll() throws SQLException {
-        List <Group> groups = new ArrayList<>();
-        ResultSet rs = statement.executeQuery(this.bundle.getString("select.groups.all"));
+    public List<Discussion> findAll() throws SQLException {
+        List <Discussion> discussions = new ArrayList<>();
+        ResultSet rs = statement.executeQuery(this.bundle.getString("select.discussions.all"));
 
         while(rs.next()) {
-            groups.add(Group.builder()
+            discussions.add(Discussion.builder()
                     .id(rs.getInt("id"))
                     .mod(new VirtualProxyBuilder<>(IUser.class, new UserFactory(rs.getString("id_mod"))).getProxy())
                     .name(rs.getString("name"))
@@ -46,17 +46,17 @@ public class GroupMapper extends Mapper {
         }
         rs.close();
 
-        return groups;
+        return discussions;
     }
 
-    public List<Group> findByUser(User user) throws SQLException {
-        List <Group> groups = new ArrayList<>();
-        preparedStatement = db.prepareStatement(this.bundle.getString("select.groups.by.user"));
+    public List<Discussion> findByUser(User user) throws SQLException {
+        List <Discussion> discussions = new ArrayList<>();
+        preparedStatement = db.prepareStatement(this.bundle.getString("select.discussions.by.user"));
         preparedStatement.setInt(1, user.getId());
         ResultSet rs = preparedStatement.executeQuery();
 
         while(rs.next()) {
-            groups.add(Group.builder()
+            discussions.add(Discussion.builder()
                     .id(rs.getInt("id"))
                     .mod(new VirtualProxyBuilder<>(IUser.class, new UserFactory(rs.getString("id_mod"))).getProxy())
                     .name(rs.getString("name"))
@@ -64,10 +64,10 @@ public class GroupMapper extends Mapper {
         }
         rs.close();
 
-        return groups;
+        return discussions;
     }
 
-    public Group findById(int id) {
+    public Discussion findById(int id) {
         throw new NO_IMPLEMENT();
     }
 
@@ -79,15 +79,15 @@ public class GroupMapper extends Mapper {
         throw new NO_IMPLEMENT();
     }
 
-    public Group update(Group group) {
+    public Discussion update(Discussion discussion) {
         throw new NO_IMPLEMENT();
     }
 
-    public Group create(Group group) {
+    public Discussion create(Discussion discussion) {
         throw new NO_IMPLEMENT();
     }
 
-    public boolean remove(Group group) {
+    public boolean remove(Discussion discussion) {
         throw new NO_IMPLEMENT();
     }
 }

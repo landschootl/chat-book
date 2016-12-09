@@ -12,7 +12,7 @@ import java.util.List;
  */
 @Getter
 @Builder
-public class Group implements IDomainObject{
+public class Discussion implements IDomainObject{
     List<Observer> obs;
 
     private int id;

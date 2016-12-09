@@ -4,7 +4,7 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import domain.enums.Role;
 import gui.accounts.AccountsPanel;
-import gui.groups.GroupsPanel;
+import gui.discussions.DiscussionsPanel;
 import gui.login.LoginFrame;
 import persistence.uow.UnitOfWork;
 import service.UserService;
@@ -25,13 +25,13 @@ public class MainFrame extends AppFrame {
 
     private JPanel dashboardPanel;
     private JButton accountsButton;
-    private JButton groupsButton;
+    private JButton discussionsButton;
 
     private JPanel userPanel;
     private JPanel contentPanel;
 
     private JPanel accountsPanel;
-    private JPanel groupsPanel;
+    private JPanel discussionsPanel;
 
     private UserService userService;
 
@@ -59,13 +59,13 @@ public class MainFrame extends AppFrame {
     public void initPanels() {
         this.accountsPanel = new AccountsPanel();
         this.contentPanel.add(accountsPanel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        this.groupsPanel = new GroupsPanel();
-        contentPanel.add(groupsPanel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        this.discussionsPanel = new DiscussionsPanel();
+        contentPanel.add(discussionsPanel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
     }
 
     public void cleanPanels() {
         this.accountsPanel.setVisible(false);
-        this.groupsPanel.setVisible(false);
+        this.discussionsPanel.setVisible(false);
     }
 
     public void initComponents() {
@@ -87,9 +87,9 @@ public class MainFrame extends AppFrame {
             cleanPanels();
             this.accountsPanel.setVisible(true);
         });
-        groupsButton.addActionListener((ActionEvent e) -> {
+        discussionsButton.addActionListener((ActionEvent e) -> {
             cleanPanels();
-            this.groupsPanel.setVisible(true);
+            this.discussionsPanel.setVisible(true);
         });
     }
 
@@ -152,9 +152,9 @@ public class MainFrame extends AppFrame {
         accountsButton = new JButton();
         accountsButton.setText("Gestion des comptes");
         dashboardPanel.add(accountsButton, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        groupsButton = new JButton();
-        groupsButton.setText("Gestion des groupes");
-        dashboardPanel.add(groupsButton, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        discussionsButton = new JButton();
+        discussionsButton.setText("Gestion des discussiones");
+        dashboardPanel.add(discussionsButton, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         contentPanel = new JPanel();
         contentPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         bodyPanel.add(contentPanel, BorderLayout.CENTER);
