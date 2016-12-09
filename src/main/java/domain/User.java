@@ -1,6 +1,6 @@
 package domain;
 
-import domain.enums.Role;
+import domain.enums.ERole;
 import lombok.Builder;
 import lombok.Getter;
 import persistence.uow.Observer;
@@ -18,7 +18,7 @@ public class User implements IUser{
     private String firstname;
     private String lastname;
     private String password;
-    private Role role;
+    private ERole role;
 
     @Override
     public String toString() {
@@ -31,38 +31,38 @@ public class User implements IUser{
     }
 
     @Override
-    public void add(Observer o) {
+    public void addObserver(Observer o) {
         obs.add(o);
     }
 
     @Override
-    public void notif() {
-        for (Observer o : obs)
-            o.action(this);
+    public void notif(Object o) {
+        for (Observer ob : obs)
+            ob.action(this);
     }
 
     public void setFirstname(String firstname) {
         this.firstname = firstname;
-        notif();
+        notif(null);
     }
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
-        notif();
+        notif(null);
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public void setRole(Role role) {
+    public void setRole(ERole role) {
         this.role = role;
-        notif();
+        notif(null);
     }
 
     @Override
     public void setLogin(String login) {
         this.login = login;
-        notif();
+        notif(null);
     }
 }

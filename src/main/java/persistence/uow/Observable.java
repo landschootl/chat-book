@@ -6,6 +6,6 @@ package persistence.uow;
  * @author Ludovic LANDSCHOOT & Laurent THIEBAULT
  */
 public interface Observable {
-    void add(Observer o);
-    void notif();
+    void addObserver(Observer o);
+    void notif(Object o);
 }

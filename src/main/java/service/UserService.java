@@ -1,7 +1,6 @@
 package service;
 
 import domain.User;
-import domain.enums.Role;
 import lombok.Data;
 import persistence.db.UserMapper;
 
@@ -31,6 +30,10 @@ public class UserService {
     public void create(User user) throws Exception {
         user.setPassword(this.securityService.encrypt(user.getPassword()));
         userMapper.create(user);
+    }
+
+    public void updateAccount(User user) {
+        userMapper.updateAccount(user);
     }
 
     public User findByCredentials(String login, String password) throws Exception {

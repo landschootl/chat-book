@@ -1,6 +1,6 @@
 package domain.enums;
 
-public enum Role {
+public enum ERole {
     USER_ADMIN,
     USER_DEFAULT;
 }

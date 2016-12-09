@@ -9,4 +9,5 @@ import domain.IDomainObject;
  */
 public interface Observer {
     void action(IDomainObject o);
+    void action(Object o);
 }

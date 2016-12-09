@@ -24,8 +24,8 @@ CREATE TABLE FRIEND (
 	id_user1 int NOT NULL,
 	id_user2 int NOT NULL,
 	confirmed boolean,
-	foreign key (id_user1) REFERENCES USER(id),
-	foreign key (id_user2) REFERENCES USER(id)
+	foreign key (id_user1) REFERENCES USER(id) ON DELETE CASCADE,
+	foreign key (id_user2) REFERENCES USER(id) ON DELETE CASCADE
 );
 
 -- Table des groupes de discussions
@@ -34,7 +34,7 @@ CREATE TABLE CONNECTION (
 	id int NOT NULL AUTO_INCREMENT primary key,
 	id_mod int,
 	name varchar(9) NOT NULL,
-	foreign key (id_mod) REFERENCES USER(id)
+	foreign key (id_mod) REFERENCES USER(id) ON DELETE CASCADE
 );
 
 -- Table de relation entre un utilisateur et un groupe de discussion
@@ -43,7 +43,7 @@ CREATE TABLE USER_CONNECTION (
 	id int NOT NULL AUTO_INCREMENT primary key,
 	id_connection int NOT NULL,
 	id_user int NOT NULL,
-	foreign key (id_connection) REFERENCES CONNECTION(id)
+	foreign key (id_connection) REFERENCES CONNECTION(id) ON DELETE CASCADE
 );
 
 -- Table des messages
@@ -56,5 +56,5 @@ CREATE TABLE MESSAGE (
 	prioritaire boolean,
 	expiration date,
 	foreign key (id_connection) REFERENCES CONNECTION(id),
-	foreign key (id_user) REFERENCES USER(id)
+	foreign key (id_user) REFERENCES USER(id) ON DELETE CASCADE
 );

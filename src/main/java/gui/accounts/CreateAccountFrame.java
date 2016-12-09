@@ -4,7 +4,7 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import domain.User;
-import domain.enums.Role;
+import domain.enums.ERole;
 import gui.AppFrame;
 import service.UserService;
 
@@ -13,9 +13,6 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
-/**
- * Created by lauthieb on 08/12/2016.
- */
 public class CreateAccountFrame extends AppFrame {
     private UserService userService;
     private DefaultListModel accountsListModel;
@@ -45,7 +42,7 @@ public class CreateAccountFrame extends AppFrame {
                                 .lastname(lastnameTextField.getText())
                                 .firstname(firstNameTextField.getText())
                                 .password(passwordTextField.getText())
-                                .role(Role.USER_DEFAULT)
+                                .role(ERole.USER_DEFAULT)
                                 .build();
                 try {
                     userService.create(user);

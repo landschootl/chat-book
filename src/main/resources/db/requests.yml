@@ -30,6 +30,13 @@ update:
     role = ?
     WHERE id = ?;
 
+  user.account:
+    UPDATE USER
+    SET login = ?,
+    firstname = ?,
+    lastname = ?
+    WHERE id = ?;
+
 delete:
   user.by.identifiant:
     DELETE FROM USER

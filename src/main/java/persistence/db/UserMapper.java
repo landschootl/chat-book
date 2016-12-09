@@ -2,13 +2,12 @@ package persistence.db;
 
 import domain.IUser;
 import domain.User;
-import domain.enums.Role;
+import domain.enums.ERole;
 import persistence.uow.UnitOfWork;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,10 +38,10 @@ public class UserMapper extends Mapper {
                     .login(rs.getString(2))
                     .firstname(rs.getString(3))
                     .lastname(rs.getString(4))
-                    .role(Role.valueOf(rs.getString(5)))
+                    .role(ERole.valueOf(rs.getString(5)))
                     .obs(new ArrayList<>())
                     .build();
-            user.add(UnitOfWork.getInstance());
+            user.addObserver(UnitOfWork.getInstance());
         }
         rs.close();
 
@@ -73,10 +72,10 @@ public class UserMapper extends Mapper {
                     .login(rs.getString(2))
                     .firstname(rs.getString(3))
                     .lastname(rs.getString(4))
-                    .role(Role.valueOf(rs.getString(5)))
+                    .role(ERole.valueOf(rs.getString(5)))
                     .obs(new ArrayList<>())
                     .build();
-            user.add(UnitOfWork.getInstance());
+            user.addObserver(UnitOfWork.getInstance());
 
             users.add(user);
         }
@@ -97,10 +96,10 @@ public class UserMapper extends Mapper {
                     .login(rs.getString(2))
                     .firstname(rs.getString(3))
                     .lastname(rs.getString(4))
-                    .role(Role.valueOf(rs.getString(5)))
+                    .role(ERole.valueOf(rs.getString(5)))
                     .obs(new ArrayList<>())
                     .build();
-            user.add(UnitOfWork.getInstance());
+            user.addObserver(UnitOfWork.getInstance());
         } else {
             throw new NoDataFoundException("Utilisateur introuvable");
         }
@@ -115,6 +114,19 @@ public class UserMapper extends Mapper {
             preparedStatement.setString(1, user.getFirstname());
             preparedStatement.setString(2, user.getLastname());
             preparedStatement.setString(3, user.getRole().toString());
+            preparedStatement.setInt(4, user.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateAccount(User user) {
+        try {
+            PreparedStatement preparedStatement = db.prepareStatement(this.bundle.getString("update.user.account"));
+            preparedStatement.setString(1, user.getLogin());
+            preparedStatement.setString(2, user.getFirstname());
+            preparedStatement.setString(3, user.getLastname());
             preparedStatement.setInt(4, user.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {

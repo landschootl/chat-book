@@ -3,7 +3,7 @@ package gui.discussions;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import domain.Discussion;
-import domain.enums.Role;
+import domain.enums.ERole;
 import service.DiscussionService;
 import service.UserService;
 
@@ -76,7 +76,7 @@ public class DiscussionsPanel extends JPanel {
             discussionsListModel = new DefaultListModel<>();
             discussionsList = new JList(discussionsListModel);
             java.util.List<Discussion> listDiscussion;
-            if (Role.USER_ADMIN.equals(userService.getConnectedUser().getRole())) {
+            if (ERole.USER_ADMIN.equals(userService.getConnectedUser().getRole())) {
                 listDiscussion = DiscussionService.findAll();
             } else {
                 listDiscussion = DiscussionService.findByUser(userService.getConnectedUser());

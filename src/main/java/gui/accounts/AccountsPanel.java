@@ -1,7 +1,7 @@
 package gui.accounts;
 
 import domain.User;
-import domain.enums.Role;
+import domain.enums.ERole;
 import persistence.uow.UnitOfWork;
 import service.UserService;
 
@@ -56,7 +56,9 @@ public class AccountsPanel extends JPanel {
             java.util.List<User> accountsList = userService.findAll();
 
             for (User user : accountsList) {
-                accountsListModel.addElement(user);
+                if (user.getId() != userService.getConnectedUser().getId()) {
+                    accountsListModel.addElement(user);
+                }
             }
             accountsJList.setVisibleRowCount(10);
             accountsJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -73,7 +75,7 @@ public class AccountsPanel extends JPanel {
                         loginAccount.setText(userSelected.getLogin());
                         nameAccountField.setText(userSelected.getLastname());
                         firstnameAccountField.setText(userSelected.getFirstname());
-                        if (userSelected.getRole().equals(Role.USER_ADMIN)) {
+                        if (userSelected.getRole().equals(ERole.USER_ADMIN)) {
                             adminButton.setSelected(true);
                             userButton.setSelected(false);
                         } else {
@@ -119,9 +121,9 @@ public class AccountsPanel extends JPanel {
         accountsPanelRight.add(infosAccountPanel);
 
         adminButton = new JRadioButton("Administrateur");
-        adminButton.setActionCommand(Role.USER_ADMIN.toString());
+        adminButton.setActionCommand(ERole.USER_ADMIN.toString());
         userButton = new JRadioButton("Utilisateur");
-        userButton.setActionCommand(Role.USER_DEFAULT.toString());
+        userButton.setActionCommand(ERole.USER_DEFAULT.toString());
         rolesGroup = new ButtonGroup();
         rolesGroup.add(adminButton);
         rolesGroup.add(userButton);
@@ -155,9 +157,9 @@ public class AccountsPanel extends JPanel {
         this.userSelected.setFirstname(this.firstnameAccountField.getText());
         this.userSelected.setLastname(this.nameAccountField.getText());
         if (this.adminButton.isSelected()) {
-            this.userSelected.setRole(Role.USER_ADMIN);
+            this.userSelected.setRole(ERole.USER_ADMIN);
         } else {
-            this.userSelected.setRole(Role.USER_DEFAULT);
+            this.userSelected.setRole(ERole.USER_DEFAULT);
         }
     }
 

@@ -34,6 +34,11 @@ public class UnitOfWork implements Observer {
         dirty.add(o);
     }
 
+    @Override
+    public void action(Object o) {
+
+    }
+
     /**
      * Effectue les modifications sur tous les utilisateurs de la liste.
      */

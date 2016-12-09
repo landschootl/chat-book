@@ -30,28 +30,28 @@ public class Discussion implements IDomainObject{
     }
 
     @Override
-    public void add(Observer o) {
+    public void addObserver(Observer o) {
         obs.add(o);
     }
 
     @Override
-    public void notif() {
-        for (Observer o : obs)
-            o.action(this);
+    public void notif(Object o) {
+        for (Observer ob : obs)
+            ob.action(this);
     }
 
     public void setId(int id) {
         this.id = id;
-        notif();
+        notif(null);
     }
 
     public void setMod(IUser mod) {
         this.mod = mod;
-        notif();
+        notif(null);
     }
 
     public void setName(String name) {
         this.name = name;
-        notif();
+        notif(null);
     }
 }

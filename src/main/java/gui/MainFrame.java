@@ -2,10 +2,14 @@ package gui;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import domain.enums.Role;
+import domain.IDomainObject;
+import domain.enums.ECrud;
+import domain.enums.ERole;
 import gui.accounts.AccountsPanel;
+import gui.accounts.UpdateAccountFrame;
 import gui.discussions.DiscussionsPanel;
 import gui.login.LoginFrame;
+import persistence.uow.Observer;
 import persistence.uow.UnitOfWork;
 import service.UserService;
 
@@ -14,8 +18,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
-public class MainFrame extends AppFrame {
-    //header
+public class MainFrame extends AppFrame implements Observer {
     private JPanel navPanel;
     private JLabel titleLabel;
     private JButton deconnectButton;
@@ -29,6 +32,7 @@ public class MainFrame extends AppFrame {
 
     private JPanel userPanel;
     private JPanel contentPanel;
+    private JButton updateAccountButton;
 
     private JPanel accountsPanel;
     private JPanel discussionsPanel;
@@ -45,9 +49,11 @@ public class MainFrame extends AppFrame {
         cleanPanels();
         initFrame();
         initComponents();
+        configUpdateAccountButton();
         configDeconnectButton();
         configDashboard();
-        if (userService.getConnectedUser().getRole().equals(Role.USER_ADMIN)) {
+        cleanButtons();
+        if (userService.getConnectedUser().getRole().equals(ERole.USER_ADMIN)) {
             this.setTitle("Chatbook - Admin");
             this.titleLabel.setText("chatbook - admin");
         } else {
@@ -77,7 +83,7 @@ public class MainFrame extends AppFrame {
     }
 
     public void checkComponentRoles() {
-        if (!Role.USER_ADMIN.equals(userService.getConnectedUser().getRole())) {
+        if (!ERole.USER_ADMIN.equals(userService.getConnectedUser().getRole())) {
             accountsButton.setVisible(false);
         }
     }
@@ -85,10 +91,16 @@ public class MainFrame extends AppFrame {
     public void configDashboard() {
         accountsButton.addActionListener((ActionEvent e) -> {
             cleanPanels();
+            cleanButtons();
+            accountsButton.setFont(new Font("Lucida Grande", Font.BOLD, 16));
+            accountsButton.setForeground(Color.BLUE);
             this.accountsPanel.setVisible(true);
         });
         discussionsButton.addActionListener((ActionEvent e) -> {
             cleanPanels();
+            cleanButtons();
+            discussionsButton.setFont(new Font("Lucida Grande", Font.BOLD, 16));
+            discussionsButton.setForeground(Color.BLUE);
             this.discussionsPanel.setVisible(true);
         });
     }
@@ -100,6 +112,42 @@ public class MainFrame extends AppFrame {
             this.unitOfWork.rollback();
             new LoginFrame();
         });
+    }
+
+    public void configUpdateAccountButton() {
+        updateAccountButton.addActionListener(e -> {
+            UpdateAccountFrame updateAccountFrame = new UpdateAccountFrame();
+            updateAccountFrame.addObserver(this);
+        });
+    }
+
+    public void cleanButtons() {
+        accountsButton.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+        accountsButton.setForeground(Color.BLACK);
+        discussionsButton.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+        discussionsButton.setForeground(Color.BLACK);
+    }
+
+    @Override
+    public void action(IDomainObject o) {
+    }
+
+    @Override
+    public void action(Object o) {
+
+        ECrud crud = (ECrud) o;
+
+        switch (crud) {
+            case UPDATE:
+                userLabel.setText(userService.getConnectedUser().getFirstname() + " " + userService.getConnectedUser().getLastname());
+                break;
+            case DELETE:
+                userService.setConnectedUser(null);
+                this.setVisible(false);
+                this.unitOfWork.rollback();
+                new LoginFrame();
+                break;
+        }
     }
 
     {
@@ -132,7 +180,7 @@ public class MainFrame extends AppFrame {
         titleLabel.setText("chatbook");
         navPanel.add(titleLabel, BorderLayout.WEST);
         userPanel = new JPanel();
-        userPanel.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
+        userPanel.setLayout(new GridLayoutManager(1, 3, new Insets(0, 0, 0, 0), -1, -1));
         userPanel.setBackground(new Color(-12887656));
         navPanel.add(userPanel, BorderLayout.EAST);
         userLabel = new JLabel();
@@ -142,7 +190,10 @@ public class MainFrame extends AppFrame {
         deconnectButton = new JButton();
         deconnectButton.setText("✖");
         deconnectButton.setToolTipText("Se déconnecter");
-        userPanel.add(deconnectButton, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(10, 10), null, 0, false));
+        userPanel.add(deconnectButton, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(10, 10), null, 0, false));
+        updateAccountButton = new JButton();
+        updateAccountButton.setText("(ô‿ô)");
+        userPanel.add(updateAccountButton, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         bodyPanel = new JPanel();
         bodyPanel.setLayout(new BorderLayout(0, 0));
         mainPanel.add(bodyPanel, BorderLayout.CENTER);
@@ -150,10 +201,10 @@ public class MainFrame extends AppFrame {
         dashboardPanel.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
         bodyPanel.add(dashboardPanel, BorderLayout.NORTH);
         accountsButton = new JButton();
-        accountsButton.setText("Gestion des comptes");
+        accountsButton.setText("Utilisateurs");
         dashboardPanel.add(accountsButton, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         discussionsButton = new JButton();
-        discussionsButton.setText("Gestion des discussiones");
+        discussionsButton.setText("Discussions");
         dashboardPanel.add(discussionsButton, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         contentPanel = new JPanel();
         contentPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
