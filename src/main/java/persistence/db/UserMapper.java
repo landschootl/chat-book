@@ -5,6 +5,7 @@ import domain.User;
 import domain.enums.ERole;
 import persistence.uow.UnitOfWork;
 
+import javax.management.relation.Role;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -65,6 +66,28 @@ public class UserMapper extends Mapper {
     public List<User> findAll() throws SQLException {
         List<User> users = new ArrayList<>();
         ResultSet rs = statement.executeQuery(this.bundle.getString("select.all.users"));
+
+        while(rs.next()) {
+            User user = User.builder()
+                    .id(rs.getInt(1))
+                    .login(rs.getString(2))
+                    .firstname(rs.getString(3))
+                    .lastname(rs.getString(4))
+                    .role(ERole.valueOf(rs.getString(5)))
+                    .obs(new ArrayList<>())
+                    .build();
+            user.addObserver(UnitOfWork.getInstance());
+
+            users.add(user);
+        }
+        rs.close();
+
+        return users;
+    }
+
+    public List<IUser> findByDiscussion() throws SQLException {
+        List<IUser> users = new ArrayList<>();
+        ResultSet rs = statement.executeQuery(this.bundle.getString("select.users.by.discussion"));
 
         while(rs.next()) {
             User user = User.builder()

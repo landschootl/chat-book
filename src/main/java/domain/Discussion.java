@@ -18,6 +18,7 @@ public class Discussion implements IDomainObject{
     private int id;
     private IUser mod;
     private String name;
+    private List<IUser> users;
 
     @Override
     public String toString() {

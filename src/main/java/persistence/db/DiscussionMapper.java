@@ -33,16 +33,20 @@ public class DiscussionMapper extends Mapper {
         return instance;
     }
 
+    private Discussion createDiscussion(ResultSet rs) throws SQLException {
+        return Discussion.builder()
+                .id(rs.getInt("id"))
+                .mod(new VirtualProxyBuilder<>(IUser.class, new UserFactory(rs.getString("id_mod"))).getProxy())
+                .name(rs.getString("name"))
+                .build();
+    }
+
     public List<Discussion> findAll() throws SQLException {
         List <Discussion> discussions = new ArrayList<>();
         ResultSet rs = statement.executeQuery(this.bundle.getString("select.discussions.all"));
 
         while(rs.next()) {
-            discussions.add(Discussion.builder()
-                    .id(rs.getInt("id"))
-                    .mod(new VirtualProxyBuilder<>(IUser.class, new UserFactory(rs.getString("id_mod"))).getProxy())
-                    .name(rs.getString("name"))
-                    .build());
+            discussions.add(createDiscussion(rs));
         }
         rs.close();
 
@@ -56,11 +60,7 @@ public class DiscussionMapper extends Mapper {
         ResultSet rs = preparedStatement.executeQuery();
 
         while(rs.next()) {
-            discussions.add(Discussion.builder()
-                    .id(rs.getInt("id"))
-                    .mod(new VirtualProxyBuilder<>(IUser.class, new UserFactory(rs.getString("id_mod"))).getProxy())
-                    .name(rs.getString("name"))
-                    .build());
+            discussions.add(createDiscussion(rs));
         }
         rs.close();
 

@@ -10,6 +10,7 @@ import service.UserService;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 
 public class DiscussionsPanel extends JPanel {
@@ -26,6 +27,7 @@ public class DiscussionsPanel extends JPanel {
     private DefaultListModel<Discussion> discussionsListModel;
     private JTextField newMessageTextField;
     private JButton sendButton;
+    private JButton addDiscussionButton;
 
     public DiscussionsPanel() {
         this.userService = UserService.getInstance();
@@ -35,22 +37,31 @@ public class DiscussionsPanel extends JPanel {
 
     private void initComponents() {
         this.setLayout(new BorderLayout(0, 0));
+        initDiscussionsPanelLeft();
+        initDiscussionsPanelRight();
 
-        initDiscussionPanelLeft();
+        addDiscussionButton = new JButton();
+        addDiscussionButton.setText("Ajouter une discussion");
+        addDiscussionButton.addActionListener((ActionEvent e) -> {
+            new UpdateDiscussionFrame(Discussion.builder().mod(userService.getConnectedUser()).build());
+        });
+        this.add(addDiscussionButton, BorderLayout.SOUTH);
+    }
 
-
-        discussionsPanelLeft.add(discussionsList, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+    private void initDiscussionsPanelRight() {
         discussionsPanelRight = new JPanel();
         discussionsPanelRight.setLayout(new BorderLayout(0, 0));
         discussionsPanelRight.setOpaque(true);
         discussionsPanelRight.setPreferredSize(new Dimension(400, 50));
         this.add(discussionsPanelRight, BorderLayout.EAST);
+
         nameDiscussion = new JLabel();
         nameDiscussion.setFont(new Font(nameDiscussion.getFont().getName(), nameDiscussion.getFont().getStyle(), 18));
         nameDiscussion.setHorizontalAlignment(0);
         nameDiscussion.setHorizontalTextPosition(0);
         nameDiscussion.setText("");
         discussionsPanelRight.add(nameDiscussion, BorderLayout.NORTH);
+
         discussionPanel  = new JPanel();
         discussionPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         discussionsPanelRight.add(discussionPanel, BorderLayout.SOUTH);
@@ -58,12 +69,13 @@ public class DiscussionsPanel extends JPanel {
         newMessageTextField = new JTextField();
         newMessageTextField.setText("Taper votre message...");
         discussionPanel.add(newMessageTextField);
+
         sendButton = new JButton();
         sendButton.setText("Envoyer");
         discussionPanel.add(sendButton);
     }
 
-    private void initDiscussionPanelLeft() {
+    private void initDiscussionsPanelLeft() {
         discussionsPanelLeft = new JPanel();
         discussionsPanelLeft.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         this.add(discussionsPanelLeft, BorderLayout.WEST);
@@ -72,17 +84,18 @@ public class DiscussionsPanel extends JPanel {
 
     public void initDiscussionsList() {
         try {
-            discussionsList = new JList();
             discussionsListModel = new DefaultListModel<>();
             discussionsList = new JList(discussionsListModel);
+            discussionsPanelLeft.add(discussionsList, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+
             java.util.List<Discussion> listDiscussion;
             if (ERole.USER_ADMIN.equals(userService.getConnectedUser().getRole())) {
                 listDiscussion = DiscussionService.findAll();
             } else {
                 listDiscussion = DiscussionService.findByUser(userService.getConnectedUser());
             }
-            for (Discussion Discussion : listDiscussion) {
-                discussionsListModel.addElement(Discussion);
+            for (Discussion discussion : listDiscussion) {
+                discussionsListModel.addElement(discussion);
             }
             discussionsList.setVisibleRowCount(10);
             discussionsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
