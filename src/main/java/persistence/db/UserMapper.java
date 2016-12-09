@@ -1,11 +1,11 @@
 package persistence.db;
 
+import domain.Discussion;
 import domain.IUser;
 import domain.User;
 import domain.enums.ERole;
 import persistence.uow.UnitOfWork;
 
-import javax.management.relation.Role;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -87,8 +87,9 @@ public class UserMapper extends Mapper {
 
     public List<IUser> findByDiscussion(Discussion discussion) throws SQLException {
         List<IUser> users = new ArrayList<>();
-        ResultSet rs = preparedStatement.executeQuery(this.bundle.getString("select.users.by.discussion"));
+        preparedStatement = db.prepareStatement(this.bundle.getString("select.users.by.discussion"));
         preparedStatement.setInt(1, discussion.getId());
+        ResultSet rs = preparedStatement.executeQuery();
 
         while(rs.next()) {
             User user = User.builder()
