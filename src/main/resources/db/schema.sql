@@ -17,42 +17,6 @@ CREATE TABLE USER (
 	constraint u_role_enum check(role in ('USER_DEFAULT','USER_ADMIN'))
 );
 
--- Table des groupes de centres d'intêrets
-/*DROP TABLE IF EXISTS HOBBIES;
-CREATE TABLE HOBBIES (
-	id int NOT NULL AUTO_INCREMENT primary key,
-	name varchar(9) NOT NULL
-);
-
--- Table des centres d'intêrets
-DROP TABLE IF EXISTS HOBBY;
-CREATE TABLE HOBBY (
-	id int NOT NULL AUTO_INCREMENT primary key,
-	id_hobbies int NOT NULL,
-	name varchar(9) NOT NULL,
-	foreign key (id_hobbies) REFERENCES HOBBIES(id)
-);
-
--- Table de relation entre un utilisateur et un groupe de centres d'interets
-DROP TABLE IF EXISTS USER_HOBBIES;
-CREATE TABLE USER_HOBBIES (
-	id int NOT NULL AUTO_INCREMENT primary key,
-	id_user int NOT NULL,
-	id_hobbies int NOT NULL,
-	foreign key (id_user) REFERENCES USER(id),
-	foreign key (id_hobbies) REFERENCES HOBBIES(id)
-);
-
--- Table de relation entre un utilisateur et un centre d'interet
-DROP TABLE IF EXISTS USER_HOBBY;
-CREATE TABLE USER_HOBBY (
-	id int NOT NULL AUTO_INCREMENT primary key,
-	id_user int NOT NULL,
-	id_hobby int NOT NULL,
-	foreign key (id_user) REFERENCES USER(id),
-	foreign key (id_hobby) REFERENCES HOBBY(id)
-);*/
-
 -- Table de relation entre deux utilisateurs amis
 DROP TABLE IF EXISTS FRIEND;
 CREATE TABLE FRIEND (
