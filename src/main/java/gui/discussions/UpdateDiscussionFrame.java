@@ -6,11 +6,14 @@ import com.intellij.uiDesigner.core.Spacer;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import domain.Discussion;
+import domain.IUser;
 import domain.User;
 import gui.AppFrame;
+import service.UserService;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.SQLException;
 
 /**
  * Created by landschoot on 09/12/16.
@@ -26,14 +29,19 @@ public class UpdateDiscussionFrame extends AppFrame {
     private JLabel managerLabel;
 
     private Discussion discussion;
-    private DefaultListModel<User> friends;
-    private DefaultListModel<User> users;
+    private DefaultListModel<IUser> friends;
+    private DefaultListModel<IUser> users;
+
+    private UserService userService;
 
     public UpdateDiscussionFrame(Discussion discussion) {
         super();
+        this.userService = UserService.getInstance();
         this.discussion = discussion;
         initComponents();
         initInformationsDiscution();
+        //initListUsers();
+        initListFriends();
     }
 
     @Override
@@ -53,11 +61,23 @@ public class UpdateDiscussionFrame extends AppFrame {
     }
 
     public void initListUsers() {
-
+        users = new DefaultListModel<>();
+        for (IUser user : discussion.getUsers()) {
+            users.addElement(user);
+        }
+        usersList.setModel(users);
     }
 
     public void initListFriends() {
-
+        friends = new DefaultListModel<>();
+        try {
+            for (IUser friend : userService.findAll()) {
+                friends.addElement(friend);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        friendsList.setModel(friends);
     }
 
     public void initButton() {
