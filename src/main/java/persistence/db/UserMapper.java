@@ -85,9 +85,10 @@ public class UserMapper extends Mapper {
         return users;
     }
 
-    public List<IUser> findByDiscussion() throws SQLException {
+    public List<IUser> findByDiscussion(Discussion discussion) throws SQLException {
         List<IUser> users = new ArrayList<>();
-        ResultSet rs = statement.executeQuery(this.bundle.getString("select.users.by.discussion"));
+        ResultSet rs = preparedStatement.executeQuery(this.bundle.getString("select.users.by.discussion"));
+        preparedStatement.setInt(1, discussion.getId());
 
         while(rs.next()) {
             User user = User.builder()

@@ -4,8 +4,12 @@ select:
         WHERE login = ? AND password = ?;
 
     user.by.identifiant: SELECT id, login, firstname, lastname, role
-            FROM USER
-            WHERE id = ?;
+          FROM USER
+          WHERE id = ?;
+
+    users.by.discussion: SELECT id, login, firstname, lastname, role
+          FROM USER_CONNECTION uc JOIN USER u ON uc.id_user=u.id
+          WHERE id_connection = ?;
 
     all.users: SELECT id, login, firstname, lastname, role
         FROM USER;
