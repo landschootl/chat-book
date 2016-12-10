@@ -55,4 +55,9 @@ public class Discussion implements IDomainObject{
         this.name = name;
         notif(null);
     }
+
+    public void setUsers(List<IUser> users) {
+        this.users = users;
+        notif(null);
+    }
 }

@@ -5,6 +5,8 @@ import domain.IUser;
 import domain.User;
 import domain.enums.ERole;
 import persistence.uow.UnitOfWork;
+import persistence.vp.UserFactory;
+import persistence.vp.VirtualProxyBuilder;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -92,17 +94,7 @@ public class UserMapper extends Mapper {
         ResultSet rs = preparedStatement.executeQuery();
 
         while(rs.next()) {
-            User user = User.builder()
-                    .id(rs.getInt(1))
-                    .login(rs.getString(2))
-                    .firstname(rs.getString(3))
-                    .lastname(rs.getString(4))
-                    .role(ERole.valueOf(rs.getString(5)))
-                    .obs(new ArrayList<>())
-                    .build();
-            user.addObserver(UnitOfWork.getInstance());
-
-            users.add(user);
+            users.add(new VirtualProxyBuilder<>(IUser.class, new UserFactory(rs.getString("id"))).getProxy());
         }
         rs.close();
 

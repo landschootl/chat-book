@@ -1,5 +1,7 @@
 package service;
 
+import domain.Discussion;
+import domain.IUser;
 import domain.User;
 import lombok.Data;
 import persistence.db.UserMapper;
@@ -48,5 +50,8 @@ public class UserService {
     public void delete(User user) {
         userMapper.delete(user);
     }
-    
+
+    public List<IUser> findByDiscussion(Discussion discussion) throws SQLException {
+        return userMapper.findByDiscussion(discussion);
+    }
 }

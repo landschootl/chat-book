@@ -65,9 +65,6 @@ public class AccountsPanel extends JPanel {
             this.add(new JScrollPane(accountsJList));
             accountsJList.addListSelectionListener((ListSelectionEvent e) -> {
                 if (!e.getValueIsAdjusting()) {
-                    if (this.userSelected != null) {
-                        updateUserInfos();
-                    }
                     userSelected = (User) accountsJList.getSelectedValue();
 
                     if (userSelected != null) {

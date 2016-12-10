@@ -4,8 +4,10 @@ import domain.Discussion;
 import domain.IUser;
 import domain.User;
 import org.omg.CORBA.NO_IMPLEMENT;
+import persistence.uow.UnitOfWork;
 import persistence.vp.UserFactory;
 import persistence.vp.VirtualProxyBuilder;
+import service.UserService;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,8 +23,11 @@ public class DiscussionMapper extends Mapper {
     public static DiscussionMapper instance = null;
     private Map<Integer, Discussion> cache;
 
+    private UserService userService;
+
     public DiscussionMapper(){
         super();
+        this.userService = UserService.getInstance();
         this.cache = new HashMap<>();
     }
 
@@ -34,11 +39,15 @@ public class DiscussionMapper extends Mapper {
     }
 
     private Discussion createDiscussion(ResultSet rs) throws SQLException {
-        return Discussion.builder()
+        Discussion discussion = Discussion.builder()
                 .id(rs.getInt("id"))
                 .mod(new VirtualProxyBuilder<>(IUser.class, new UserFactory(rs.getString("id_mod"))).getProxy())
                 .name(rs.getString("name"))
+                .obs(new ArrayList<>())
                 .build();
+        discussion.setUsers(userService.findByDiscussion(discussion));
+        discussion.addObserver(UnitOfWork.getInstance());
+        return discussion;
     }
 
     public List<Discussion> findAll() throws SQLException {
@@ -52,6 +61,7 @@ public class DiscussionMapper extends Mapper {
 
         return discussions;
     }
+
 
     public List<Discussion> findByUser(User user) throws SQLException {
         List <Discussion> discussions = new ArrayList<>();
