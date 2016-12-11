@@ -36,6 +36,10 @@ select:
         FROM FRIENDSHIP
         WHERE id_user2 = ? AND confirmed = false;
 
+    message.by.discussion: SELECT id, id_connection, id_user, message, accused, priority, expiration, code
+        FROM MESSAGE
+        WHERE id_connection = ?;
+
 create:
   user:
     INSERT INTO USER VALUES (default, ?, ?, ?, ?, ?);
@@ -48,6 +52,9 @@ create:
 
   friendship:
     INSERT INTO FRIENDSHIP VALUES (default, ?, ?, false);
+
+  message:
+    INSERT INTO MESSAGE VALUES (default, ?, ?, ?, ?, ?, ?, ?);
 
 update:
   user.by.identifiant:

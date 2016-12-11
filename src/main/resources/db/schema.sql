@@ -53,8 +53,10 @@ CREATE TABLE MESSAGE (
 	id_connection int NOT NULL,
 	id_user int NOT NULL,
 	message varchar(140) NOT NULL,
-	prioritaire boolean,
+	accused boolean,
+	priority boolean,
 	expiration date,
+	code boolean,
 	foreign key (id_connection) REFERENCES CONNECTION(id),
 	foreign key (id_user) REFERENCES USER(id) ON DELETE CASCADE
 );

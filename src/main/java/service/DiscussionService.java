@@ -16,7 +16,7 @@ public class DiscussionService {
     public static DiscussionService instance = null;
     private DiscussionMapper discussionMapper;
 
-    public DiscussionService(){
+    private DiscussionService(){
         discussionMapper = DiscussionMapper.getInstance();
     }
 

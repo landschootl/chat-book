@@ -15,7 +15,6 @@ import service.UserService;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -80,14 +79,10 @@ public class UpdateDiscussionFrame extends AppFrame implements Observable {
     public void initListFriends() {
         friendsList.setPreferredSize(new Dimension(150, 150));
         friends = new DefaultListModel<>();
-        try {
-            for (IUser friend : userService.findAll()) {
-                if (!friendInTheUsers(friend)) {
-                    friends.addElement(friend);
-                }
+        for (IUser friend : userService.findConnectedUserFriends()) {
+            if (!friendInTheUsers(friend)) {
+                friends.addElement(friend);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         friendsList.setModel(friends);
     }

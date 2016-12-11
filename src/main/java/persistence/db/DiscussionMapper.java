@@ -21,14 +21,12 @@ import java.util.Map;
  */
 public class DiscussionMapper extends Mapper {
     public static DiscussionMapper instance = null;
-    private Map<Integer, Discussion> cache;
 
     private UserService userService;
 
     public DiscussionMapper(){
         super();
         this.userService = UserService.getInstance();
-        this.cache = new HashMap<>();
     }
 
     public static DiscussionMapper getInstance() {
