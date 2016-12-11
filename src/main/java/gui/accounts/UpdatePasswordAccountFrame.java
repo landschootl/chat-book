@@ -65,7 +65,7 @@ public class UpdatePasswordAccountFrame extends AppFrame {
         mainPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         this.setContentPane(mainPanel);
 
-        this.setTitle("Modifier mon mot de passe");
+        this.setTitle("Modifier le mot de passe");
         this.setSize(400, 230);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);

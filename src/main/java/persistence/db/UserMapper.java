@@ -146,7 +146,7 @@ public class UserMapper extends Mapper {
     public void updatePassword(IUser user) {
         try {
             PreparedStatement preparedStatement = db.prepareStatement(this.bundle.getString("update.user.password"));
-            preparedStatement.setString(1, ((User) user).getPassword());
+            preparedStatement.setString(1, user.getPassword());
             preparedStatement.setInt(2, user.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {

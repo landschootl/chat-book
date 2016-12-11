@@ -33,6 +33,7 @@ public class AccountsPanel extends JPanel {
     private JButton createAccountButton;
     private JButton updateAccountButton;
     private JButton deleteAccountButton;
+    private JButton passwordAccountButton;
     private ButtonGroup rolesGroup;
 
     public AccountsPanel() {
@@ -132,6 +133,7 @@ public class AccountsPanel extends JPanel {
         accountsPanelRight.add(infosAccountPanel, BorderLayout.CENTER);
 
         JPanel buttonsPanel = new JPanel();
+        buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
 
         updateAccountButton = new JButton("Enregistrer");
         updateAccountButton.addActionListener((ActionEvent e) -> {
@@ -150,6 +152,10 @@ public class AccountsPanel extends JPanel {
             JOptionPane.showMessageDialog(new JFrame(), "Suppression effectuée.");
         });
         buttonsPanel.add(deleteAccountButton);
+
+        passwordAccountButton = new JButton("Modifier le mot de passe");
+        passwordAccountButton.addActionListener((ActionEvent e) -> new UpdatePasswordAccountFrame(userSelected));
+        buttonsPanel.add(passwordAccountButton);
 
         accountsPanelRight.add(buttonsPanel, BorderLayout.SOUTH);
 
@@ -175,5 +181,6 @@ public class AccountsPanel extends JPanel {
         adminButton.setVisible(visible);
         updateAccountButton.setVisible(visible);
         deleteAccountButton.setVisible(visible);
+        passwordAccountButton.setVisible(visible);
     }
 }

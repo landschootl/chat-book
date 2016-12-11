@@ -50,7 +50,7 @@ public class UserService {
 
     public void updatePassword(IUser user) {
         try {
-            ((User) user).setPassword(SecurityService.getInstance().encrypt(((User) user).getPassword()));
+            user.setPassword(SecurityService.getInstance().encrypt(user.getPassword()));
         } catch (Exception e) {
             e.printStackTrace();
         }
