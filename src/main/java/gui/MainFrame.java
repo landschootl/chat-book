@@ -15,10 +15,12 @@ import persistence.uow.Observer;
 import persistence.uow.UnitOfWork;
 import service.UserService;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 
 public class MainFrame extends AppFrame implements Observer {
     private JPanel navPanel;
@@ -99,6 +101,23 @@ public class MainFrame extends AppFrame implements Observer {
         userLabel.setText(userService.getConnectedUser().getFirstname() + " " + userService.getConnectedUser().getLastname());
         dashboardPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         checkComponentRoles();
+
+        Image waitingFriendshipImg = null;
+        Image updateAccountccountImg = null;
+        Image logoutImg = null;
+        try {
+            waitingFriendshipImg = ImageIO.read(MainFrame.class.getResource("../img/demandes_amis.png"));
+            waitingFriendshipImg = waitingFriendshipImg.getScaledInstance(20, 20, Image.SCALE_DEFAULT);
+            updateAccountccountImg = ImageIO.read(MainFrame.class.getResource("../img/mon_compte.png"));
+            updateAccountccountImg = updateAccountccountImg.getScaledInstance(20, 20, Image.SCALE_DEFAULT);
+            logoutImg = ImageIO.read(MainFrame.class.getResource("../img/deconnexion.png"));
+            logoutImg = logoutImg.getScaledInstance(20, 20, Image.SCALE_DEFAULT);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        waitingFriendshipsButton.setIcon(new ImageIcon(waitingFriendshipImg));
+        updateAccountButton.setIcon(new ImageIcon(updateAccountccountImg));
+        deconnectButton.setIcon(new ImageIcon(logoutImg));
     }
 
     public void checkComponentRoles() {
@@ -227,16 +246,16 @@ public class MainFrame extends AppFrame implements Observer {
         userLabel.setText("Label");
         userPanel.add(userLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         deconnectButton = new JButton();
-        deconnectButton.setText("✖");
+        deconnectButton.setText("");
         deconnectButton.setToolTipText("Se déconnecter");
         userPanel.add(deconnectButton, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(10, 10), null, 0, false));
         updateAccountButton = new JButton();
-        updateAccountButton.setText("(ô‿ô)");
+        updateAccountButton.setText("");
         updateAccountButton.setToolTipText("Modifier mon compte");
         userPanel.add(updateAccountButton, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         waitingFriendshipsButton = new JButton();
         waitingFriendshipsButton.setFont(new Font(waitingFriendshipsButton.getFont().getName(), Font.BOLD, waitingFriendshipsButton.getFont().getSize()));
-        waitingFriendshipsButton.setText("±");
+        waitingFriendshipsButton.setText("");
         waitingFriendshipsButton.setToolTipText("Demandes d'amitié en attente");
         userPanel.add(waitingFriendshipsButton, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         bodyPanel = new JPanel();
