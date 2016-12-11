@@ -1,11 +1,14 @@
 package gui.search;
 
+import domain.Friendship;
 import domain.IUser;
 import domain.User;
 import domain.enums.ERole;
 import gui.components.PlaceholderTextField;
 import persistence.uow.UnitOfWork;
+import service.FriendshipService;
 import service.SearchService;
+import service.UserService;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -18,6 +21,8 @@ import java.sql.SQLException;
 
 public class SearchPanel extends JPanel {
     private SearchService searchService;
+    private UserService userService;
+    private FriendshipService friendshipService;
     private IUser userSelected;
 
     private PlaceholderTextField firstnameSearch;
@@ -34,10 +39,15 @@ public class SearchPanel extends JPanel {
     private JLabel loginAccount;
     private JLabel lastnameAccount;
     private JLabel firstnameAccount;
+    private JLabel waitingFriendshipLabel;
+    private JButton addFriendButton;
+    private JButton deleteFriendButton;
     private JPanel infosAccountPanel;
 
     public SearchPanel() {
         this.searchService = SearchService.getInstance();
+        this.friendshipService = FriendshipService.getInstance();
+        this.userService = UserService.getInstance();
         this.setLayout(new BorderLayout(0, 0));
 
         initSearch();
@@ -48,12 +58,6 @@ public class SearchPanel extends JPanel {
     private void initAccountsList() {
         try {
             accountsListModel = new DefaultListModel<>();
-            java.util.List<IUser> accountsList = this.searchService.searchUsers("","");
-
-            for (IUser user : accountsList) {
-                accountsListModel.addElement(user);
-            }
-
             accountsJList = new JList(accountsListModel);
             accountsJList.setVisibleRowCount(10);
             accountsJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -68,6 +72,7 @@ public class SearchPanel extends JPanel {
                         loginAccount.setText(userSelected.getLogin());
                         lastnameAccount.setText(userSelected.getLastname());
                         firstnameAccount.setText(userSelected.getFirstname());
+                        checkVisibilityFriendButtons();
                     } else {
                         setVisibleAccountInfos(false);
                     }
@@ -85,7 +90,9 @@ public class SearchPanel extends JPanel {
         java.util.List<IUser> accountsList = this.searchService.searchUsers(lastnameSearch.getText(), firstnameSearch.getText());
 
         for (IUser user : accountsList) {
-            accountsListModel.addElement(user);
+            if (user.getId() != userService.getConnectedUser().getId()) {
+                accountsListModel.addElement(user);
+            }
         }
         accountsScrollPane.setVisible(true);
         this.validate();
@@ -149,10 +156,22 @@ public class SearchPanel extends JPanel {
         infosAccountPanel = new JPanel();
         lastnameAccount = new JLabel();
         firstnameAccount = new JLabel();
+        waitingFriendshipLabel = new JLabel("Demande d'amitié en attente de confirmation");
+        waitingFriendshipLabel.setVisible(false);
 
         infosAccountPanel.setLayout(new GridLayout(3, 3));
         infosAccountPanel.add(firstnameAccount);
         infosAccountPanel.add(lastnameAccount);
+        infosAccountPanel.add(waitingFriendshipLabel);
+
+        addFriendButton = new JButton("Ajouter en ami");
+        addFriendButton.setVisible(false);
+        infosAccountPanel.add(addFriendButton);
+
+        deleteFriendButton = new JButton("Supprimer de vos amis");
+        deleteFriendButton.setVisible(false);
+        infosAccountPanel.add(deleteFriendButton);
+
         panelRight.add(infosAccountPanel);
 
         this.add(panelRight, BorderLayout.EAST);
@@ -165,5 +184,27 @@ public class SearchPanel extends JPanel {
         infosAccountPanel.setVisible(visible);
         firstnameAccount.setVisible(visible);
         lastnameAccount.setVisible(visible);
+    }
+
+    private void checkVisibilityFriendButtons() {
+        IUser connectedUser = userService.getConnectedUser();
+
+        Friendship friendship = this.friendshipService.findFriendship(connectedUser, userSelected);
+
+        if (friendship != null) {
+            if (friendship.isConfirmed()) {
+                this.addFriendButton.setVisible(false);
+                this.deleteFriendButton.setVisible(true);
+                this.waitingFriendshipLabel.setVisible(false);
+            } else {
+                this.addFriendButton.setVisible(false);
+                this.deleteFriendButton.setVisible(false);
+                this.waitingFriendshipLabel.setVisible(true);
+            }
+        } else {
+            this.addFriendButton.setVisible(true);
+            this.deleteFriendButton.setVisible(false);
+            this.waitingFriendshipLabel.setVisible(false);
+        }
     }
 }

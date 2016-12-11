@@ -18,8 +18,8 @@ CREATE TABLE USER (
 );
 
 -- Table de relation entre deux utilisateurs amis
-DROP TABLE IF EXISTS FRIEND;
-CREATE TABLE FRIEND (
+DROP TABLE IF EXISTS FRIENDSHIP;
+CREATE TABLE FRIENDSHIP (
 	id int NOT NULL AUTO_INCREMENT primary key,
 	id_user1 int NOT NULL,
 	id_user2 int NOT NULL,

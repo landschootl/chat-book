@@ -11,7 +11,7 @@ select:
           FROM USER_CONNECTION uc JOIN USER u ON uc.id_user=u.id
           WHERE uc.id_connection = ?;
 
-    all.users: SELECT id, login, firstname, lastname, role
+    users.all: SELECT id, login, firstname, lastname, role
         FROM USER;
 
     discussions.all: SELECT id, id_mod, name
@@ -21,6 +21,11 @@ select:
         FROM CONNECTION c
         JOIN USER_CONNECTION uc ON c.id = uc.id_connection
         WHERE uc.id_user = ?;
+
+    friendship: SELECT id_user1, id_user1, confirmed
+        FROM FRIENDSHIP
+        WHERE id_user1 = ? AND id_user2 = ?
+        OR id_user1 = ? AND id_user2 = ?;
 
 create:
   user:

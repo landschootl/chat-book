@@ -28,20 +28,6 @@ public class UserMapper extends Mapper {
         return instance;
     }
 
-    private User createUser(ResultSet rs) throws SQLException {
-        User user;
-        user = User.builder()
-                .id(rs.getInt(1))
-                .login(rs.getString(2))
-                .firstname(rs.getString(3))
-                .lastname(rs.getString(4))
-                .role(ERole.valueOf(rs.getString(5)))
-                .obs(new ArrayList<>())
-                .build();
-        user.addObserver(UnitOfWork.getInstance());
-        return user;
-    }
-
     public User findByCredentials(String login, String password) throws SQLException {
         User user = null;
         preparedStatement = db.prepareStatement(this.bundle.getString("select.user.by.credentials"));
@@ -73,7 +59,7 @@ public class UserMapper extends Mapper {
 
     public List<IUser> findAll() throws SQLException {
         List<IUser> users = new ArrayList<>();
-        ResultSet rs = statement.executeQuery(this.bundle.getString("select.all.users"));
+        ResultSet rs = statement.executeQuery(this.bundle.getString("select.users.all"));
 
         while(rs.next()) {
             users.add(new VirtualProxyBuilder<>(IUser.class, new UserFactory(rs.getString("id"))).getProxy());
@@ -147,5 +133,19 @@ public class UserMapper extends Mapper {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private User createUser(ResultSet rs) throws SQLException {
+        User user;
+        user = User.builder()
+                .id(rs.getInt(1))
+                .login(rs.getString(2))
+                .firstname(rs.getString(3))
+                .lastname(rs.getString(4))
+                .role(ERole.valueOf(rs.getString(5)))
+                .obs(new ArrayList<>())
+                .build();
+        user.addObserver(UnitOfWork.getInstance());
+        return user;
     }
 }
