@@ -40,6 +40,12 @@ create:
   user:
     INSERT INTO USER VALUES (default, ?, ?, ?, ?, ?);
 
+  discussion:
+    INSERT INTO CONNECTION VALUES (default, ?, ?);
+
+  discussion.user:
+      INSERT INTO USER_CONNECTION VALUES (default, ?, ?);
+
   friendship:
     INSERT INTO FRIENDSHIP VALUES (default, ?, ?, false);
 

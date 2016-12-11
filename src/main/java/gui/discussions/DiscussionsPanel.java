@@ -3,9 +3,11 @@ package gui.discussions;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import domain.Discussion;
+import domain.IDomainObject;
 import domain.IUser;
 import domain.User;
-import domain.enums.ERole;
+import domain.enums.ECrud;
+import persistence.uow.Observer;
 import service.DiscussionService;
 import service.UserService;
 
@@ -16,8 +18,7 @@ import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class DiscussionsPanel extends JPanel {
-
+public class DiscussionsPanel extends JPanel implements Observer {
     private JPanel discussionsPanelLeft;
     private JPanel discussionsPanelRight;
     private JPanel sendDiscussionPanel;
@@ -53,7 +54,8 @@ public class DiscussionsPanel extends JPanel {
         addDiscussionButton = new JButton();
         addDiscussionButton.setText("Créer une nouvelle discussion");
         addDiscussionButton.addActionListener((ActionEvent e) -> {
-            new UpdateDiscussionFrame(Discussion.builder().mod(userService.getConnectedUser()).users(new ArrayList<IUser>()).build());
+            UpdateDiscussionFrame updateDiscussionFrame = new UpdateDiscussionFrame(Discussion.builder().mod(connectedUser).users(new ArrayList<IUser>()).build());
+            updateDiscussionFrame.addObserver(this);
         });
         this.add(addDiscussionButton, BorderLayout.NORTH);
     }
@@ -79,7 +81,8 @@ public class DiscussionsPanel extends JPanel {
         updateDiscussionButton = new JButton("gérer");
         updateDiscussionButton.setVisible(false);
         updateDiscussionButton.addActionListener((ActionEvent e) -> {
-            new UpdateDiscussionFrame(discussionSelected);
+            UpdateDiscussionFrame updateDiscussionFrame = new UpdateDiscussionFrame(discussionSelected);
+            updateDiscussionFrame.addObserver(this);
         });
         headerDiscussionPanel.add(updateDiscussionButton);
 
@@ -110,10 +113,10 @@ public class DiscussionsPanel extends JPanel {
             discussionsPanelLeft.add(discussionsList, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
 
             java.util.List<Discussion> listDiscussion;
-            if (ERole.USER_ADMIN.equals(userService.getConnectedUser().getRole())) {
+            if (connectedUser.isAdmin()) {
                 listDiscussion = discussionService.findAll();
             } else {
-                listDiscussion = discussionService.findByUser(userService.getConnectedUser());
+                listDiscussion = discussionService.findByUser(connectedUser);
             }
             for (Discussion discussion : listDiscussion) {
                 discussionsListModel.addElement(discussion);
@@ -125,7 +128,7 @@ public class DiscussionsPanel extends JPanel {
                 if (!e.getValueIsAdjusting()) {
                     discussionSelected = (Discussion) discussionsList.getSelectedValue();
                     nameDiscussion.setText(discussionSelected.getName());
-                    if(discussionSelected.getMod().equals(connectedUser) || connectedUser.isAdmin()){
+                    if(discussionSelected.getMod().getId() == connectedUser.getId() || connectedUser.isAdmin()){
                         updateDiscussionButton.setVisible(true);
                     } else {
                         updateDiscussionButton.setVisible(false);
@@ -136,4 +139,26 @@ public class DiscussionsPanel extends JPanel {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void action(IDomainObject o) {}
+
+    @Override
+    public void action(Object o) {}
+
+    @Override
+    public void action(Object crud, Object element) {
+        switch ((ECrud) crud) {
+            case UPDATE:
+
+                break;
+            case CREATE:
+                discussionsListModel.addElement((Discussion) element);
+                break;
+            case DELETE:
+
+                break;
+        }
+    }
+
 }

@@ -58,4 +58,12 @@ public class DiscussionService {
     public boolean delete(Discussion discussion){
         return discussionMapper.remove(discussion);
     }
+
+    public Discussion saveDiscussion(Discussion discussion) {
+        if(discussion.getId() == 0){
+            return discussionMapper.create(discussion);
+        } else {
+            return discussionMapper.update(discussion);
+        }
+    }
 }

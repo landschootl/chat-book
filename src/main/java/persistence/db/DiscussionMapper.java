@@ -4,11 +4,11 @@ import domain.Discussion;
 import domain.IUser;
 import domain.User;
 import org.omg.CORBA.NO_IMPLEMENT;
-import persistence.uow.UnitOfWork;
 import persistence.vp.UserFactory;
 import persistence.vp.VirtualProxyBuilder;
 import service.UserService;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -43,10 +43,8 @@ public class DiscussionMapper extends Mapper {
                 .id(rs.getInt("id"))
                 .mod(new VirtualProxyBuilder<>(IUser.class, new UserFactory(rs.getString("id_mod"))).getProxy())
                 .name(rs.getString("name"))
-                .obs(new ArrayList<>())
                 .build();
         discussion.setUsers(userService.findByDiscussion(discussion));
-        discussion.addObserver(UnitOfWork.getInstance());
         return discussion;
     }
 
@@ -94,7 +92,24 @@ public class DiscussionMapper extends Mapper {
     }
 
     public Discussion create(Discussion discussion) {
-        throw new NO_IMPLEMENT();
+        try {
+            PreparedStatement preparedStatement = db.prepareStatement(this.bundle.getString("create.discussion"), PreparedStatement.RETURN_GENERATED_KEYS);
+            preparedStatement.setInt(1, discussion.getMod().getId());
+            preparedStatement.setString(2, discussion.getName());
+            preparedStatement.executeUpdate();
+            ResultSet resultId = preparedStatement.getGeneratedKeys();
+            resultId.next();
+            discussion.setId(resultId.getInt(1));
+            for(IUser user : discussion.getUsers()){
+                preparedStatement = db.prepareStatement(this.bundle.getString("create.discussion.user"));
+                preparedStatement.setInt(1, discussion.getId());
+                preparedStatement.setInt(2, user.getId());
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return discussion;
     }
 
     public boolean remove(Discussion discussion) {

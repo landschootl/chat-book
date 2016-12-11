@@ -33,7 +33,7 @@ DROP TABLE IF EXISTS CONNECTION;
 CREATE TABLE CONNECTION (
 	id int NOT NULL AUTO_INCREMENT primary key,
 	id_mod int,
-	name varchar(9) NOT NULL,
+	name varchar(20) NOT NULL,
 	foreign key (id_mod) REFERENCES USER(id) ON DELETE CASCADE
 );
 

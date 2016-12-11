@@ -39,6 +39,11 @@ public class UnitOfWork implements Observer {
 
     }
 
+    @Override
+    public void action(Object crud, Object element) {
+
+    }
+
     /**
      * Effectue les modifications sur tous les utilisateurs de la liste.
      */

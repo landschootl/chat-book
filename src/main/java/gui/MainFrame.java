@@ -159,7 +159,6 @@ public class MainFrame extends AppFrame implements Observer {
 
     @Override
     public void action(Object o) {
-
         ECrud crud = (ECrud) o;
 
         switch (crud) {
@@ -173,6 +172,11 @@ public class MainFrame extends AppFrame implements Observer {
                 new LoginFrame();
                 break;
         }
+    }
+
+    @Override
+    public void action(Object crud, Object element) {
+
     }
 
     {

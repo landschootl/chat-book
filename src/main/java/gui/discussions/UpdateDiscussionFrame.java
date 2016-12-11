@@ -5,17 +5,23 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import domain.Discussion;
 import domain.IUser;
+import domain.enums.ECrud;
 import gui.AppFrame;
+import persistence.uow.Observable;
+import persistence.uow.Observer;
+import service.DiscussionService;
 import service.UserService;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * Created by landschoot on 11/12/16.
  */
-public class UpdateDiscussionFrame extends AppFrame {
+public class UpdateDiscussionFrame extends AppFrame implements Observable {
     private JPanel mainPanel;
     private JTextField titleField;
     private JButton addUserButton;
@@ -26,19 +32,25 @@ public class UpdateDiscussionFrame extends AppFrame {
     private JLabel managerLabel;
     private JButton saveButton;
 
+    private java.util.List<Observer> obs;
+
     private Discussion discussion;
     private DefaultListModel<IUser> users;
     private DefaultListModel<IUser> friends;
+    private DiscussionService discussionService;
     private UserService userService;
 
     public UpdateDiscussionFrame(Discussion discussion) {
         super();
+        this.discussionService = DiscussionService.getInstance();
         this.userService = UserService.getInstance();
+        this.obs = new ArrayList<>();
         this.discussion = discussion;
         initComponents();
         initInformationsDiscution();
         initListUsers();
         initListFriends();
+        initButton();
     }
 
     @Override
@@ -66,6 +78,7 @@ public class UpdateDiscussionFrame extends AppFrame {
     }
 
     public void initListFriends() {
+        friendsList.setPreferredSize(new Dimension(150, 150));
         friends = new DefaultListModel<>();
         try {
             for (IUser friend : userService.findAll()) {
@@ -89,7 +102,62 @@ public class UpdateDiscussionFrame extends AppFrame {
     }
 
     public void initButton() {
+        addUserButton.addActionListener((ActionEvent e) -> {
+            IUser friendSelected = (IUser) friendsList.getSelectedValue();
+            if (friendSelected != null) {
+                users.addElement(friendSelected);
+                discussion.addUser(friendSelected);
+                for (int i = 0; i < friends.size(); i++) {
+                    IUser friend = friends.get(i);
+                    if (friend.getId() == friendSelected.getId()) {
+                        friends.remove(i);
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(new JFrame(), "Veuillez sélectionner votre ami à ajouter");
+            }
+        });
+        removeUserButton.addActionListener((ActionEvent e) -> {
+            IUser userSelected = (IUser) usersList.getSelectedValue();
+            if (userSelected != null) {
+                friends.addElement(userSelected);
+                for (int i = 0; i < users.size(); i++) {
+                    IUser user = users.get(i);
+                    if (user.getId() == userSelected.getId()) {
+                        users.remove(i);
+                        discussion.removeUser(user.getId());
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(new JFrame(), "Veuillez sélectionner l'utilisateur à retirer");
+            }
+        });
+        saveButton.addActionListener((ActionEvent e) -> {
+            discussion.setName(titleField.getText());
+            discussion.addUser(discussion.getMod());
+            discussion = discussionService.saveDiscussion(discussion);
+            notif(ECrud.CREATE);
+            this.dispose();
+        });
+    }
 
+    private void removeAUserInList(IUser user, DefaultListModel<IUser> list) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getId() == user.getId()) {
+                list.remove(i);
+            }
+        }
+    }
+
+    @Override
+    public void addObserver(Observer o) {
+        this.obs.add(o);
+    }
+
+    @Override
+    public void notif(Object o) {
+        for (Observer ob : obs)
+            ob.action(o, discussion);
     }
 
     {
@@ -127,6 +195,8 @@ public class UpdateDiscussionFrame extends AppFrame {
         panel2.setLayout(new GridLayoutManager(1, 3, new Insets(10, 10, 10, 10), -1, -1));
         mainPanel.add(panel2, BorderLayout.CENTER);
         final JScrollPane scrollPane1 = new JScrollPane();
+        scrollPane1.setHorizontalScrollBarPolicy(31);
+        scrollPane1.setVerticalScrollBarPolicy(20);
         panel2.add(scrollPane1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         friendsList = new JList();
         scrollPane1.setViewportView(friendsList);
