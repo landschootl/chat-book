@@ -49,7 +49,7 @@ public class AccountsPanel extends JPanel {
         this.add(createAccountButton, BorderLayout.NORTH);
     }
 
-    public void initAccountsList() {
+    private void initAccountsList() {
         try {
             accountsListModel = new DefaultListModel<>();
             accountsJList = new JList(accountsListModel);
@@ -89,7 +89,7 @@ public class AccountsPanel extends JPanel {
         }
     }
 
-    public void initAccountsPanelRight() {
+    private void initAccountsPanelRight() {
         accountsPanelRight = new JPanel();
         accountsPanelRight.setLayout(new BorderLayout(0, 0));
         accountsPanelRight.setOpaque(true);

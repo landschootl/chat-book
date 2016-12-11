@@ -9,6 +9,7 @@ import gui.accounts.AccountsPanel;
 import gui.accounts.UpdateAccountFrame;
 import gui.discussions.DiscussionsPanel;
 import gui.login.LoginFrame;
+import gui.search.SearchPanel;
 import persistence.uow.Observer;
 import persistence.uow.UnitOfWork;
 import service.UserService;
@@ -33,9 +34,11 @@ public class MainFrame extends AppFrame implements Observer {
     private JPanel userPanel;
     private JPanel contentPanel;
     private JButton updateAccountButton;
+    private JButton searchButton;
 
     private JPanel accountsPanel;
     private JPanel discussionsPanel;
+    private JPanel searchPanel;
 
     private UserService userService;
 
@@ -64,14 +67,17 @@ public class MainFrame extends AppFrame implements Observer {
 
     public void initPanels() {
         this.accountsPanel = new AccountsPanel();
-        this.contentPanel.add(accountsPanel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        contentPanel.add(accountsPanel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         this.discussionsPanel = new DiscussionsPanel();
         contentPanel.add(discussionsPanel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        this.searchPanel = new SearchPanel();
+        contentPanel.add(searchPanel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
     }
 
     public void cleanPanels() {
         this.accountsPanel.setVisible(false);
         this.discussionsPanel.setVisible(false);
+        this.searchPanel.setVisible(false);
     }
 
     public void initComponents() {
@@ -103,6 +109,13 @@ public class MainFrame extends AppFrame implements Observer {
             discussionsButton.setForeground(Color.BLUE);
             this.discussionsPanel.setVisible(true);
         });
+        searchButton.addActionListener((ActionEvent e) -> {
+            cleanPanels();
+            cleanButtons();
+            searchButton.setFont(new Font("Lucida Grande", Font.BOLD, 16));
+            searchButton.setForeground(Color.BLUE);
+            this.searchPanel.setVisible(true);
+        });
     }
 
     public void configDeconnectButton() {
@@ -126,6 +139,8 @@ public class MainFrame extends AppFrame implements Observer {
         accountsButton.setForeground(Color.BLACK);
         discussionsButton.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
         discussionsButton.setForeground(Color.BLACK);
+        searchButton.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+        searchButton.setForeground(Color.BLACK);
     }
 
     @Override
@@ -198,14 +213,17 @@ public class MainFrame extends AppFrame implements Observer {
         bodyPanel.setLayout(new BorderLayout(0, 0));
         mainPanel.add(bodyPanel, BorderLayout.CENTER);
         dashboardPanel = new JPanel();
-        dashboardPanel.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
+        dashboardPanel.setLayout(new GridLayoutManager(1, 3, new Insets(0, 0, 0, 0), -1, -1));
         bodyPanel.add(dashboardPanel, BorderLayout.NORTH);
         accountsButton = new JButton();
         accountsButton.setText("Utilisateurs");
-        dashboardPanel.add(accountsButton, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        dashboardPanel.add(accountsButton, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(204, 32), null, 0, false));
         discussionsButton = new JButton();
         discussionsButton.setText("Discussions");
         dashboardPanel.add(discussionsButton, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        searchButton = new JButton();
+        searchButton.setText("Recherche d'amis");
+        dashboardPanel.add(searchButton, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         contentPanel = new JPanel();
         contentPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         bodyPanel.add(contentPanel, BorderLayout.CENTER);
