@@ -31,6 +31,9 @@ create:
   user:
     INSERT INTO USER VALUES (default, ?, ?, ?, ?, ?);
 
+  friendship:
+    INSERT INTO FRIENDSHIP VALUES (default, ?, ?, false);
+
 update:
   user.by.identifiant:
     UPDATE USER
@@ -50,3 +53,8 @@ delete:
   user.by.identifiant:
     DELETE FROM USER
     WHERE id = ?;
+
+  friendship:
+    DELETE FROM FRIENDSHIP
+    WHERE id_user1 = ? AND id_user2 = ?
+    OR id_user1 = ? AND id_user2 = ?;

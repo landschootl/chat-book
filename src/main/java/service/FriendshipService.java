@@ -22,7 +22,15 @@ public class FriendshipService {
         return instance;
     }
 
-    public Friendship findFriendship(IUser user1, IUser user2) {
+    public void create(Friendship friendship) {
+        friendshipMapper.create(friendship);
+    }
+
+    public void delete(Friendship friendship) {
+        friendshipMapper.delete(friendship);
+    }
+
+    public Friendship find(IUser user1, IUser user2) {
         return friendshipMapper.find(user1, user2);
     }
 }

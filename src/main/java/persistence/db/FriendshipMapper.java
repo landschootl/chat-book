@@ -20,6 +20,18 @@ public class FriendshipMapper extends Mapper {
         return instance;
     }
 
+    public void create(Friendship friendship) {
+        try {
+            preparedStatement = db.prepareStatement(this.bundle.getString("create.friendship"));
+            preparedStatement.setInt(1, friendship.getUser1().getId());
+            preparedStatement.setInt(2, friendship.getUser2().getId());
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public Friendship find(IUser user1, IUser user2) {
         try {
             preparedStatement = db.prepareStatement(this.bundle.getString("select.friendship"));
@@ -40,5 +52,19 @@ public class FriendshipMapper extends Mapper {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void delete(Friendship friendship) {
+        try {
+            preparedStatement = db.prepareStatement(this.bundle.getString("delete.friendship"));
+            preparedStatement.setInt(1, friendship.getUser1().getId());
+            preparedStatement.setInt(2, friendship.getUser2().getId());
+            preparedStatement.setInt(3, friendship.getUser2().getId());
+            preparedStatement.setInt(4, friendship.getUser1().getId());
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

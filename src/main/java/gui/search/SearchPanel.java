@@ -103,14 +103,14 @@ public class SearchPanel extends JPanel {
         JPanel panelSearch = new JPanel();
         this.add(panelSearch, BorderLayout.NORTH);
 
-        lastnameSearch = new PlaceholderTextField();
-        lastnameSearch.setPlaceholder("Nom");
-        lastnameSearch.setPreferredSize(new Dimension(200, 24));
-        panelSearch.add(lastnameSearch);
         firstnameSearch = new PlaceholderTextField();
         firstnameSearch.setPlaceholder("Prénom");
         firstnameSearch.setPreferredSize(new Dimension(200, 24));
         panelSearch.add(firstnameSearch);
+        lastnameSearch = new PlaceholderTextField();
+        lastnameSearch.setPlaceholder("Nom");
+        lastnameSearch.setPreferredSize(new Dimension(200, 24));
+        panelSearch.add(lastnameSearch);
 
         KeyListener keyListener = new KeyListener() {
             @Override
@@ -165,10 +165,33 @@ public class SearchPanel extends JPanel {
         infosAccountPanel.add(waitingFriendshipLabel);
 
         addFriendButton = new JButton("Ajouter en ami");
+        addFriendButton.addActionListener((ActionEvent e) -> {
+            Friendship friendship = Friendship.builder()
+                                        .user1(userService.getConnectedUser())
+                                        .user2(userSelected)
+                                        .build();
+
+            friendshipService.create(friendship);
+            addFriendButton.setVisible(false);
+            waitingFriendshipLabel.setVisible(true);
+            JOptionPane.showMessageDialog(new JFrame(), "Ajout avec succès.");
+        });
         addFriendButton.setVisible(false);
         infosAccountPanel.add(addFriendButton);
 
         deleteFriendButton = new JButton("Supprimer de vos amis");
+        deleteFriendButton.addActionListener((ActionEvent e) -> {
+            Friendship friendship = Friendship.builder()
+                    .user1(userService.getConnectedUser())
+                    .user2(userSelected)
+                    .build();
+
+            friendshipService.delete(friendship);
+            deleteFriendButton.setVisible(false);
+            addFriendButton.setVisible(true);
+            JOptionPane.showMessageDialog(new JFrame(), "Suppression avec succès.");
+        });
+
         deleteFriendButton.setVisible(false);
         infosAccountPanel.add(deleteFriendButton);
 
@@ -189,7 +212,7 @@ public class SearchPanel extends JPanel {
     private void checkVisibilityFriendButtons() {
         IUser connectedUser = userService.getConnectedUser();
 
-        Friendship friendship = this.friendshipService.findFriendship(connectedUser, userSelected);
+        Friendship friendship = this.friendshipService.find(connectedUser, userSelected);
 
         if (friendship != null) {
             if (friendship.isConfirmed()) {
