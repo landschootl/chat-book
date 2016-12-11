@@ -78,7 +78,7 @@ public class DiscussionsPanel extends JPanel implements Observer {
         nameDiscussion.setText("");
         headerDiscussionPanel.add(nameDiscussion);
 
-        updateDiscussionButton = new JButton("gérer");
+        updateDiscussionButton = new JButton("Gérer");
         updateDiscussionButton.setVisible(false);
         updateDiscussionButton.addActionListener((ActionEvent e) -> {
             UpdateDiscussionFrame updateDiscussionFrame = new UpdateDiscussionFrame(discussionSelected);
