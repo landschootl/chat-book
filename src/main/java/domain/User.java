@@ -65,4 +65,8 @@ public class User implements IUser{
         this.login = login;
         notif(null);
     }
+
+    public boolean isAdmin(){
+        return ERole.USER_ADMIN.equals(role);
+    }
 }
