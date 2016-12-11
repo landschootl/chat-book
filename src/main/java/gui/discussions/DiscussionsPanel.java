@@ -30,6 +30,7 @@ public class DiscussionsPanel extends JPanel implements Observer {
     private JButton sendButton;
     private JButton addDiscussionButton;
     private JButton updateDiscussionButton;
+    private JButton deleteDiscussionButton;
 
     private UserService userService;
     private User connectedUser;
@@ -55,7 +56,11 @@ public class DiscussionsPanel extends JPanel implements Observer {
         addDiscussionButton = new JButton();
         addDiscussionButton.setText("Créer une nouvelle discussion");
         addDiscussionButton.addActionListener((ActionEvent e) -> {
-            UpdateDiscussionFrame updateDiscussionFrame = new UpdateDiscussionFrame(Discussion.builder().mod(connectedUser).users(new ArrayList<IUser>()).build());
+            UpdateDiscussionFrame updateDiscussionFrame = new UpdateDiscussionFrame(Discussion.builder()
+                    .mod(connectedUser)
+                    .users(new ArrayList<IUser>())
+                    .messages(new ArrayList<Message>())
+                    .build());
             updateDiscussionFrame.addObserver(this);
         });
         this.add(addDiscussionButton, BorderLayout.NORTH);
@@ -90,6 +95,15 @@ public class DiscussionsPanel extends JPanel implements Observer {
         });
         headerDiscussionPanel.add(updateDiscussionButton);
 
+        deleteDiscussionButton = new JButton("supprimer");
+        deleteDiscussionButton.setVisible(false);
+        deleteDiscussionButton.addActionListener((ActionEvent e) -> {
+            discussionService.delete(discussionSelected);
+            discussionsListModel.removeElement(discussionSelected);
+
+        });
+        headerDiscussionPanel.add(deleteDiscussionButton);
+
         sendDiscussionPanel = new JPanel();
         sendDiscussionPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         discussionsPanelRight.add(sendDiscussionPanel, BorderLayout.SOUTH);
@@ -115,22 +129,27 @@ public class DiscussionsPanel extends JPanel implements Observer {
 
         });
         sendDiscussionPanel.add(sendButton);
+
+        clearDiscussionPanel();
     }
 
-    private void refreshDiscussionsPanelRight(){
+    private void drawDiscussionsPanelRight(){
+        nameDiscussion.setVisible(true);
+        newMessageTextField.setVisible(true);
+        sendButton.setVisible(true);
         nameDiscussion.setText(discussionSelected.getName());
-        if(discussionSelected.getMod().getId() == connectedUser.getId() || connectedUser.isAdmin()){
+        if (discussionSelected.getMod().getId() == connectedUser.getId() || connectedUser.isAdmin()) {
             updateDiscussionButton.setVisible(true);
+            deleteDiscussionButton.setVisible(true);
         } else {
             updateDiscussionButton.setVisible(false);
+            deleteDiscussionButton.setVisible(false);
         }
-
         messagesPanel.removeAll();
         messagesPanel.repaint();
-        for (Message message: discussionSelected.getMessages()) {
+        for (Message message : discussionSelected.getMessages()) {
             addMessagePanel(message);
         }
-
     }
 
     private void addMessagePanel(Message message) {
@@ -167,12 +186,25 @@ public class DiscussionsPanel extends JPanel implements Observer {
             discussionsList.addListSelectionListener((ListSelectionEvent e) -> {
                 if (!e.getValueIsAdjusting()) {
                     discussionSelected = (Discussion) discussionsList.getSelectedValue();
-                    refreshDiscussionsPanelRight();
+                    if(discussionSelected != null){
+                        drawDiscussionsPanelRight();
+                        discussionsPanelRight.setVisible(true);
+                    } else {
+                        clearDiscussionPanel();
+                    }
                 }
             });
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private void clearDiscussionPanel(){
+        updateDiscussionButton.setVisible(false);
+        deleteDiscussionButton.setVisible(false);
+        nameDiscussion.setVisible(false);
+        newMessageTextField.setVisible(false);
+        sendButton.setVisible(false);
     }
 
     @Override
@@ -185,13 +217,10 @@ public class DiscussionsPanel extends JPanel implements Observer {
     public void action(Object crud, Object element) {
         switch ((ECrud) crud) {
             case UPDATE:
-
+//                discussionsListModel.setElementAt(element, i);
                 break;
             case CREATE:
                 discussionsListModel.addElement((Discussion) element);
-                break;
-            case DELETE:
-
                 break;
         }
     }

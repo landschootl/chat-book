@@ -110,7 +110,13 @@ public class DiscussionMapper extends Mapper {
         return discussion;
     }
 
-    public boolean remove(Discussion discussion) {
-        throw new NO_IMPLEMENT();
+    public void remove(Discussion discussion) {
+        try {
+            PreparedStatement preparedStatement = db.prepareStatement(this.bundle.getString("delete.discussion.by.identifiant"));
+            preparedStatement.setInt(1, discussion.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

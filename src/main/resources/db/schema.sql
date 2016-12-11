@@ -57,6 +57,6 @@ CREATE TABLE MESSAGE (
 	priority boolean,
 	expiration date,
 	code boolean,
-	foreign key (id_connection) REFERENCES CONNECTION(id),
+	foreign key (id_connection) REFERENCES CONNECTION(id) ON DELETE CASCADE,
 	foreign key (id_user) REFERENCES USER(id) ON DELETE CASCADE
 );

@@ -39,14 +39,6 @@ public class DiscussionService {
         return discussionMapper.findById(id);
     }
 
-    public boolean addUser(User user){
-        return discussionMapper.addUser(user);
-    }
-
-    public boolean removeUser(User user){
-        return discussionMapper.removeUser(user);
-    }
-
     public Discussion update(Discussion discussion){
         return discussionMapper.update(discussion);
     }
@@ -55,8 +47,8 @@ public class DiscussionService {
         return discussionMapper.create(discussion);
     }
 
-    public boolean delete(Discussion discussion){
-        return discussionMapper.remove(discussion);
+    public void delete(Discussion discussion){
+        discussionMapper.remove(discussion);
     }
 
     public Discussion saveDiscussion(Discussion discussion) {

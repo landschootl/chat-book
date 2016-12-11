@@ -94,3 +94,7 @@ delete:
   friendship.refuse:
     DELETE FROM FRIENDSHIP
     WHERE id = ?;
+
+  discussion.by.identifiant:
+      DELETE FROM CONNECTION
+      WHERE id = ?;

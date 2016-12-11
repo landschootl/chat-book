@@ -71,7 +71,9 @@ public class UpdateDiscussionFrame extends AppFrame implements Observable {
     public void initListUsers() {
         users = new DefaultListModel<>();
         for (IUser user : discussion.getUsers()) {
-            users.addElement(user);
+            if (user.getId() != userService.getConnectedUser().getId()) {
+                users.addElement(user);
+            }
         }
         usersList.setModel(users);
     }
@@ -128,11 +130,15 @@ public class UpdateDiscussionFrame extends AppFrame implements Observable {
             }
         });
         saveButton.addActionListener((ActionEvent e) -> {
-            discussion.setName(titleField.getText());
-            discussion.addUser(discussion.getMod());
-            discussion = discussionService.saveDiscussion(discussion);
-            notif(ECrud.CREATE);
-            this.dispose();
+            if (!"".equals(titleField.getText())) {
+                discussion.setName(titleField.getText());
+                discussion.addUser(discussion.getMod());
+                discussion = discussionService.saveDiscussion(discussion);
+                notif(ECrud.CREATE);
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(new JFrame(), "N'oubliez pas de donner un nom à la conversation");
+            }
         });
     }
 
