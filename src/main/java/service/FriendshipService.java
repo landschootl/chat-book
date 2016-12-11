@@ -5,6 +5,8 @@ import domain.IUser;
 import lombok.Data;
 import persistence.db.FriendshipMapper;
 
+import java.util.List;
+
 @Data
 public class FriendshipService {
     public static FriendshipService instance = null;
@@ -32,5 +34,17 @@ public class FriendshipService {
 
     public Friendship find(IUser user1, IUser user2) {
         return friendshipMapper.find(user1, user2);
+    }
+
+    public List<Friendship> findWaitingFriendships(IUser user) {
+        return friendshipMapper.findWaitingFriendships(user);
+    }
+
+    public void acceptFriendship(Friendship friendship) {
+        friendshipMapper.acceptFriendship(friendship);
+    }
+
+    public void refuseFriendship(Friendship friendship) {
+        friendshipMapper.refuseFriendship(friendship);
     }
 }

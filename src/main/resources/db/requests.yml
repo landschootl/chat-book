@@ -22,10 +22,14 @@ select:
         JOIN USER_CONNECTION uc ON c.id = uc.id_connection
         WHERE uc.id_user = ?;
 
-    friendship: SELECT id_user1, id_user1, confirmed
+    friendship: SELECT id_user1, id_user2, confirmed
         FROM FRIENDSHIP
         WHERE id_user1 = ? AND id_user2 = ?
         OR id_user1 = ? AND id_user2 = ?;
+
+    friendship.waiting: SELECT id, id_user1, id_user2, confirmed
+        FROM FRIENDSHIP
+        WHERE id_user2 = ? AND confirmed = false;
 
 create:
   user:
@@ -49,6 +53,11 @@ update:
     lastname = ?
     WHERE id = ?;
 
+  friendship.accept:
+    UPDATE FRIENDSHIP
+    SET confirmed = true
+    WHERE id = ?;
+
 delete:
   user.by.identifiant:
     DELETE FROM USER
@@ -58,3 +67,7 @@ delete:
     DELETE FROM FRIENDSHIP
     WHERE id_user1 = ? AND id_user2 = ?
     OR id_user1 = ? AND id_user2 = ?;
+
+  friendship.refuse:
+    DELETE FROM FRIENDSHIP
+    WHERE id = ?;

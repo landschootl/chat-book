@@ -2,9 +2,13 @@ package persistence.db;
 
 import domain.Friendship;
 import domain.IUser;
+import persistence.vp.UserFactory;
+import persistence.vp.VirtualProxyBuilder;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FriendshipMapper extends Mapper {
     public static FriendshipMapper instance = null;
@@ -52,6 +56,52 @@ public class FriendshipMapper extends Mapper {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public List<Friendship> findWaitingFriendships(IUser user) {
+        List<Friendship> waitingFriendships = new ArrayList<>();
+
+        try {
+            preparedStatement = db.prepareStatement(this.bundle.getString("select.friendship.waiting"));
+            preparedStatement.setInt(1, user.getId());
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                waitingFriendships.add(
+                    Friendship.builder()
+                            .id(rs.getInt("id"))
+                            .user1(new VirtualProxyBuilder<>(IUser.class, new UserFactory(rs.getString("id_user1"))).getProxy())
+                            .user2(new VirtualProxyBuilder<>(IUser.class, new UserFactory(rs.getString("id_user2"))).getProxy())
+                            .confirmed(rs.getBoolean("confirmed")).build()
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return waitingFriendships;
+    }
+
+    public void acceptFriendship(Friendship friendship) {
+        try {
+            preparedStatement = db.prepareStatement(this.bundle.getString("update.friendship.accept"));
+            preparedStatement.setInt(1, friendship.getId());
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void refuseFriendship(Friendship friendship) {
+        try {
+            preparedStatement = db.prepareStatement(this.bundle.getString("delete.friendship.refuse"));
+            preparedStatement.setInt(1, friendship.getId());
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void delete(Friendship friendship) {

@@ -25,7 +25,7 @@
               <text value="chatbook" noi18n="true"/>
             </properties>
           </component>
-          <grid id="f3cc5" binding="userPanel" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="f3cc5" binding="userPanel" layout-manager="GridLayoutManager" row-count="1" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints border-constraint="East"/>
             <properties>
@@ -44,7 +44,7 @@
               </component>
               <component id="8ea2a" class="javax.swing.JButton" binding="deconnectButton">
                 <constraints>
-                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                  <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
                     <preferred-size width="10" height="10"/>
                   </grid>
                 </constraints>
@@ -59,6 +59,17 @@
                 </constraints>
                 <properties>
                   <text value="(ô‿ô)"/>
+                  <toolTipText value="Modifier mon compte"/>
+                </properties>
+              </component>
+              <component id="edc73" class="javax.swing.JButton" binding="waitingFriendshipsButton">
+                <constraints>
+                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <font style="1"/>
+                  <text value="±"/>
+                  <toolTipText value="Demandes d'amitié en attente"/>
                 </properties>
               </component>
             </children>

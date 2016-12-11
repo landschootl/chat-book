@@ -10,6 +10,7 @@ import gui.accounts.UpdateAccountFrame;
 import gui.discussions.DiscussionsPanel;
 import gui.login.LoginFrame;
 import gui.search.SearchPanel;
+import gui.waitingFriendships.WaitingFriendshipsFrame;
 import persistence.uow.Observer;
 import persistence.uow.UnitOfWork;
 import service.UserService;
@@ -35,6 +36,7 @@ public class MainFrame extends AppFrame implements Observer {
     private JPanel contentPanel;
     private JButton updateAccountButton;
     private JButton searchButton;
+    private JButton waitingFriendshipsButton;
 
     private AccountsPanel accountsPanel;
     private DiscussionsPanel discussionsPanel;
@@ -53,6 +55,7 @@ public class MainFrame extends AppFrame implements Observer {
         initFrame();
         initComponents();
         configUpdateAccountButton();
+        configWaitingFriendshipButton();
         configDeconnectButton();
         configDashboard();
         cleanButtons();
@@ -135,6 +138,12 @@ public class MainFrame extends AppFrame implements Observer {
         });
     }
 
+    public void configWaitingFriendshipButton() {
+        waitingFriendshipsButton.addActionListener(e -> {
+            new WaitingFriendshipsFrame();
+        });
+    }
+
     public void cleanButtons() {
         accountsButton.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
         accountsButton.setForeground(Color.BLACK);
@@ -196,7 +205,7 @@ public class MainFrame extends AppFrame implements Observer {
         titleLabel.setText("chatbook");
         navPanel.add(titleLabel, BorderLayout.WEST);
         userPanel = new JPanel();
-        userPanel.setLayout(new GridLayoutManager(1, 3, new Insets(0, 0, 0, 0), -1, -1));
+        userPanel.setLayout(new GridLayoutManager(1, 4, new Insets(0, 0, 0, 0), -1, -1));
         userPanel.setBackground(new Color(-12887656));
         navPanel.add(userPanel, BorderLayout.EAST);
         userLabel = new JLabel();
@@ -206,10 +215,16 @@ public class MainFrame extends AppFrame implements Observer {
         deconnectButton = new JButton();
         deconnectButton.setText("✖");
         deconnectButton.setToolTipText("Se déconnecter");
-        userPanel.add(deconnectButton, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(10, 10), null, 0, false));
+        userPanel.add(deconnectButton, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(10, 10), null, 0, false));
         updateAccountButton = new JButton();
         updateAccountButton.setText("(ô‿ô)");
+        updateAccountButton.setToolTipText("Modifier mon compte");
         userPanel.add(updateAccountButton, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        waitingFriendshipsButton = new JButton();
+        waitingFriendshipsButton.setFont(new Font(waitingFriendshipsButton.getFont().getName(), Font.BOLD, waitingFriendshipsButton.getFont().getSize()));
+        waitingFriendshipsButton.setText("±");
+        waitingFriendshipsButton.setToolTipText("Demandes d'amitié en attente");
+        userPanel.add(waitingFriendshipsButton, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         bodyPanel = new JPanel();
         bodyPanel.setLayout(new BorderLayout(0, 0));
         mainPanel.add(bodyPanel, BorderLayout.CENTER);
