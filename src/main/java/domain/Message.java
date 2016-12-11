@@ -12,8 +12,8 @@ import java.time.LocalDate;
 @Builder
 public class Message {
     private int id;
-    private int id_connection;
-    private int id_user;
+    private int idConnection;
+    private IUser user;
     private String message;
     private boolean accused;
     private boolean priority;

@@ -1,7 +1,10 @@
 package persistence.db;
 
 import domain.Discussion;
+import domain.IUser;
 import domain.Message;
+import persistence.vp.UserFactory;
+import persistence.vp.VirtualProxyBuilder;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -30,7 +33,8 @@ public class MessageMapper extends Mapper {
     private Message createMessage(ResultSet rs) throws SQLException {
         Message message = Message.builder()
                 .id(rs.getInt("id"))
-                .id_connection(rs.getInt("id_connection"))
+                .idConnection(rs.getInt("id_connection"))
+                .user(new VirtualProxyBuilder<>(IUser.class, new UserFactory(rs.getString("id_user"))).getProxy())
                 .message(rs.getString("message"))
                 .accused(rs.getBoolean("accused"))
                 .priority(rs.getBoolean("priority"))
@@ -56,8 +60,8 @@ public class MessageMapper extends Mapper {
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = db.prepareStatement(this.bundle.getString("create.message"), PreparedStatement.RETURN_GENERATED_KEYS);
-            preparedStatement.setInt(1, message.getId_connection());
-            preparedStatement.setInt(2, message.getId_user());
+            preparedStatement.setInt(1, message.getIdConnection());
+            preparedStatement.setInt(2, message.getUser().getId());
             preparedStatement.setString(3, message.getMessage());
             preparedStatement.setBoolean(4, message.isAccused());
             preparedStatement.setBoolean(5, message.isPriority());

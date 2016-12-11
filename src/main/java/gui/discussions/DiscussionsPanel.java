@@ -118,8 +118,8 @@ public class DiscussionsPanel extends JPanel implements Observer {
         sendButton.setText("Envoyer");
         sendButton.addActionListener((ActionEvent e) -> {
             Message message = messageService.create(Message.builder()
-                    .id_connection(discussionSelected.getId())
-                    .id_user(connectedUser.getId())
+                    .idConnection(discussionSelected.getId())
+                    .user(connectedUser)
                     .message(newMessageTextField.getText())
                     .accused(false)
                     .priority(false)
@@ -158,9 +158,9 @@ public class DiscussionsPanel extends JPanel implements Observer {
         JPanel messagePanel = new JPanel();
         messagePanel.setLayout(new BoxLayout(messagePanel, BoxLayout.Y_AXIS));
         JLabel userLabel = new JLabel();
-        userLabel.setFont(new Font("Lucida Grande", Font.BOLD, 16));
+        userLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
         userLabel.setBorder(new EmptyBorder(5,0,5,0));
-        userLabel.setText("Toto");
+        userLabel.setText(message.getUser().toString());
         messagePanel.add(userLabel);
         JLabel messageLabel = new JLabel();
         messageLabel.setText(message.getMessage());
