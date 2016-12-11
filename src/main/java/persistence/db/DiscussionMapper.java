@@ -6,15 +6,14 @@ import domain.User;
 import org.omg.CORBA.NO_IMPLEMENT;
 import persistence.vp.UserFactory;
 import persistence.vp.VirtualProxyBuilder;
+import service.MessageService;
 import service.UserService;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by landschoot on 04/11/16.
@@ -23,10 +22,12 @@ public class DiscussionMapper extends Mapper {
     public static DiscussionMapper instance = null;
 
     private UserService userService;
+    private MessageService messageService;
 
     public DiscussionMapper(){
         super();
         this.userService = UserService.getInstance();
+        this.messageService = MessageService.getInstance();
     }
 
     public static DiscussionMapper getInstance() {
@@ -43,6 +44,7 @@ public class DiscussionMapper extends Mapper {
                 .name(rs.getString("name"))
                 .build();
         discussion.setUsers(userService.findByDiscussion(discussion));
+        discussion.setMessages(messageService.findByDiscussion(discussion));
         return discussion;
     }
 
@@ -64,12 +66,10 @@ public class DiscussionMapper extends Mapper {
         preparedStatement = db.prepareStatement(this.bundle.getString("select.discussions.by.user"));
         preparedStatement.setInt(1, user.getId());
         ResultSet rs = preparedStatement.executeQuery();
-
         while(rs.next()) {
             discussions.add(createDiscussion(rs));
         }
         rs.close();
-
         return discussions;
     }
 

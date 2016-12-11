@@ -2,13 +2,11 @@ package gui.discussions;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import domain.Discussion;
-import domain.IDomainObject;
-import domain.IUser;
-import domain.User;
+import domain.*;
 import domain.enums.ECrud;
 import persistence.uow.Observer;
 import service.DiscussionService;
+import service.MessageService;
 import service.UserService;
 
 import javax.swing.*;
@@ -25,6 +23,7 @@ public class DiscussionsPanel extends JPanel implements Observer {
     private JPanel headerDiscussionPanel;
     private JLabel nameDiscussion;
 
+    private JPanel messagesPanel;
     private JList discussionsList;
 
     private JTextField newMessageTextField;
@@ -36,6 +35,7 @@ public class DiscussionsPanel extends JPanel implements Observer {
     private User connectedUser;
     private DiscussionService discussionService;
     private DefaultListModel<Discussion> discussionsListModel;
+    private MessageService messageService;
 
     private Discussion discussionSelected;
 
@@ -43,6 +43,7 @@ public class DiscussionsPanel extends JPanel implements Observer {
         this.userService = UserService.getInstance();
         this.connectedUser = userService.getConnectedUser();
         this.discussionService = discussionService.getInstance();
+        this.messageService = MessageService.getInstance();
         initComponents();
     }
 
@@ -78,8 +79,11 @@ public class DiscussionsPanel extends JPanel implements Observer {
         nameDiscussion.setText("");
         headerDiscussionPanel.add(nameDiscussion);
 
-        updateDiscussionButton = new JButton("Gérer");
-        updateDiscussionButton.setVisible(false);
+
+        messagesPanel = new JPanel();
+        discussionsPanelRight.add(messagesPanel, BorderLayout.CENTER);
+
+        updateDiscussionButton = new JButton("gérer");
         updateDiscussionButton.addActionListener((ActionEvent e) -> {
             UpdateDiscussionFrame updateDiscussionFrame = new UpdateDiscussionFrame(discussionSelected);
             updateDiscussionFrame.addObserver(this);
@@ -96,7 +100,43 @@ public class DiscussionsPanel extends JPanel implements Observer {
 
         sendButton = new JButton();
         sendButton.setText("Envoyer");
+        sendButton.addActionListener((ActionEvent e) -> {
+            Message message = messageService.create(Message.builder()
+                    .id_connection(discussionSelected.getId())
+                    .id_user(connectedUser.getId())
+                    .message(newMessageTextField.getText())
+                    .accused(false)
+                    .priority(false)
+                    .expiration(null)
+                    .code(false)
+                    .build());
+            addMessagePanel(message);
+            discussionSelected.addMessages(message);
+
+        });
         sendDiscussionPanel.add(sendButton);
+    }
+
+    private void refreshDiscussionsPanelRight(){
+        nameDiscussion.setText(discussionSelected.getName());
+        if(discussionSelected.getMod().getId() == connectedUser.getId() || connectedUser.isAdmin()){
+            updateDiscussionButton.setVisible(true);
+        } else {
+            updateDiscussionButton.setVisible(false);
+        }
+
+        messagesPanel.removeAll();
+        messagesPanel.repaint();
+        for (Message message: discussionSelected.getMessages()) {
+            addMessagePanel(message);
+        }
+
+    }
+
+    private void addMessagePanel(Message message) {
+        messagesPanel.add(new JLabel(message.getMessage()));
+        messagesPanel.revalidate();
+        messagesPanel.repaint();
     }
 
     private void initDiscussionsPanelLeft() {
@@ -127,12 +167,7 @@ public class DiscussionsPanel extends JPanel implements Observer {
             discussionsList.addListSelectionListener((ListSelectionEvent e) -> {
                 if (!e.getValueIsAdjusting()) {
                     discussionSelected = (Discussion) discussionsList.getSelectedValue();
-                    nameDiscussion.setText(discussionSelected.getName());
-                    if(discussionSelected.getMod().getId() == connectedUser.getId() || connectedUser.isAdmin()){
-                        updateDiscussionButton.setVisible(true);
-                    } else {
-                        updateDiscussionButton.setVisible(false);
-                    }
+                    refreshDiscussionsPanelRight();
                 }
             });
         } catch (SQLException e) {

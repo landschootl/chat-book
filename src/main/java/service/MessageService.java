@@ -1,6 +1,11 @@
 package service;
 
+import domain.Discussion;
+import domain.Message;
 import persistence.db.MessageMapper;
+
+import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by landschoot on 11/12/16.
@@ -20,4 +25,11 @@ public class MessageService {
         return instance;
     }
 
+    public List<Message> findByDiscussion(Discussion discussion) throws SQLException {
+        return messageMapper.findByDiscussion(discussion);
+    }
+
+    public Message create(Message message){
+        return messageMapper.create(message);
+    }
 }

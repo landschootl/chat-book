@@ -1,14 +1,14 @@
 package domain;
 
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  * Created by landschoot on 11/12/16.
  */
-@Getter
+@Data
 @Builder
 public class Message {
     private int id;
@@ -17,6 +17,6 @@ public class Message {
     private String message;
     private boolean accused;
     private boolean priority;
-    private Date date;
+    private LocalDate expiration;
     private boolean code;
 }

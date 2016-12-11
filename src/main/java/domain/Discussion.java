@@ -1,40 +1,25 @@
 package domain;
 
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 
 import java.util.List;
 
 /**
  * Created by landschoot on 04/11/16.
  */
-@Getter
+@Data
 @Builder
 public class Discussion {
     private int id;
     private IUser mod;
     private String name;
     private List<IUser> users;
+    private List<Message> messages;
 
     @Override
     public String toString() {
         return "nom : "+name+" | moderateur : "+mod.getLogin();
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setMod(IUser mod) {
-        this.mod = mod;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setUsers(List<IUser> users) {
-        this.users = users;
     }
 
     public void addUser(IUser user){
@@ -49,4 +34,7 @@ public class Discussion {
         }
     }
 
+    public void addMessages(Message message) {
+        messages.add(message);
+    }
 }
