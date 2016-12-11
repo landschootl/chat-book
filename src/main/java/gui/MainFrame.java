@@ -62,8 +62,18 @@ public class MainFrame extends AppFrame implements Observer {
         if (userService.getConnectedUser().getRole().equals(ERole.USER_ADMIN)) {
             this.setTitle("Chatbook - Admin");
             this.titleLabel.setText("chatbook - admin");
+            cleanPanels();
+            cleanButtons();
+            accountsButton.setFont(new Font("Lucida Grande", Font.BOLD, 16));
+            accountsButton.setForeground(new Color(59, 89, 152));
+            this.accountsPanel.setVisible(true);
         } else {
             this.setTitle("Chatbook - " + userService.getConnectedUser().getFirstname() + " " + userService.getConnectedUser().getLastname());
+            cleanPanels();
+            cleanButtons();
+            discussionsButton.setFont(new Font("Lucida Grande", Font.BOLD, 16));
+            discussionsButton.setForeground(new Color(59, 89, 152));
+            this.discussionsPanel.setVisible(true);
         }
         this.setVisible(true);
     }
