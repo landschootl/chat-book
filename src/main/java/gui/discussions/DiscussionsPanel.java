@@ -4,12 +4,14 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import domain.*;
 import domain.enums.ECrud;
+import gui.components.PlaceholderTextField;
 import persistence.uow.Observer;
 import service.DiscussionService;
 import service.MessageService;
 import service.UserService;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -26,7 +28,7 @@ public class DiscussionsPanel extends JPanel implements Observer {
     private JPanel messagesPanel;
     private JList discussionsList;
 
-    private JTextField newMessageTextField;
+    private PlaceholderTextField newMessageTextField;
     private JButton sendButton;
     private JButton addDiscussionButton;
     private JButton updateDiscussionButton;
@@ -84,9 +86,9 @@ public class DiscussionsPanel extends JPanel implements Observer {
         nameDiscussion.setText("");
         headerDiscussionPanel.add(nameDiscussion);
 
-
         messagesPanel = new JPanel();
-        discussionsPanelRight.add(messagesPanel, BorderLayout.CENTER);
+        messagesPanel.setLayout(new BoxLayout(messagesPanel, BoxLayout.Y_AXIS));
+        discussionsPanelRight.add(new JScrollPane(messagesPanel), BorderLayout.CENTER);
 
         updateDiscussionButton = new JButton("gérer");
         updateDiscussionButton.addActionListener((ActionEvent e) -> {
@@ -105,11 +107,11 @@ public class DiscussionsPanel extends JPanel implements Observer {
         headerDiscussionPanel.add(deleteDiscussionButton);
 
         sendDiscussionPanel = new JPanel();
-        sendDiscussionPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+        sendDiscussionPanel.setLayout(new BoxLayout(sendDiscussionPanel, BoxLayout.X_AXIS));
         discussionsPanelRight.add(sendDiscussionPanel, BorderLayout.SOUTH);
 
-        newMessageTextField = new JTextField();
-        newMessageTextField.setText("Taper votre message...");
+        newMessageTextField = new PlaceholderTextField();
+        newMessageTextField.setPlaceholder("Tapez votre message...");
         sendDiscussionPanel.add(newMessageTextField);
 
         sendButton = new JButton();
@@ -125,7 +127,7 @@ public class DiscussionsPanel extends JPanel implements Observer {
                     .code(false)
                     .build());
             addMessagePanel(message);
-            discussionSelected.addMessages(message);
+            discussionSelected.addMessage(message);
 
         });
         sendDiscussionPanel.add(sendButton);
@@ -153,7 +155,19 @@ public class DiscussionsPanel extends JPanel implements Observer {
     }
 
     private void addMessagePanel(Message message) {
-        messagesPanel.add(new JLabel(message.getMessage()));
+        JPanel messagePanel = new JPanel();
+        messagePanel.setLayout(new BoxLayout(messagePanel, BoxLayout.Y_AXIS));
+        JLabel userLabel = new JLabel();
+        userLabel.setFont(new Font("Lucida Grande", Font.BOLD, 16));
+        userLabel.setBorder(new EmptyBorder(5,0,5,0));
+        userLabel.setText("Toto");
+        messagePanel.add(userLabel);
+        JLabel messageLabel = new JLabel();
+        messageLabel.setText(message.getMessage());
+        messageLabel.setBorder(new EmptyBorder(0,0,5,0));
+        messagePanel.add(messageLabel);
+
+        messagesPanel.add(messagePanel);
         messagesPanel.revalidate();
         messagesPanel.repaint();
     }

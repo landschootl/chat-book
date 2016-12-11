@@ -34,7 +34,7 @@ public class Discussion {
         }
     }
 
-    public void addMessages(Message message) {
+    public void addMessage(Message message) {
         messages.add(message);
     }
 }
