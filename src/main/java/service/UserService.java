@@ -7,6 +7,7 @@ import lombok.Data;
 import persistence.db.UserMapper;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -17,9 +18,17 @@ public class UserService {
     private UserMapper userMapper;
     private User connectedUser;
 
+    private List<IUser> users;
+
     private UserService() {
         this.userMapper = UserMapper.getInstance();
         this.securityService = SecurityService.getInstance();
+        this.users = new ArrayList<>();
+        try {
+            this.users = this.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static UserService getInstance() {

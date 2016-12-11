@@ -1,24 +1,33 @@
 package gui.search;
 
+import domain.IUser;
 import domain.User;
+import domain.enums.ERole;
 import gui.components.PlaceholderTextField;
 import persistence.uow.UnitOfWork;
-import service.UserService;
+import service.SearchService;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.sql.SQLException;
 
 public class SearchPanel extends JPanel {
-    private UserService userService;
-    private User userSelected;
-    private UnitOfWork unitOfWork;
+    private SearchService searchService;
+    private IUser userSelected;
 
     private PlaceholderTextField firstnameSearch;
     private PlaceholderTextField lastnameSearch;
     private JButton searchButton;
 
-    private DefaultListModel<User> accountsListModel;
+    private JPanel contentPanel;
+
+    private JScrollPane accountsScrollPane;
+    private DefaultListModel<IUser> accountsListModel;
     private JList accountsJList;
 
     private JPanel panelRight;
@@ -28,12 +37,55 @@ public class SearchPanel extends JPanel {
     private JPanel infosAccountPanel;
 
     public SearchPanel() {
-        this.userService = UserService.getInstance();
-        this.unitOfWork = UnitOfWork.getInstance();
+        this.searchService = SearchService.getInstance();
         this.setLayout(new BorderLayout(0, 0));
 
         initSearch();
+        initAccountsList();
         initAccountsPanelRight();
+    }
+
+    private void initAccountsList() {
+        try {
+            accountsListModel = new DefaultListModel<>();
+            java.util.List<IUser> accountsList = this.searchService.searchUsers("","");
+
+            for (IUser user : accountsList) {
+                accountsListModel.addElement(user);
+            }
+
+            accountsJList = new JList(accountsListModel);
+            accountsJList.setVisibleRowCount(10);
+            accountsJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            accountsScrollPane = new JScrollPane(accountsJList);
+            this.add(accountsScrollPane);
+            accountsJList.addListSelectionListener((ListSelectionEvent e) -> {
+                if (!e.getValueIsAdjusting()) {
+                    userSelected = (IUser) accountsJList.getSelectedValue();
+
+                    if (userSelected != null) {
+                        setVisibleAccountInfos(true);
+                        loginAccount.setText(userSelected.getLogin());
+                        lastnameAccount.setText(userSelected.getLastname());
+                        firstnameAccount.setText(userSelected.getFirstname());
+                    } else {
+                        setVisibleAccountInfos(false);
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateAccountsList() {
+        this.accountsListModel.removeAllElements();
+
+        java.util.List<IUser> accountsList = this.searchService.searchUsers(lastnameSearch.getText(), firstnameSearch.getText());
+
+        for (IUser user : accountsList) {
+            accountsListModel.addElement(user);
+        }
     }
 
     private void initSearch() {
@@ -48,7 +100,28 @@ public class SearchPanel extends JPanel {
         firstnameSearch.setPlaceholder("Prénom");
         firstnameSearch.setPreferredSize(new Dimension(200, 24));
         panelSearch.add(firstnameSearch);
+
+        KeyListener keyListener = new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    updateAccountsList();
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+            }
+        };
+        lastnameSearch.addKeyListener(keyListener);
+        firstnameSearch.addKeyListener(keyListener);
+
         searchButton = new JButton("Rechercher");
+        searchButton.addActionListener((ActionEvent e) -> updateAccountsList());
         panelSearch.add(searchButton);
     }
 
