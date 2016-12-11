@@ -73,12 +73,13 @@ public class SearchPanel extends JPanel {
                     }
                 }
             });
+            accountsScrollPane.setVisible(false);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void updateAccountsList() {
+    public void updateAccountsList() {
         this.accountsListModel.removeAllElements();
 
         java.util.List<IUser> accountsList = this.searchService.searchUsers(lastnameSearch.getText(), firstnameSearch.getText());
@@ -86,6 +87,9 @@ public class SearchPanel extends JPanel {
         for (IUser user : accountsList) {
             accountsListModel.addElement(user);
         }
+        accountsScrollPane.setVisible(true);
+        this.validate();
+        this.repaint();
     }
 
     private void initSearch() {

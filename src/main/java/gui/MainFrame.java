@@ -36,9 +36,9 @@ public class MainFrame extends AppFrame implements Observer {
     private JButton updateAccountButton;
     private JButton searchButton;
 
-    private JPanel accountsPanel;
-    private JPanel discussionsPanel;
-    private JPanel searchPanel;
+    private AccountsPanel accountsPanel;
+    private DiscussionsPanel discussionsPanel;
+    private SearchPanel searchPanel;
 
     private UserService userService;
 
@@ -114,6 +114,7 @@ public class MainFrame extends AppFrame implements Observer {
             cleanButtons();
             searchButton.setFont(new Font("Lucida Grande", Font.BOLD, 16));
             searchButton.setForeground(Color.BLUE);
+            this.searchPanel.updateAccountsList();
             this.searchPanel.setVisible(true);
         });
     }

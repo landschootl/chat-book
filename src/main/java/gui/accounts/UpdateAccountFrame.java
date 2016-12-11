@@ -24,8 +24,8 @@ public class UpdateAccountFrame extends AppFrame implements Observable {
 
     private JPanel mainPanel;
     private JTextField loginTextField;
-    private JTextField lastnameTextField;
     private JTextField firstNameTextField;
+    private JTextField lastNameTextField;
     private JButton cancelButton;
     private JLabel errorLabel;
     private JButton saveButton;
@@ -45,8 +45,8 @@ public class UpdateAccountFrame extends AppFrame implements Observable {
                 User user = User.builder()
                         .id(userService.getConnectedUser().getId())
                         .login(loginTextField.getText())
-                        .lastname(lastnameTextField.getText())
                         .firstname(firstNameTextField.getText())
+                        .lastname(lastNameTextField.getText())
                         .role(userService.getConnectedUser().getRole())
                         .build();
                 try {
@@ -80,8 +80,8 @@ public class UpdateAccountFrame extends AppFrame implements Observable {
 
     public boolean fieldsEmpty() {
         return this.loginTextField.getText().isEmpty() ||
-                this.lastnameTextField.getText().isEmpty() ||
-                this.firstNameTextField.getText().isEmpty();
+                this.firstNameTextField.getText().isEmpty() ||
+                this.lastNameTextField.getText().isEmpty();
     }
 
     @Override
@@ -90,8 +90,8 @@ public class UpdateAccountFrame extends AppFrame implements Observable {
         this.setContentPane(mainPanel);
 
         loginTextField.setText(userService.getConnectedUser().getLogin());
-        lastnameTextField.setText(userService.getConnectedUser().getLastname());
         firstNameTextField.setText(userService.getConnectedUser().getFirstname());
+        lastNameTextField.setText(userService.getConnectedUser().getLastname());
 
         this.setTitle("Mon compte");
         this.setSize(400, 230);
@@ -131,15 +131,15 @@ public class UpdateAccountFrame extends AppFrame implements Observable {
         final Spacer spacer1 = new Spacer();
         mainPanel.add(spacer1, new GridConstraints(0, 2, 3, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         final JLabel label1 = new JLabel();
-        label1.setText("Nom");
+        label1.setText("Prénom");
         mainPanel.add(label1, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        lastnameTextField = new JTextField();
-        mainPanel.add(lastnameTextField, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        firstNameTextField = new JTextField();
+        mainPanel.add(firstNameTextField, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         final JLabel label2 = new JLabel();
         label2.setText("Prénom");
         mainPanel.add(label2, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        firstNameTextField = new JTextField();
-        mainPanel.add(firstNameTextField, new GridConstraints(4, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        lastNameTextField = new JTextField();
+        mainPanel.add(lastNameTextField, new GridConstraints(4, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         errorLabel = new JLabel();
         errorLabel.setForeground(new Color(-3932139));
         errorLabel.setText("");

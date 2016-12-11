@@ -21,8 +21,8 @@ public class CreateAccountFrame extends AppFrame {
 
     private JPanel mainPanel;
     private JTextField loginTextField;
-    private JTextField lastnameTextField;
     private JTextField firstNameTextField;
+    private JTextField lastNameTextField;
     private JTextField passwordTextField;
     private JButton createAccountButton;
     private JButton cancelButton;
@@ -40,13 +40,13 @@ public class CreateAccountFrame extends AppFrame {
         createAccountButton.addActionListener((ActionEvent e) -> {
             if (!fieldsEmpty()) {
                 User user = User.builder()
-                    .login(loginTextField.getText())
-                    .lastname(lastnameTextField.getText())
-                    .firstname(firstNameTextField.getText())
-                    .password(passwordTextField.getText())
-                    .role(ERole.USER_DEFAULT)
-                    .obs(new ArrayList<>())
-                    .build();
+                        .login(loginTextField.getText())
+                        .firstname(firstNameTextField.getText())
+                        .lastname(lastNameTextField.getText())
+                        .password(passwordTextField.getText())
+                        .role(ERole.USER_DEFAULT)
+                        .obs(new ArrayList<>())
+                        .build();
                 try {
                     userService.create(user);
                     user.addObserver(UnitOfWork.getInstance());
@@ -67,8 +67,8 @@ public class CreateAccountFrame extends AppFrame {
 
     public boolean fieldsEmpty() {
         return this.loginTextField.getText().isEmpty() ||
-                this.lastnameTextField.getText().isEmpty() ||
                 this.firstNameTextField.getText().isEmpty() ||
+                this.lastNameTextField.getText().isEmpty() ||
                 this.passwordTextField.getText().isEmpty();
     }
 
@@ -109,15 +109,15 @@ public class CreateAccountFrame extends AppFrame {
         loginTextField = new JTextField();
         mainPanel.add(loginTextField, new GridConstraints(3, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         final JLabel label2 = new JLabel();
-        label2.setText("Nom");
+        label2.setText("Prénom");
         mainPanel.add(label2, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        lastnameTextField = new JTextField();
-        mainPanel.add(lastnameTextField, new GridConstraints(4, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        final JLabel label3 = new JLabel();
-        label3.setText("Prénom");
-        mainPanel.add(label3, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         firstNameTextField = new JTextField();
-        mainPanel.add(firstNameTextField, new GridConstraints(5, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        mainPanel.add(firstNameTextField, new GridConstraints(4, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        final JLabel label3 = new JLabel();
+        label3.setText("Nom");
+        mainPanel.add(label3, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        lastNameTextField = new JTextField();
+        mainPanel.add(lastNameTextField, new GridConstraints(5, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         final JLabel label4 = new JLabel();
         label4.setText("Mot de passe");
         mainPanel.add(label4, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));

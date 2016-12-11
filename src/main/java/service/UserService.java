@@ -9,6 +9,7 @@ import persistence.db.UserMapper;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class UserService {
@@ -57,6 +58,9 @@ public class UserService {
     }
 
     public void delete(IUser user) {
+        this.users = this.users.stream()
+                .filter((IUser u) -> u.getId() != user.getId())
+                .collect(Collectors.toList());
         userMapper.delete(user);
     }
 

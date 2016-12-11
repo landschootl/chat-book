@@ -34,10 +34,10 @@
           <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Nom"/>
+          <text value="Prénom"/>
         </properties>
       </component>
-      <component id="c01c3" class="javax.swing.JTextField" binding="lastnameTextField">
+      <component id="c01c3" class="javax.swing.JTextField" binding="firstNameTextField">
         <constraints>
           <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
@@ -50,10 +50,10 @@
           <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Prénom"/>
+          <text value="Nom"/>
         </properties>
       </component>
-      <component id="c7070" class="javax.swing.JTextField" binding="firstNameTextField">
+      <component id="c7070" class="javax.swing.JTextField" binding="lastNameTextField">
         <constraints>
           <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>

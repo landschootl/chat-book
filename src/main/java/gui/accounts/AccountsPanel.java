@@ -111,10 +111,10 @@ public class AccountsPanel extends JPanel {
         firstnameAccountField = new JTextField();
 
         infosAccountPanel.setLayout(new GridLayout(3, 3));
-        infosAccountPanel.add(new JLabel("Nom"));
-        infosAccountPanel.add(nameAccountField);
         infosAccountPanel.add(new JLabel("Prénom"));
         infosAccountPanel.add(firstnameAccountField);
+        infosAccountPanel.add(new JLabel("Nom"));
+        infosAccountPanel.add(nameAccountField);
         accountsPanelRight.add(infosAccountPanel);
 
         adminButton = new JRadioButton("Administrateur");
