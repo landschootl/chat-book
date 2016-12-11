@@ -1,7 +1,10 @@
 package gui.waitingFriendships;
 
 import domain.Friendship;
+import domain.enums.ECrud;
 import gui.AppFrame;
+import persistence.uow.Observable;
+import persistence.uow.Observer;
 import service.FriendshipService;
 import service.UserService;
 
@@ -11,7 +14,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
-public class WaitingFriendshipsFrame extends AppFrame {
+public class WaitingFriendshipsFrame extends AppFrame implements Observable {
+
+    private java.util.List<Observer> obs;
 
     private java.util.List<Friendship> waitingFrienships;
     private FriendshipService friendshipService;
@@ -21,6 +26,7 @@ public class WaitingFriendshipsFrame extends AppFrame {
     private JPanel contentPanel;
 
     public WaitingFriendshipsFrame() {
+        this.obs = new ArrayList<>();
         this.waitingFrienships = new ArrayList<>();
         this.friendshipService = FriendshipService.getInstance();
         initComponents();
@@ -72,6 +78,7 @@ public class WaitingFriendshipsFrame extends AppFrame {
                 waitingFrienships.remove(f);
                 p.setVisible(false);
                 checkVisibilityNoWaitingFriendships();
+                notif(ECrud.UPDATE);
             });
             buttonsPanel.add(acceptButton);
 
@@ -81,6 +88,7 @@ public class WaitingFriendshipsFrame extends AppFrame {
                 waitingFrienships.remove(f);
                 p.setVisible(false);
                 checkVisibilityNoWaitingFriendships();
+                notif(ECrud.UPDATE);
             });
             buttonsPanel.add(refuseButton);
             p.add(buttonsPanel, BorderLayout.EAST);
@@ -92,5 +100,16 @@ public class WaitingFriendshipsFrame extends AppFrame {
         if (waitingFrienships.isEmpty()) {
             this.noWaitingFriendships.setVisible(true);
         }
+    }
+
+    @Override
+    public void addObserver(Observer o) {
+        this.obs.add(o);
+    }
+
+    @Override
+    public void notif(Object o) {
+        for (Observer ob : obs)
+            ob.action(o);
     }
 }

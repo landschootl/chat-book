@@ -13,6 +13,7 @@ import gui.search.SearchPanel;
 import gui.waitingFriendships.WaitingFriendshipsFrame;
 import persistence.uow.Observer;
 import persistence.uow.UnitOfWork;
+import service.FriendshipService;
 import service.UserService;
 
 import javax.imageio.ImageIO;
@@ -45,12 +46,14 @@ public class MainFrame extends AppFrame implements Observer {
     private SearchPanel searchPanel;
 
     private UserService userService;
+    private FriendshipService friendshipService;
 
     private UnitOfWork unitOfWork;
 
     public MainFrame() {
         this.unitOfWork = UnitOfWork.getInstance();
         this.userService = UserService.getInstance();
+        this.friendshipService = FriendshipService.getInstance();
         this.setContentPane(this.mainPanel);
         initPanels();
         cleanPanels();
@@ -107,24 +110,37 @@ public class MainFrame extends AppFrame implements Observer {
         userPanel.setBorder(new EmptyBorder(0, 0, 0, 14));
         checkComponentRoles();
         initImages();
+        initWaitingFriendshipImage();
     }
 
-    private void initImages() {
+    private void initWaitingFriendshipImage() {
         Image waitingFriendshipImg = null;
-        Image updateAccountccountImg = null;
+        try {
+            if (friendshipService.findWaitingFriendships(UserService.getInstance().getConnectedUser()).size() != 0) {
+                waitingFriendshipImg = ImageIO.read(MainFrame.class.getResource("../img/demandes_amis_new.png"));
+            } else {
+                waitingFriendshipImg = ImageIO.read(MainFrame.class.getResource("../img/demandes_amis.png"));
+            }
+            waitingFriendshipImg = waitingFriendshipImg.getScaledInstance(16, 16, Image.SCALE_DEFAULT);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        waitingFriendshipsButton.setIcon(new ImageIcon(waitingFriendshipImg));
+    }
+
+
+    private void initImages() {
+        Image updateAccountImg = null;
         Image logoutImg = null;
         try {
-            waitingFriendshipImg = ImageIO.read(MainFrame.class.getResource("../img/demandes_amis.png"));
-            waitingFriendshipImg = waitingFriendshipImg.getScaledInstance(16, 16, Image.SCALE_DEFAULT);
-            updateAccountccountImg = ImageIO.read(MainFrame.class.getResource("../img/mon_compte.png"));
-            updateAccountccountImg = updateAccountccountImg.getScaledInstance(16, 16, Image.SCALE_DEFAULT);
+            updateAccountImg = ImageIO.read(MainFrame.class.getResource("../img/mon_compte.png"));
+            updateAccountImg = updateAccountImg.getScaledInstance(16, 16, Image.SCALE_DEFAULT);
             logoutImg = ImageIO.read(MainFrame.class.getResource("../img/deconnexion.png"));
             logoutImg = logoutImg.getScaledInstance(16, 16, Image.SCALE_DEFAULT);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        waitingFriendshipsButton.setIcon(new ImageIcon(waitingFriendshipImg));
-        updateAccountButton.setIcon(new ImageIcon(updateAccountccountImg));
+        updateAccountButton.setIcon(new ImageIcon(updateAccountImg));
         deconnectButton.setIcon(new ImageIcon(logoutImg));
     }
 
@@ -177,7 +193,8 @@ public class MainFrame extends AppFrame implements Observer {
 
     public void configWaitingFriendshipButton() {
         waitingFriendshipsButton.addActionListener(e -> {
-            new WaitingFriendshipsFrame();
+            WaitingFriendshipsFrame waitingFriendshipsFrame = new WaitingFriendshipsFrame();
+            waitingFriendshipsFrame.addObserver(this);
         });
     }
 
@@ -201,6 +218,7 @@ public class MainFrame extends AppFrame implements Observer {
         switch (crud) {
             case UPDATE:
                 userLabel.setText(userService.getConnectedUser().getFirstname() + " " + userService.getConnectedUser().getLastname());
+                initWaitingFriendshipImage();
                 break;
             case DELETE:
                 userService.setConnectedUser(null);
