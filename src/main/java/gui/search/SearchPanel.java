@@ -12,6 +12,7 @@ import service.SearchService;
 import service.UserService;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import java.awt.*;
@@ -41,6 +42,7 @@ public class SearchPanel extends JPanel {
     private JLabel loginAccount;
     private JLabel lastnameAccount;
     private JLabel firstnameAccount;
+    private JLabel roleAccount;
     private JLabel waitingFriendshipLabel;
     private JButton addFriendButton;
     private JButton deleteFriendButton;
@@ -72,8 +74,15 @@ public class SearchPanel extends JPanel {
                     if (userSelected != null) {
                         setVisibleAccountInfos(true);
                         loginAccount.setText(userSelected.getLogin());
-                        lastnameAccount.setText(userSelected.getLastname());
-                        firstnameAccount.setText(userSelected.getFirstname());
+                        firstnameAccount.setText("Prénom : " + userSelected.getFirstname());
+                        lastnameAccount.setText("Nom : " + userSelected.getLastname());
+                        String role;
+                        if (userSelected.getRole().equals(ERole.USER_ADMIN)) {
+                            role = "Administrateur";
+                        } else {
+                            role = "Utilisateur";
+                        }
+                        roleAccount.setText("Role : " + role);
                         checkVisibilityFriendButtons();
                     } else {
                         setVisibleAccountInfos(false);
@@ -143,31 +152,38 @@ public class SearchPanel extends JPanel {
 
     private void initAccountsPanelRight() {
         panelRight = new JPanel();
-        panelRight.setLayout(new BorderLayout(0, 0));
         panelRight.setOpaque(true);
         panelRight.setPreferredSize(new Dimension(400, 50));
-        panelRight.setLayout(new BoxLayout(panelRight, BoxLayout.Y_AXIS));
+        panelRight.setLayout(new BorderLayout());
         panelRight.setBorder(new EmptyBorder(0, 10, 10, 10));
 
         loginAccount = new JLabel();
-        loginAccount.setFont(new Font(loginAccount.getFont().getName(), loginAccount.getFont().getStyle(), 18));
-        loginAccount.setHorizontalTextPosition(11);
-        loginAccount.setText("");
-        loginAccount.setVerticalAlignment(1);
-        loginAccount.setVerticalTextPosition(1);
+        loginAccount.setFont(new Font(loginAccount.getFont().getName(), loginAccount.getFont().getStyle(), 24));
+        loginAccount.setHorizontalAlignment(JLabel.CENTER);
         loginAccount.setBorder(new EmptyBorder(0, 0, 10, 0));
-        this.panelRight.add(loginAccount, BorderLayout.WEST);
+        panelRight.add(loginAccount, BorderLayout.NORTH);
 
         infosAccountPanel = new JPanel();
-        lastnameAccount = new JLabel();
+        infosAccountPanel.setLayout(new BoxLayout(infosAccountPanel, BoxLayout.Y_AXIS));
         firstnameAccount = new JLabel();
+        firstnameAccount.setBorder(new EmptyBorder(8, 0, 8, 0));
+        lastnameAccount = new JLabel();
+        lastnameAccount.setBorder(new EmptyBorder(8, 0, 8, 0));
+        roleAccount = new JLabel();
+        roleAccount.setBorder(new EmptyBorder(8, 0, 8, 0));
+
+        infosAccountPanel.add(firstnameAccount);
+        infosAccountPanel.add(lastnameAccount);
+        infosAccountPanel.add(roleAccount);
+
+        panelRight.add(infosAccountPanel, BorderLayout.CENTER);
+
+        JPanel buttonsPanel = new JPanel();
+
         waitingFriendshipLabel = new JLabel("Demande d'amitié en attente de confirmation");
         waitingFriendshipLabel.setVisible(false);
 
-        infosAccountPanel.setLayout(new GridLayout(3, 3));
-        infosAccountPanel.add(firstnameAccount);
-        infosAccountPanel.add(lastnameAccount);
-        infosAccountPanel.add(waitingFriendshipLabel);
+        buttonsPanel.add(waitingFriendshipLabel);
 
         addFriendButton = new JButton("Ajouter en ami");
         addFriendButton.addActionListener((ActionEvent e) -> {
@@ -182,7 +198,7 @@ public class SearchPanel extends JPanel {
             JOptionPane.showMessageDialog(new JFrame(), "Demande d'amitié envoyée avec succès.");
         });
         addFriendButton.setVisible(false);
-        infosAccountPanel.add(addFriendButton);
+        buttonsPanel.add(addFriendButton);
 
         deleteFriendButton = new JButton("Supprimer de vos amis");
         deleteFriendButton.addActionListener((ActionEvent e) -> {
@@ -198,9 +214,9 @@ public class SearchPanel extends JPanel {
         });
 
         deleteFriendButton.setVisible(false);
-        infosAccountPanel.add(deleteFriendButton);
+        buttonsPanel.add(deleteFriendButton);
 
-        panelRight.add(infosAccountPanel);
+        panelRight.add(buttonsPanel, BorderLayout.SOUTH);
 
         this.add(panelRight, BorderLayout.EAST);
 

@@ -41,7 +41,7 @@ public class WaitingFriendshipsFrame extends AppFrame {
         this.contentPanel.setLayout(new BoxLayout(this.contentPanel, BoxLayout.Y_AXIS));
         this.add(new JScrollPane(contentPanel), BorderLayout.CENTER);
 
-        this.noWaitingFriendships = new JLabel("Vous n'avez pas de demandes d'amitié en attente.");
+        this.noWaitingFriendships = new JLabel("Vous n'avez pas de demandes d'amitié.");
         this.noWaitingFriendships.setHorizontalAlignment(0);
         this.noWaitingFriendships.setBorder(new EmptyBorder(20, 20, 20, 20));
         this.noWaitingFriendships.setVisible(false);
