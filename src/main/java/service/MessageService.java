@@ -1,16 +1,16 @@
 package service;
 
-import persistence.db.MessageMaper;
+import persistence.db.MessageMapper;
 
 /**
  * Created by landschoot on 11/12/16.
  */
 public class MessageService {
     public static MessageService instance = null;
-    private MessageMaper messageMapper;
+    private MessageMapper messageMapper;
 
     private MessageService(){
-        messageMapper = MessageMaper.getInstance();
+        messageMapper = MessageMapper.getInstance();
     }
 
     public static MessageService getInstance() {

@@ -167,12 +167,12 @@ public class UserMapper extends Mapper {
     private User createUser(ResultSet rs) throws SQLException {
         User user;
         user = User.builder()
-                .id(rs.getInt(1))
-                .login(rs.getString(2))
-                .firstname(rs.getString(3))
-                .lastname(rs.getString(4))
-                .role(ERole.valueOf(rs.getString(5)))
-                .password(rs.getString(6))
+                .id(rs.getInt("id"))
+                .login(rs.getString("login"))
+                .firstname(rs.getString("firstname"))
+                .lastname(rs.getString("lastname"))
+                .role(ERole.valueOf(rs.getString("role")))
+                .password(rs.getString("password"))
                 .obs(new ArrayList<>())
                 .build();
         user.addObserver(UnitOfWork.getInstance());
