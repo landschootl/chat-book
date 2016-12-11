@@ -110,10 +110,10 @@ public class MainFrame extends AppFrame implements Observer {
         userPanel.setBorder(new EmptyBorder(0, 0, 0, 14));
         checkComponentRoles();
         initImages();
-        initWaitingFriendshipImage();
+        configWaitingFriendshipImage();
     }
 
-    private void initWaitingFriendshipImage() {
+    private void configWaitingFriendshipImage() {
         Image waitingFriendshipImg = null;
         try {
             if (friendshipService.findWaitingFriendships(UserService.getInstance().getConnectedUser()).size() != 0) {
@@ -218,7 +218,7 @@ public class MainFrame extends AppFrame implements Observer {
         switch (crud) {
             case UPDATE:
                 userLabel.setText(userService.getConnectedUser().getFirstname() + " " + userService.getConnectedUser().getLastname());
-                initWaitingFriendshipImage();
+                configWaitingFriendshipImage();
                 break;
             case DELETE:
                 userService.setConnectedUser(null);
