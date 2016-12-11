@@ -57,6 +57,15 @@ public class UserService {
         return userMapper.findAll();
     }
 
+    public List<IUser> findConnectedUserFriends() {
+        List<IUser> friends = userMapper.findFriends(connectedUser);
+        friends = friends.stream()
+                    .filter((IUser u) -> u.getId() != connectedUser.getId())
+                    .collect(Collectors.toList());
+
+        return friends;
+    }
+
     public void delete(IUser user) {
         this.users = this.users.stream()
                 .filter((IUser u) -> u.getId() != user.getId())

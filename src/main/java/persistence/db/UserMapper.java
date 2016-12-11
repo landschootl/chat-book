@@ -99,6 +99,24 @@ public class UserMapper extends Mapper {
         return user;
     }
 
+    public List<IUser> findFriends(IUser user) {
+        List<IUser> friends = new ArrayList<>();
+        try {
+            preparedStatement = db.prepareStatement(this.bundle.getString("select.user.friends"));
+            preparedStatement.setInt(1, user.getId());
+            preparedStatement.setInt(2, user.getId());
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while(rs.next()) {
+                friends.add(new VirtualProxyBuilder<>(IUser.class, new UserFactory(rs.getString("id"))).getProxy());
+            }
+            rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return friends;
+    }
+
     public void update(User user) {
         try {
             PreparedStatement preparedStatement = db.prepareStatement(this.bundle.getString("update.user.by.identifiant"));

@@ -7,6 +7,11 @@ select:
           FROM USER
           WHERE id = ?;
 
+    user.friends: SELECT u.id, u.login, u.firstname, u.lastname, u.role
+            FROM USER u
+            JOIN FRIENDSHIP f ON f.id_user1 = u.id OR f.id_user2 = u.id
+            WHERE (f.id_user1 = ? OR f.id_user2 = ?) AND f.confirmed = true;
+
     users.by.discussion: SELECT u.id, u.login, u.firstname, u.lastname, u.role
           FROM USER_CONNECTION uc JOIN USER u ON uc.id_user=u.id
           WHERE uc.id_connection = ?;

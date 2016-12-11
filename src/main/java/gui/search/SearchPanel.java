@@ -86,7 +86,6 @@ public class SearchPanel extends JPanel {
 
     public void updateAccountsList() {
         this.accountsListModel.removeAllElements();
-
         java.util.List<IUser> accountsList = this.searchService.searchUsers(lastnameSearch.getText(), firstnameSearch.getText());
 
         for (IUser user : accountsList) {
@@ -134,6 +133,22 @@ public class SearchPanel extends JPanel {
         searchButton = new JButton("Rechercher");
         searchButton.addActionListener((ActionEvent e) -> updateAccountsList());
         panelSearch.add(searchButton);
+
+        searchButton = new JButton("Voir vos amis");
+        searchButton.addActionListener((ActionEvent e) -> showFriends());
+        panelSearch.add(searchButton);
+    }
+
+    private void showFriends() {
+        this.accountsListModel.removeAllElements();
+        java.util.List<IUser> accountsList = this.userService.findConnectedUserFriends();
+
+        for (IUser user : accountsList) {
+            accountsListModel.addElement(user);
+        }
+        accountsScrollPane.setVisible(true);
+        this.validate();
+        this.repaint();
     }
 
     private void initAccountsPanelRight() {
@@ -174,7 +189,7 @@ public class SearchPanel extends JPanel {
             friendshipService.create(friendship);
             addFriendButton.setVisible(false);
             waitingFriendshipLabel.setVisible(true);
-            JOptionPane.showMessageDialog(new JFrame(), "Ajout avec succès.");
+            JOptionPane.showMessageDialog(new JFrame(), "Demande d'amitié envoyée avec succès.");
         });
         addFriendButton.setVisible(false);
         infosAccountPanel.add(addFriendButton);
