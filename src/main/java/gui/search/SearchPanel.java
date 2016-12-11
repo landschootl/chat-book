@@ -4,6 +4,7 @@ import domain.Friendship;
 import domain.IUser;
 import domain.User;
 import domain.enums.ERole;
+import gui.accounts.ShowFriendsFrame;
 import gui.components.PlaceholderTextField;
 import persistence.uow.UnitOfWork;
 import service.FriendshipService;
@@ -28,6 +29,7 @@ public class SearchPanel extends JPanel {
     private PlaceholderTextField firstnameSearch;
     private PlaceholderTextField lastnameSearch;
     private JButton searchButton;
+    private JButton showFriendsButton;
 
     private JPanel contentPanel;
 
@@ -134,21 +136,9 @@ public class SearchPanel extends JPanel {
         searchButton.addActionListener((ActionEvent e) -> updateAccountsList());
         panelSearch.add(searchButton);
 
-        searchButton = new JButton("Voir vos amis");
-        searchButton.addActionListener((ActionEvent e) -> showFriends());
-        panelSearch.add(searchButton);
-    }
-
-    private void showFriends() {
-        this.accountsListModel.removeAllElements();
-        java.util.List<IUser> accountsList = this.userService.findConnectedUserFriends();
-
-        for (IUser user : accountsList) {
-            accountsListModel.addElement(user);
-        }
-        accountsScrollPane.setVisible(true);
-        this.validate();
-        this.repaint();
+        showFriendsButton = new JButton("Voir vos amis");
+        showFriendsButton.addActionListener((ActionEvent e) -> new ShowFriendsFrame());
+        panelSearch.add(showFriendsButton);
     }
 
     private void initAccountsPanelRight() {
