@@ -102,21 +102,21 @@ public class MainFrame extends AppFrame implements Observer {
             cleanPanels();
             cleanButtons();
             accountsButton.setFont(new Font("Lucida Grande", Font.BOLD, 16));
-            accountsButton.setForeground(Color.BLUE);
+            accountsButton.setForeground(new Color(59, 89, 152));
             this.accountsPanel.setVisible(true);
         });
         discussionsButton.addActionListener((ActionEvent e) -> {
             cleanPanels();
             cleanButtons();
             discussionsButton.setFont(new Font("Lucida Grande", Font.BOLD, 16));
-            discussionsButton.setForeground(Color.BLUE);
+            discussionsButton.setForeground(new Color(59, 89, 152));
             this.discussionsPanel.setVisible(true);
         });
         searchButton.addActionListener((ActionEvent e) -> {
             cleanPanels();
             cleanButtons();
             searchButton.setFont(new Font("Lucida Grande", Font.BOLD, 16));
-            searchButton.setForeground(Color.BLUE);
+            searchButton.setForeground(new Color(59, 89, 152));
             this.searchPanel.updateAccountsList();
             this.searchPanel.setVisible(true);
         });
