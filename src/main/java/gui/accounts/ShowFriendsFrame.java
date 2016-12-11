@@ -10,6 +10,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.stream.Collectors;
 
 public class ShowFriendsFrame extends AppFrame {
 
@@ -75,7 +76,11 @@ public class ShowFriendsFrame extends AppFrame {
                         .build();
 
                 friendshipService.delete(friendship);
-                friends.remove(friend);
+
+                friends = friends.stream()
+                        .filter((IUser u) -> u.getId() != friend.getId())
+                        .collect(Collectors.toList());
+
                 p.setVisible(false);
                 checkVisibilityNoFriendLabel();
             });
