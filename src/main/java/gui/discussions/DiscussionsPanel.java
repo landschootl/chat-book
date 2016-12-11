@@ -14,7 +14,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import java.awt.*;
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -26,6 +26,7 @@ public class DiscussionsPanel extends JPanel implements Observer {
     private JLabel nameDiscussion;
 
     private JPanel messagesPanel;
+    private JScrollPane messagesScrollPane;
     private JList discussionsList;
 
     private PlaceholderTextField newMessageTextField;
@@ -88,21 +89,21 @@ public class DiscussionsPanel extends JPanel implements Observer {
 
         messagesPanel = new JPanel();
         messagesPanel.setLayout(new BoxLayout(messagesPanel, BoxLayout.Y_AXIS));
-        discussionsPanelRight.add(new JScrollPane(messagesPanel), BorderLayout.CENTER);
+        messagesScrollPane = new JScrollPane(messagesPanel);
+        discussionsPanelRight.add(messagesScrollPane, BorderLayout.CENTER);
 
-        updateDiscussionButton = new JButton("gérer");
+        updateDiscussionButton = new JButton("Gérer");
         updateDiscussionButton.addActionListener((ActionEvent e) -> {
             UpdateDiscussionFrame updateDiscussionFrame = new UpdateDiscussionFrame(discussionSelected);
             updateDiscussionFrame.addObserver(this);
         });
         headerDiscussionPanel.add(updateDiscussionButton);
 
-        deleteDiscussionButton = new JButton("supprimer");
+        deleteDiscussionButton = new JButton("Supprimer");
         deleteDiscussionButton.setVisible(false);
         deleteDiscussionButton.addActionListener((ActionEvent e) -> {
             discussionService.delete(discussionSelected);
             discussionsListModel.removeElement(discussionSelected);
-
         });
         headerDiscussionPanel.add(deleteDiscussionButton);
 
@@ -112,27 +113,47 @@ public class DiscussionsPanel extends JPanel implements Observer {
 
         newMessageTextField = new PlaceholderTextField();
         newMessageTextField.setPlaceholder("Tapez votre message...");
+        KeyListener keyListener = new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    sendMessage();
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+            }
+        };
+        newMessageTextField.addKeyListener(keyListener);
         sendDiscussionPanel.add(newMessageTextField);
 
         sendButton = new JButton();
         sendButton.setText("Envoyer");
-        sendButton.addActionListener((ActionEvent e) -> {
-            Message message = messageService.create(Message.builder()
-                    .idConnection(discussionSelected.getId())
-                    .user(connectedUser)
-                    .message(newMessageTextField.getText())
-                    .accused(false)
-                    .priority(false)
-                    .expiration(null)
-                    .code(false)
-                    .build());
-            addMessagePanel(message);
-            discussionSelected.addMessage(message);
+        sendButton.addActionListener((ActionEvent e) -> sendMessage());
 
-        });
         sendDiscussionPanel.add(sendButton);
 
         clearDiscussionPanel();
+    }
+
+    private void sendMessage() {
+        Message message = messageService.create(Message.builder()
+                .idConnection(discussionSelected.getId())
+                .user(connectedUser)
+                .message(newMessageTextField.getText())
+                .accused(false)
+                .priority(false)
+                .expiration(null)
+                .code(false)
+                .build());
+        addMessagePanel(message);
+        discussionSelected.addMessage(message);
+        newMessageTextField.setText("");
     }
 
     private void drawDiscussionsPanelRight(){
@@ -157,11 +178,11 @@ public class DiscussionsPanel extends JPanel implements Observer {
     private void addMessagePanel(Message message) {
         JPanel messagePanel = new JPanel();
         messagePanel.setLayout(new BoxLayout(messagePanel, BoxLayout.Y_AXIS));
-        JLabel userLabel = new JLabel();
-        userLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
-        userLabel.setBorder(new EmptyBorder(5,0,5,0));
-        userLabel.setText(message.getUser().toString());
-        messagePanel.add(userLabel);
+        JLabel infosLabel = new JLabel();
+        infosLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
+        infosLabel.setBorder(new EmptyBorder(5,0,5,0));
+        infosLabel.setText(message.getUser().toString());
+        messagePanel.add(infosLabel);
         JLabel messageLabel = new JLabel();
         messageLabel.setText(message.getMessage());
         messageLabel.setBorder(new EmptyBorder(0,0,5,0));
@@ -170,6 +191,9 @@ public class DiscussionsPanel extends JPanel implements Observer {
         messagesPanel.add(messagePanel);
         messagesPanel.revalidate();
         messagesPanel.repaint();
+
+        messagesPanel.scrollRectToVisible(
+                new Rectangle(0, messagesPanel.getHeight()+200, 0, 0));
     }
 
     private void initDiscussionsPanelLeft() {
