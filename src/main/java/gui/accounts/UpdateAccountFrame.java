@@ -3,6 +3,7 @@ package gui.accounts;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import domain.IUser;
 import domain.User;
 import domain.enums.ECrud;
 import gui.AppFrame;
@@ -26,10 +27,10 @@ public class UpdateAccountFrame extends AppFrame implements Observable {
     private JTextField loginTextField;
     private JTextField firstNameTextField;
     private JTextField lastNameTextField;
-    private JButton cancelButton;
     private JLabel errorLabel;
     private JButton saveButton;
     private JButton deleteButton;
+    private JButton passwordButton;
 
     public UpdateAccountFrame() {
         this.obs = new ArrayList<>();
@@ -75,7 +76,7 @@ public class UpdateAccountFrame extends AppFrame implements Observable {
             }
         });
 
-        cancelButton.addActionListener((ActionEvent e) -> this.dispose());
+        passwordButton.addActionListener((ActionEvent e) -> new UpdatePasswordAccountFrame(userService.getConnectedUser()));
     }
 
     public boolean fieldsEmpty() {
@@ -153,11 +154,11 @@ public class UpdateAccountFrame extends AppFrame implements Observable {
         saveButton.setText("Enregistrer");
         mainPanel.add(saveButton, new GridConstraints(5, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         deleteButton = new JButton();
-        deleteButton.setText("Supprimer le compte");
+        deleteButton.setText("Supprimer votre compte");
         mainPanel.add(deleteButton, new GridConstraints(6, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        cancelButton = new JButton();
-        cancelButton.setText("Annuler les modifications");
-        mainPanel.add(cancelButton, new GridConstraints(7, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        passwordButton = new JButton();
+        passwordButton.setText("Modifier votre mot de passe");
+        mainPanel.add(passwordButton, new GridConstraints(7, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**

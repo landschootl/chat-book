@@ -1,22 +1,22 @@
 select:
-    user.by.credentials: SELECT id, login, firstname, lastname, role
+    user.by.credentials: SELECT id, login, firstname, lastname, role, password
         FROM USER
         WHERE login = ? AND password = ?;
 
-    user.by.identifiant: SELECT id, login, firstname, lastname, role
+    user.by.identifiant: SELECT id, login, firstname, lastname, role, password
           FROM USER
           WHERE id = ?;
 
-    user.friends: SELECT u.id, u.login, u.firstname, u.lastname, u.role
+    user.friends: SELECT u.id, u.login, u.firstname, u.lastname, u.role, u.password
             FROM USER u
             JOIN FRIENDSHIP f ON f.id_user1 = u.id OR f.id_user2 = u.id
             WHERE (f.id_user1 = ? OR f.id_user2 = ?) AND f.confirmed = true;
 
-    users.by.discussion: SELECT u.id, u.login, u.firstname, u.lastname, u.role
+    users.by.discussion: SELECT u.id, u.login, u.firstname, u.lastname, u.role, u.password
           FROM USER_CONNECTION uc JOIN USER u ON uc.id_user=u.id
           WHERE uc.id_connection = ?;
 
-    users.all: SELECT id, login, firstname, lastname, role
+    users.all: SELECT id, login, firstname, lastname, role, password
         FROM USER;
 
     discussions.all: SELECT id, id_mod, name
@@ -69,6 +69,11 @@ update:
     SET login = ?,
     firstname = ?,
     lastname = ?
+    WHERE id = ?;
+
+  user.password:
+    UPDATE USER
+    SET password = ?
     WHERE id = ?;
 
   friendship.accept:

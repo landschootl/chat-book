@@ -143,6 +143,17 @@ public class UserMapper extends Mapper {
         }
     }
 
+    public void updatePassword(IUser user) {
+        try {
+            PreparedStatement preparedStatement = db.prepareStatement(this.bundle.getString("update.user.password"));
+            preparedStatement.setString(1, ((User) user).getPassword());
+            preparedStatement.setInt(2, user.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void delete(IUser user) {
         try {
             PreparedStatement preparedStatement = db.prepareStatement(this.bundle.getString("delete.user.by.identifiant"));
@@ -161,6 +172,7 @@ public class UserMapper extends Mapper {
                 .firstname(rs.getString(3))
                 .lastname(rs.getString(4))
                 .role(ERole.valueOf(rs.getString(5)))
+                .password(rs.getString(6))
                 .obs(new ArrayList<>())
                 .build();
         user.addObserver(UnitOfWork.getInstance());

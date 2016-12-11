@@ -48,6 +48,15 @@ public class UserService {
         userMapper.updateAccount(user);
     }
 
+    public void updatePassword(IUser user) {
+        try {
+            ((User) user).setPassword(SecurityService.getInstance().encrypt(((User) user).getPassword()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        userMapper.updatePassword(user);
+    }
+
     public User findByCredentials(String login, String password) throws Exception {
         this.connectedUser = userMapper.findByCredentials(login, securityService.encrypt(password));
         return this.connectedUser;

@@ -14,6 +14,8 @@ public interface IUser extends IDomainObject {
 
     public String getLogin();
 
+    public String getPassword();
+
     public void setFirstname(String firstname);
 
     public void setLastname(String lastname);
@@ -21,6 +23,8 @@ public interface IUser extends IDomainObject {
     public void setRole(ERole role);
 
     public void setLogin(String login);
+
+    public void setPassword(String password);
 
     public int getId();
 }
