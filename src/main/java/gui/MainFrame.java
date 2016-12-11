@@ -61,6 +61,11 @@ public class MainFrame extends AppFrame implements Observer {
         configDeconnectButton();
         configDashboard();
         cleanButtons();
+        checkRole();
+        this.setVisible(true);
+    }
+
+    private void checkRole() {
         if (userService.getConnectedUser().getRole().equals(ERole.USER_ADMIN)) {
             this.setTitle("Chatbook - Admin");
             this.titleLabel.setText("chatbook - admin");
@@ -77,7 +82,6 @@ public class MainFrame extends AppFrame implements Observer {
             discussionsButton.setForeground(new Color(59, 89, 152));
             this.discussionsPanel.setVisible(true);
         }
-        this.setVisible(true);
     }
 
     public void initPanels() {
@@ -100,18 +104,22 @@ public class MainFrame extends AppFrame implements Observer {
         userLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
         userLabel.setText(userService.getConnectedUser().getFirstname() + " " + userService.getConnectedUser().getLastname());
         dashboardPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        userPanel.setBorder(new EmptyBorder(0, 0, 0, 14));
         checkComponentRoles();
+        initImages();
+    }
 
+    private void initImages() {
         Image waitingFriendshipImg = null;
         Image updateAccountccountImg = null;
         Image logoutImg = null;
         try {
             waitingFriendshipImg = ImageIO.read(MainFrame.class.getResource("../img/demandes_amis.png"));
-            waitingFriendshipImg = waitingFriendshipImg.getScaledInstance(20, 20, Image.SCALE_DEFAULT);
+            waitingFriendshipImg = waitingFriendshipImg.getScaledInstance(16, 16, Image.SCALE_DEFAULT);
             updateAccountccountImg = ImageIO.read(MainFrame.class.getResource("../img/mon_compte.png"));
-            updateAccountccountImg = updateAccountccountImg.getScaledInstance(20, 20, Image.SCALE_DEFAULT);
+            updateAccountccountImg = updateAccountccountImg.getScaledInstance(16, 16, Image.SCALE_DEFAULT);
             logoutImg = ImageIO.read(MainFrame.class.getResource("../img/deconnexion.png"));
-            logoutImg = logoutImg.getScaledInstance(20, 20, Image.SCALE_DEFAULT);
+            logoutImg = logoutImg.getScaledInstance(16, 16, Image.SCALE_DEFAULT);
         } catch (IOException e) {
             e.printStackTrace();
         }

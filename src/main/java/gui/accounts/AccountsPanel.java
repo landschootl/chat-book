@@ -143,6 +143,7 @@ public class AccountsPanel extends JPanel {
             this.unitOfWork.commit();
             JOptionPane.showMessageDialog(new JFrame(), "Mise à jour effectuée.");
         });
+        updateAccountButton.setAlignmentX(JButton.CENTER_ALIGNMENT);
         buttonsPanel.add(updateAccountButton);
 
         deleteAccountButton = new JButton("Supprimer");
@@ -151,10 +152,12 @@ public class AccountsPanel extends JPanel {
             this.accountsListModel.remove(accountsJList.getSelectedIndex());
             JOptionPane.showMessageDialog(new JFrame(), "Suppression effectuée.");
         });
+        deleteAccountButton.setAlignmentX(JButton.CENTER_ALIGNMENT);
         buttonsPanel.add(deleteAccountButton);
 
         passwordAccountButton = new JButton("Modifier le mot de passe");
         passwordAccountButton.addActionListener((ActionEvent e) -> new UpdatePasswordAccountFrame(userSelected));
+        passwordAccountButton.setAlignmentX(JButton.CENTER_ALIGNMENT);
         buttonsPanel.add(passwordAccountButton);
 
         accountsPanelRight.add(buttonsPanel, BorderLayout.SOUTH);
