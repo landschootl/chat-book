@@ -1,6 +1,6 @@
 package gui.accounts;
 
-import domain.User;
+import domain.IUser;
 import domain.enums.ERole;
 import persistence.uow.UnitOfWork;
 import service.UserService;
@@ -15,12 +15,12 @@ import java.sql.SQLException;
 public class AccountsPanel extends JPanel {
 
     private UserService userService;
-    private User userSelected;
+    private IUser userSelected;
     private UnitOfWork unitOfWork;
 
     private JPanel accountsPanelRight;
 
-    private DefaultListModel<User> accountsListModel;
+    private DefaultListModel<IUser> accountsListModel;
     private JList accountsJList;
     private JLabel loginAccount;
     private JPanel infosAccountPanel;
@@ -53,9 +53,9 @@ public class AccountsPanel extends JPanel {
         try {
             accountsListModel = new DefaultListModel<>();
             accountsJList = new JList(accountsListModel);
-            java.util.List<User> accountsList = userService.findAll();
+            java.util.List<IUser> accountsList = userService.findAll();
 
-            for (User user : accountsList) {
+            for (IUser user : accountsList) {
                 if (user.getId() != userService.getConnectedUser().getId()) {
                     accountsListModel.addElement(user);
                 }
@@ -65,7 +65,7 @@ public class AccountsPanel extends JPanel {
             this.add(new JScrollPane(accountsJList));
             accountsJList.addListSelectionListener((ListSelectionEvent e) -> {
                 if (!e.getValueIsAdjusting()) {
-                    userSelected = (User) accountsJList.getSelectedValue();
+                    userSelected = (IUser) accountsJList.getSelectedValue();
 
                     if (userSelected != null) {
                         setVisibleAccountInfos(true);

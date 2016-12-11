@@ -6,12 +6,14 @@ import com.intellij.uiDesigner.core.Spacer;
 import domain.User;
 import domain.enums.ERole;
 import gui.AppFrame;
+import persistence.uow.UnitOfWork;
 import service.UserService;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
 public class CreateAccountFrame extends AppFrame {
     private UserService userService;
@@ -38,14 +40,16 @@ public class CreateAccountFrame extends AppFrame {
         createAccountButton.addActionListener((ActionEvent e) -> {
             if (!fieldsEmpty()) {
                 User user = User.builder()
-                                .login(loginTextField.getText())
-                                .lastname(lastnameTextField.getText())
-                                .firstname(firstNameTextField.getText())
-                                .password(passwordTextField.getText())
-                                .role(ERole.USER_DEFAULT)
-                                .build();
+                    .login(loginTextField.getText())
+                    .lastname(lastnameTextField.getText())
+                    .firstname(firstNameTextField.getText())
+                    .password(passwordTextField.getText())
+                    .role(ERole.USER_DEFAULT)
+                    .obs(new ArrayList<>())
+                    .build();
                 try {
                     userService.create(user);
+                    user.addObserver(UnitOfWork.getInstance());
                     this.accountsListModel.addElement(user);
                     this.dispose();
                     JOptionPane.showMessageDialog(new JFrame(), "Utilisateur créé avec succès.");

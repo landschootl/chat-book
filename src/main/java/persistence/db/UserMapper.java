@@ -28,6 +28,20 @@ public class UserMapper extends Mapper {
         return instance;
     }
 
+    private User createUser(ResultSet rs) throws SQLException {
+        User user;
+        user = User.builder()
+                .id(rs.getInt(1))
+                .login(rs.getString(2))
+                .firstname(rs.getString(3))
+                .lastname(rs.getString(4))
+                .role(ERole.valueOf(rs.getString(5)))
+                .obs(new ArrayList<>())
+                .build();
+        user.addObserver(UnitOfWork.getInstance());
+        return user;
+    }
+
     public User findByCredentials(String login, String password) throws SQLException {
         User user = null;
         preparedStatement = db.prepareStatement(this.bundle.getString("select.user.by.credentials"));
@@ -36,15 +50,7 @@ public class UserMapper extends Mapper {
         ResultSet rs = preparedStatement.executeQuery();
 
         while(rs.next()) {
-            user = User.builder()
-                    .id(rs.getInt(1))
-                    .login(rs.getString(2))
-                    .firstname(rs.getString(3))
-                    .lastname(rs.getString(4))
-                    .role(ERole.valueOf(rs.getString(5)))
-                    .obs(new ArrayList<>())
-                    .build();
-            user.addObserver(UnitOfWork.getInstance());
+            user = createUser(rs);
         }
         rs.close();
 
@@ -65,22 +71,12 @@ public class UserMapper extends Mapper {
         }
     }
 
-    public List<User> findAll() throws SQLException {
-        List<User> users = new ArrayList<>();
+    public List<IUser> findAll() throws SQLException {
+        List<IUser> users = new ArrayList<>();
         ResultSet rs = statement.executeQuery(this.bundle.getString("select.all.users"));
 
         while(rs.next()) {
-            User user = User.builder()
-                    .id(rs.getInt(1))
-                    .login(rs.getString(2))
-                    .firstname(rs.getString(3))
-                    .lastname(rs.getString(4))
-                    .role(ERole.valueOf(rs.getString(5)))
-                    .obs(new ArrayList<>())
-                    .build();
-            user.addObserver(UnitOfWork.getInstance());
-
-            users.add(user);
+            users.add(new VirtualProxyBuilder<>(IUser.class, new UserFactory(rs.getString("id"))).getProxy());
         }
         rs.close();
 
@@ -102,21 +98,13 @@ public class UserMapper extends Mapper {
     }
 
     public IUser findByIdentifiant(String identifiant) throws SQLException, NoDataFoundException {
-        IUser user = null;
+        IUser user;
         preparedStatement = db.prepareStatement(this.bundle.getString("select.user.by.identifiant"));
         preparedStatement.setString(1, identifiant);
         ResultSet rs = preparedStatement.executeQuery();
 
         if(rs.next()) {
-            user = (User) User.builder()
-                    .id(rs.getInt(1))
-                    .login(rs.getString(2))
-                    .firstname(rs.getString(3))
-                    .lastname(rs.getString(4))
-                    .role(ERole.valueOf(rs.getString(5)))
-                    .obs(new ArrayList<>())
-                    .build();
-            user.addObserver(UnitOfWork.getInstance());
+            user = createUser(rs);
         } else {
             throw new NoDataFoundException("Utilisateur introuvable");
         }
@@ -151,7 +139,7 @@ public class UserMapper extends Mapper {
         }
     }
 
-    public void delete(User user) {
+    public void delete(IUser user) {
         try {
             PreparedStatement preparedStatement = db.prepareStatement(this.bundle.getString("delete.user.by.identifiant"));
             preparedStatement.setInt(1, user.getId());

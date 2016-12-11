@@ -21,4 +21,6 @@ public interface IUser extends IDomainObject {
     public void setRole(ERole role);
 
     public void setLogin(String login);
+
+    public int getId();
 }

@@ -43,11 +43,11 @@ public class UserService {
         return this.connectedUser;
     }
 
-    public List<User> findAll() throws SQLException {
+    public List<IUser> findAll() throws SQLException {
         return userMapper.findAll();
     }
 
-    public void delete(User user) {
+    public void delete(IUser user) {
         userMapper.delete(user);
     }
 
