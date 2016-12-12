@@ -60,7 +60,6 @@ public class DiscussionMapper extends Mapper {
         return discussions;
     }
 
-
     public List<Discussion> findByUser(User user) throws SQLException {
         List <Discussion> discussions = new ArrayList<>();
         preparedStatement = db.prepareStatement(this.bundle.getString("select.discussions.by.user"));
@@ -77,16 +76,53 @@ public class DiscussionMapper extends Mapper {
         throw new NO_IMPLEMENT();
     }
 
-    public boolean addUser(User user) {
-        throw new NO_IMPLEMENT();
+    public void addUser(Discussion discussion, IUser user) {
+        try {
+            preparedStatement = db.prepareStatement(this.bundle.getString("create.discussion.user"));
+            preparedStatement.setInt(1, discussion.getId());
+            preparedStatement.setInt(2, user.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    public boolean removeUser(User user) {
-        throw new NO_IMPLEMENT();
+    public void removeUser(Discussion discussion, IUser user) {
+        try {
+            preparedStatement = db.prepareStatement(this.bundle.getString("delete.discussion.user"));
+            preparedStatement.setInt(1, discussion.getId());
+            preparedStatement.setInt(2, user.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public Discussion update(Discussion discussion) {
-        throw new NO_IMPLEMENT();
+        try {
+            PreparedStatement preparedStatement = db.prepareStatement(this.bundle.getString("update.discussion"));
+            preparedStatement.setInt(1, discussion.getMod().getId());
+            preparedStatement.setString(2, discussion.getName());
+            preparedStatement.setInt(3, discussion.getId());
+            preparedStatement.executeUpdate();
+            List<IUser> oldUsers = userService.findByDiscussion(discussion);
+            List<IUser> existUsers = new ArrayList<>();
+            for(IUser oldUser : oldUsers){
+                if(!discussion.containUser(oldUser)){
+                    existUsers.add(discussion.getUser(oldUser.getId()));
+                } else {
+                    removeUser(discussion, oldUser);
+                }
+            }
+            for(IUser user : discussion.getUsers()){
+                if(!existUsers.contains(user)) {
+                    addUser(discussion, user);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return discussion;
     }
 
     public Discussion create(Discussion discussion) {
@@ -99,10 +135,7 @@ public class DiscussionMapper extends Mapper {
             resultId.next();
             discussion.setId(resultId.getInt(1));
             for(IUser user : discussion.getUsers()){
-                preparedStatement = db.prepareStatement(this.bundle.getString("create.discussion.user"));
-                preparedStatement.setInt(1, discussion.getId());
-                preparedStatement.setInt(2, user.getId());
-                preparedStatement.executeUpdate();
+                addUser(discussion, user);
             }
         } catch (SQLException e) {
             e.printStackTrace();

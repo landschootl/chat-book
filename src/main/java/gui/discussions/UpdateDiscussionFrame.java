@@ -5,6 +5,7 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import domain.Discussion;
 import domain.IUser;
+import domain.User;
 import domain.enums.ECrud;
 import gui.AppFrame;
 import persistence.uow.Observable;
@@ -15,6 +16,8 @@ import service.UserService;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 /**
@@ -38,11 +41,15 @@ public class UpdateDiscussionFrame extends AppFrame implements Observable {
     private DefaultListModel<IUser> friends;
     private DiscussionService discussionService;
     private UserService userService;
+    private User userConnected;
+
+    private final String INIT_MANAGER_LABEL = "Gérant : ";
 
     public UpdateDiscussionFrame(Discussion discussion) {
         super();
         this.discussionService = DiscussionService.getInstance();
         this.userService = UserService.getInstance();
+        this.userConnected = userService.getConnectedUser();
         this.obs = new ArrayList<>();
         this.discussion = discussion;
         initComponents();
@@ -65,24 +72,50 @@ public class UpdateDiscussionFrame extends AppFrame implements Observable {
 
     public void initInformationsDiscution() {
         titleField.setText(discussion.getName());
-        managerLabel.setText(managerLabel.getText() + discussion.getMod().getLogin());
+        managerLabel.setText(INIT_MANAGER_LABEL + discussion.getMod().getLogin());
     }
 
     public void initListUsers() {
         users = new DefaultListModel<>();
         for (IUser user : discussion.getUsers()) {
-            if (user.getId() != userService.getConnectedUser().getId()) {
+            if (user.getId() != discussion.getMod().getId()) {
                 users.addElement(user);
             }
         }
         usersList.setModel(users);
+        usersList.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent evt) {
+                if (evt.getClickCount() == 2) {
+                    IUser userSelected = (IUser) usersList.getSelectedValue();
+                    int dialogResult = JOptionPane.showConfirmDialog(null, "Mettre  " + userSelected.getLogin() + " moderateur du groupe ?", "Attention", 0);
+                    if (dialogResult == JOptionPane.YES_OPTION) {
+                        users.addElement(discussion.getMod());
+                        discussion.setMod(userSelected);
+                        managerLabel.setText(INIT_MANAGER_LABEL + userSelected.getLogin());
+                        for (int i = 0; i < users.getSize(); i++) {
+                            IUser user = users.get(i);
+                            if (user.getId() == userSelected.getId()) {
+                                users.remove(i);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
     }
 
     public void initListFriends() {
         friendsList.setPreferredSize(new Dimension(150, 150));
         friends = new DefaultListModel<>();
-        for (IUser friend : userService.findConnectedUserFriends()) {
-            if (!friendInTheUsers(friend)) {
+        java.util.List<IUser> list;
+        if (userConnected.isAdmin()) {
+            list = userService.findAll();
+        } else {
+            list = userService.findConnectedUserFriends();
+        }
+        for (IUser friend : list) {
+            if (!friendInTheUsers(friend) && (discussion.getMod().getId() != friend.getId())) {
                 friends.addElement(friend);
             }
         }
@@ -116,7 +149,11 @@ public class UpdateDiscussionFrame extends AppFrame implements Observable {
         });
         removeUserButton.addActionListener((ActionEvent e) -> {
             IUser userSelected = (IUser) usersList.getSelectedValue();
-            if (userSelected != null) {
+            if (userSelected == null) {
+                JOptionPane.showMessageDialog(new JFrame(), "Veuillez sélectionner l'utilisateur à retirer");
+            } else if (userSelected.getId() == userConnected.getId() && !userConnected.isAdmin()) {
+                JOptionPane.showMessageDialog(new JFrame(), "En tant que administrateur, vous ne pouvez pas quitter la discussion");
+            } else {
                 friends.addElement(userSelected);
                 for (int i = 0; i < users.size(); i++) {
                     IUser user = users.get(i);
@@ -125,29 +162,23 @@ public class UpdateDiscussionFrame extends AppFrame implements Observable {
                         discussion.removeUser(user.getId());
                     }
                 }
-            } else {
-                JOptionPane.showMessageDialog(new JFrame(), "Veuillez sélectionner l'utilisateur à retirer");
             }
         });
         saveButton.addActionListener((ActionEvent e) -> {
             if (!"".equals(titleField.getText())) {
                 discussion.setName(titleField.getText());
-                discussion.addUser(discussion.getMod());
-                discussion = discussionService.saveDiscussion(discussion);
-                notif(ECrud.CREATE);
+                if (discussion.getId() == 0) {
+                    discussion = discussionService.create(discussion);
+                    notif(ECrud.CREATE);
+                } else {
+                    discussion = discussionService.update(discussion);
+                    notif(ECrud.UPDATE);
+                }
                 this.dispose();
             } else {
                 JOptionPane.showMessageDialog(new JFrame(), "N'oubliez pas de donner un nom à la conversation");
             }
         });
-    }
-
-    private void removeAUserInList(IUser user, DefaultListModel<IUser> list) {
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getId() == user.getId()) {
-                list.remove(i);
-            }
-        }
     }
 
     @Override

@@ -11,7 +11,6 @@ import service.MessageService;
 import service.UserService;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import java.awt.*;
@@ -19,6 +18,8 @@ import java.awt.event.*;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.*;
+
 
 public class DiscussionsPanel extends JPanel implements Observer {
     private JPanel discussionsPanelLeft;
@@ -61,9 +62,11 @@ public class DiscussionsPanel extends JPanel implements Observer {
         addDiscussionButton = new JButton();
         addDiscussionButton.setText("Créer une nouvelle discussion");
         addDiscussionButton.addActionListener((ActionEvent e) -> {
+            java.util.List<IUser> users = new ArrayList<>();
+            users.add(connectedUser);
             UpdateDiscussionFrame updateDiscussionFrame = new UpdateDiscussionFrame(Discussion.builder()
                     .mod(connectedUser)
-                    .users(new ArrayList<IUser>())
+                    .users(users)
                     .messages(new ArrayList<Message>())
                     .build());
             updateDiscussionFrame.addObserver(this);
@@ -104,8 +107,11 @@ public class DiscussionsPanel extends JPanel implements Observer {
         deleteDiscussionButton = new JButton("Supprimer");
         deleteDiscussionButton.setVisible(false);
         deleteDiscussionButton.addActionListener((ActionEvent e) -> {
-            discussionService.delete(discussionSelected);
-            discussionsListModel.removeElement(discussionSelected);
+            int dialogResult = JOptionPane.showConfirmDialog(null, "Etes-vous sûr de vouloir supprimer la discussion ?", "Attention", 0);
+            if (dialogResult == JOptionPane.YES_OPTION) {
+                discussionService.delete(discussionSelected);
+                discussionsListModel.removeElement(discussionSelected);
+            }
         });
         headerDiscussionPanel.add(deleteDiscussionButton);
 
@@ -280,7 +286,16 @@ public class DiscussionsPanel extends JPanel implements Observer {
     public void action(Object crud, Object element) {
         switch ((ECrud) crud) {
             case UPDATE:
-//                discussionsListModel.setElementAt(element, i);
+                Enumeration<Discussion> discussionEnumeration = discussionsListModel.elements();
+                int i=0;
+                while(discussionEnumeration.hasMoreElements()){
+                    Discussion discussion = discussionEnumeration.nextElement();
+                    if(discussion.getId() == ((Discussion) element).getId()){
+                        discussionsListModel.setElementAt((Discussion) element, i);
+                    }
+                    i++;
+                }
+                discussionsList.clearSelection();
                 break;
             case CREATE:
                 discussionsListModel.addElement((Discussion) element);

@@ -7,12 +7,10 @@ import persistence.uow.UnitOfWork;
 import service.UserService;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.sql.SQLException;
 
 public class AccountsPanel extends JPanel {
 
@@ -53,43 +51,37 @@ public class AccountsPanel extends JPanel {
     }
 
     private void initAccountsList() {
-        try {
-            accountsListModel = new DefaultListModel<>();
-            accountsJList = new JList(accountsListModel);
-            java.util.List<IUser> accountsList = userService.findAll();
-
-            for (IUser user : accountsList) {
-                if (user.getId() != userService.getConnectedUser().getId()) {
-                    accountsListModel.addElement(user);
+        accountsListModel = new DefaultListModel<>();
+        accountsJList = new JList(accountsListModel);
+        java.util.List<IUser> accountsList = userService.findAll();
+        for (IUser user : accountsList) {
+            if (user.getId() != userService.getConnectedUser().getId()) {
+                accountsListModel.addElement(user);
+            }
+        }
+        accountsJList.setVisibleRowCount(10);
+        accountsJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        this.add(new JScrollPane(accountsJList));
+        accountsJList.addListSelectionListener((ListSelectionEvent e) -> {
+            if (!e.getValueIsAdjusting()) {
+                userSelected = (IUser) accountsJList.getSelectedValue();
+                if (userSelected != null) {
+                    setVisibleAccountInfos(true);
+                    loginAccount.setText(userSelected.getLogin());
+                    nameAccountField.setText(userSelected.getLastname());
+                    firstnameAccountField.setText(userSelected.getFirstname());
+                    if (userSelected.getRole().equals(ERole.USER_ADMIN)) {
+                        adminButton.setSelected(true);
+                        userButton.setSelected(false);
+                    } else {
+                        userButton.setSelected(true);
+                        adminButton.setSelected(false);
+                    }
+                } else {
+                    setVisibleAccountInfos(false);
                 }
             }
-            accountsJList.setVisibleRowCount(10);
-            accountsJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-            this.add(new JScrollPane(accountsJList));
-            accountsJList.addListSelectionListener((ListSelectionEvent e) -> {
-                if (!e.getValueIsAdjusting()) {
-                    userSelected = (IUser) accountsJList.getSelectedValue();
-
-                    if (userSelected != null) {
-                        setVisibleAccountInfos(true);
-                        loginAccount.setText(userSelected.getLogin());
-                        nameAccountField.setText(userSelected.getLastname());
-                        firstnameAccountField.setText(userSelected.getFirstname());
-                        if (userSelected.getRole().equals(ERole.USER_ADMIN)) {
-                            adminButton.setSelected(true);
-                            userButton.setSelected(false);
-                        } else {
-                            userButton.setSelected(true);
-                            adminButton.setSelected(false);
-                        }
-                    } else {
-                        setVisibleAccountInfos(false);
-                    }
-                }
-            });
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        });
     }
 
     private void initAccountsPanelRight() {

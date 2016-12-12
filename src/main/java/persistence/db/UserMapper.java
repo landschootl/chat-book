@@ -57,15 +57,18 @@ public class UserMapper extends Mapper {
         }
     }
 
-    public List<IUser> findAll() throws SQLException {
+    public List<IUser> findAll() {
         List<IUser> users = new ArrayList<>();
-        ResultSet rs = statement.executeQuery(this.bundle.getString("select.users.all"));
-
-        while(rs.next()) {
-            users.add(new VirtualProxyBuilder<>(IUser.class, new UserFactory(rs.getString("id"))).getProxy());
+        ResultSet rs = null;
+        try {
+            rs = statement.executeQuery(this.bundle.getString("select.users.all"));
+            while(rs.next()) {
+                users.add(new VirtualProxyBuilder<>(IUser.class, new UserFactory(rs.getString("id"))).getProxy());
+            }
+            rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        rs.close();
-
         return users;
     }
 

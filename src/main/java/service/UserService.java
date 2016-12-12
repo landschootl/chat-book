@@ -25,11 +25,7 @@ public class UserService {
         this.userMapper = UserMapper.getInstance();
         this.securityService = SecurityService.getInstance();
         this.users = new ArrayList<>();
-        try {
-            this.users = this.findAll();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        this.users = this.findAll();
     }
 
     public static UserService getInstance() {
@@ -62,7 +58,7 @@ public class UserService {
         return this.connectedUser;
     }
 
-    public List<IUser> findAll() throws SQLException {
+    public List<IUser> findAll() {
         return userMapper.findAll();
     }
 

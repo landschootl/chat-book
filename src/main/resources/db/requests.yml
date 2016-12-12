@@ -48,7 +48,7 @@ create:
     INSERT INTO CONNECTION VALUES (default, ?, ?);
 
   discussion.user:
-      INSERT INTO USER_CONNECTION VALUES (default, ?, ?);
+    INSERT INTO USER_CONNECTION VALUES (?, ?);
 
   friendship:
     INSERT INTO FRIENDSHIP VALUES (default, ?, ?, false);
@@ -81,6 +81,12 @@ update:
     SET confirmed = true
     WHERE id = ?;
 
+  discussion:
+    UPDATE CONNECTION
+    SET id_mod = ?,
+    name = ?
+    WHERE id = ?;
+
 delete:
   user.by.identifiant:
     DELETE FROM USER
@@ -98,3 +104,7 @@ delete:
   discussion.by.identifiant:
       DELETE FROM CONNECTION
       WHERE id = ?;
+
+  discussion.user:
+      DELETE FROM USER_CONNECTION
+      WHERE id_connection = ? AND id_user = ?;

@@ -40,9 +40,9 @@ CREATE TABLE CONNECTION (
 -- Table de relation entre un utilisateur et un groupe de discussion
 DROP TABLE IF EXISTS USER_CONNECTION;
 CREATE TABLE USER_CONNECTION (
-	id int NOT NULL AUTO_INCREMENT primary key,
 	id_connection int NOT NULL,
 	id_user int NOT NULL,
+	primary key (id_connection, id_user),
 	foreign key (id_connection) REFERENCES CONNECTION(id) ON DELETE CASCADE
 );
 
