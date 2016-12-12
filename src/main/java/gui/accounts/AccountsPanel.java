@@ -22,7 +22,7 @@ public class AccountsPanel extends JPanel {
 
     private DefaultListModel<IUser> accountsListModel;
     private JList accountsJList;
-    private JLabel loginAccount;
+    private JTextField loginAccountField;
     private JPanel infosAccountPanel;
     private JTextField nameAccountField;
     private JTextField firstnameAccountField;
@@ -67,7 +67,7 @@ public class AccountsPanel extends JPanel {
                 userSelected = (IUser) accountsJList.getSelectedValue();
                 if (userSelected != null) {
                     setVisibleAccountInfos(true);
-                    loginAccount.setText(userSelected.getLogin());
+                    loginAccountField.setText(userSelected.getLogin());
                     nameAccountField.setText(userSelected.getLastname());
                     firstnameAccountField.setText(userSelected.getFirstname());
                     if (userSelected.getRole().equals(ERole.USER_ADMIN)) {
@@ -91,11 +91,11 @@ public class AccountsPanel extends JPanel {
         accountsPanelRight.setPreferredSize(new Dimension(400, 100));
         accountsPanelRight.setBorder(new EmptyBorder(0, 10, 10, 10));
 
-        loginAccount = new JLabel();
-        loginAccount.setFont(new Font(loginAccount.getFont().getName(), loginAccount.getFont().getStyle(), 24));
-        loginAccount.setHorizontalAlignment(0);
-        loginAccount.setBorder(new EmptyBorder(0, 0, 10, 0));
-        accountsPanelRight.add(loginAccount, BorderLayout.NORTH);
+        loginAccountField = new JTextField();
+        loginAccountField.setFont(new Font(loginAccountField.getFont().getName(), loginAccountField.getFont().getStyle(), 24));
+        loginAccountField.setHorizontalAlignment(0);
+        loginAccountField.setBorder(new EmptyBorder(0, 0, 10, 0));
+        accountsPanelRight.add(loginAccountField, BorderLayout.NORTH);
 
         infosAccountPanel = new JPanel();
         infosAccountPanel.setLayout(new GridBagLayout());
@@ -160,6 +160,7 @@ public class AccountsPanel extends JPanel {
     }
 
     private void updateUserInfos() {
+        this.userSelected.setLogin(this.loginAccountField.getText());
         this.userSelected.setFirstname(this.firstnameAccountField.getText());
         this.userSelected.setLastname(this.nameAccountField.getText());
         if (this.adminButton.isSelected()) {
@@ -170,7 +171,7 @@ public class AccountsPanel extends JPanel {
     }
 
     private void setVisibleAccountInfos(boolean visible) {
-        loginAccount.setVisible(visible);
+        loginAccountField.setVisible(visible);
         infosAccountPanel.setVisible(visible);
         userButton.setVisible(visible);
         adminButton.setVisible(visible);

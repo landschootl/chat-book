@@ -123,10 +123,11 @@ public class UserMapper extends Mapper {
     public void update(User user) {
         try {
             PreparedStatement preparedStatement = db.prepareStatement(this.bundle.getString("update.user.by.identifiant"));
-            preparedStatement.setString(1, user.getFirstname());
-            preparedStatement.setString(2, user.getLastname());
-            preparedStatement.setString(3, user.getRole().toString());
-            preparedStatement.setInt(4, user.getId());
+            preparedStatement.setString(1, user.getLogin());
+            preparedStatement.setString(2, user.getFirstname());
+            preparedStatement.setString(3, user.getLastname());
+            preparedStatement.setString(4, user.getRole().toString());
+            preparedStatement.setInt(5, user.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

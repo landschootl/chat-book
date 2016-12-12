@@ -59,7 +59,8 @@ create:
 update:
   user.by.identifiant:
     UPDATE USER
-    SET firstname = ?,
+    SET login = ?,
+    firstname = ?,
     lastname = ?,
     role = ?
     WHERE id = ?;
