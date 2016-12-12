@@ -18,6 +18,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.*;
@@ -278,7 +279,6 @@ public class DiscussionsPanel extends JPanel implements Observer {
         dateLabel.setText(formattedDateTime);
         messagePanel.add(dateLabel);
 
-
         JLabel expirationLabel = new JLabel();
         if (message.getExpiration() != null) {
             expirationLabel.setFont(new Font("Lucida Grande", Font.ITALIC, 9));
@@ -302,17 +302,37 @@ public class DiscussionsPanel extends JPanel implements Observer {
         messageLabel.setBorder(new EmptyBorder(0,0,10,0));
         messagePanel.add(messageLabel);
 
+        if (message.isAccused() &&
+                connectedUser.getId() != message.getUser().getId() &&
+                message.getDateAccused() == null) {
+            message.setDateAccused(LocalDateTime.now());
+            messageService.updateDateAccused(message);
+        }
+
+        JLabel accusedLabel = new JLabel();
+        if (message.isAccused() && message.getDateAccused() != null) {
+            accusedLabel.setFont(new Font("Lucida Grande", Font.ITALIC, 9));
+            messageLabel.setBorder(new EmptyBorder(0,0,2,0));
+            accusedLabel.setBorder(new EmptyBorder(0,0,10,0));
+            formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy à HH:mm");
+            formattedDateTime = "(Lu le " + message.getDateAccused().format(formatter) + ")";
+            accusedLabel.setText(formattedDateTime);
+            messagePanel.add(accusedLabel);
+        }
+
         if (connectedUser.getId() == message.getUser().getId()) {
             userLabel.setAlignmentX(JLabel.RIGHT_ALIGNMENT);
             dateLabel.setAlignmentX(JLabel.RIGHT_ALIGNMENT);
             expirationLabel.setAlignmentX(JLabel.RIGHT_ALIGNMENT);
             messageLabel.setAlignmentX(JLabel.RIGHT_ALIGNMENT);
+            accusedLabel.setAlignmentX(JLabel.RIGHT_ALIGNMENT);
             wrapMessagePanel.add(messagePanel, BorderLayout.EAST);
         } else {
             userLabel.setAlignmentX(JLabel.LEFT_ALIGNMENT);
             dateLabel.setAlignmentX(JLabel.LEFT_ALIGNMENT);
             expirationLabel.setAlignmentX(JLabel.LEFT_ALIGNMENT);
             messageLabel.setAlignmentX(JLabel.LEFT_ALIGNMENT);
+            accusedLabel.setAlignmentX(JLabel.LEFT_ALIGNMENT);
             wrapMessagePanel.add(messagePanel, BorderLayout.WEST);
         }
 
@@ -320,6 +340,7 @@ public class DiscussionsPanel extends JPanel implements Observer {
             userLabel.setForeground(Color.RED);
             dateLabel.setForeground(Color.RED);
             messageLabel.setForeground(Color.RED);
+            accusedLabel.setForeground(Color.RED);
         }
 
         messagesPanel.add(wrapMessagePanel);

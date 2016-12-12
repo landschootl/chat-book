@@ -17,6 +17,7 @@ public class Message {
     private IUser user;
     private String message;
     private LocalDateTime dateExpedition;
+    private LocalDateTime dateAccused;
     private boolean accused;
     private boolean priority;
     private LocalDate expiration;

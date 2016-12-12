@@ -27,6 +27,6 @@ INSERT INTO USER_CONNECTION VALUES ((SELECT id FROM CONNECTION WHERE name="ludot
 INSERT INTO USER_CONNECTION VALUES ((SELECT id FROM CONNECTION WHERE name="ludothieb"), (SELECT id FROM USER WHERE firstname="Laurent"));
 
 /****************** Insertion message ******************/
-INSERT INTO MESSAGE VALUES (default, (SELECT id FROM CONNECTION WHERE name="ludothieb"), (SELECT id FROM USER WHERE firstname="Ludovic"), "Salut Laurent !", "2016-12-05 18:19:03", false, false, null, false);
-INSERT INTO MESSAGE VALUES (default, (SELECT id FROM CONNECTION WHERE name="ludothieb"), (SELECT id FROM USER WHERE firstname="Laurent"), "Hey Ludo, ça va ?", "2016-12-05 18:28:00", false, false, null, false);
-INSERT INTO MESSAGE VALUES (default, (SELECT id FROM CONNECTION WHERE name="ludothieb"), (SELECT id FROM USER WHERE firstname="Laurent"), "Repond !", "2016-12-05 18:30:00", false, false, null, false);
+INSERT INTO MESSAGE VALUES (default, (SELECT id FROM CONNECTION WHERE name="ludothieb"), (SELECT id FROM USER WHERE firstname="Ludovic"), "Salut Laurent !", "2016-12-05 18:19:03", null, false, false, null, false);
+INSERT INTO MESSAGE VALUES (default, (SELECT id FROM CONNECTION WHERE name="ludothieb"), (SELECT id FROM USER WHERE firstname="Laurent"), "Hey Ludo, ça va ?", "2016-12-05 18:28:00", null, false, false, null, false);
+INSERT INTO MESSAGE VALUES (default, (SELECT id FROM CONNECTION WHERE name="ludothieb"), (SELECT id FROM USER WHERE firstname="Laurent"), "Repond !", "2016-12-05 18:30:00", null, false, false, null, false);

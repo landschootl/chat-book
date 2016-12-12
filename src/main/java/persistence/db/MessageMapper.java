@@ -34,6 +34,7 @@ public class MessageMapper extends Mapper {
                 .user(new VirtualProxyBuilder<>(IUser.class, new UserFactory(rs.getString("id_user"))).getProxy())
                 .message(rs.getString("message"))
                 .dateExpedition(rs.getDate("date_expedition") == null ? null : rs.getTimestamp("date_expedition").toLocalDateTime())
+                .dateAccused(rs.getDate("date_accused") == null ? null : rs.getTimestamp("date_accused").toLocalDateTime())
                 .accused(rs.getBoolean("accused"))
                 .priority(rs.getBoolean("priority"))
                 .expiration(rs.getDate("expiration") == null ? null : rs.getDate("expiration").toLocalDate())
@@ -54,6 +55,17 @@ public class MessageMapper extends Mapper {
         return messages;
     }
 
+    public void updateDateAccused(Message message) {
+        try {
+            preparedStatement = db.prepareStatement(this.bundle.getString("update.message.date.accused"));
+            preparedStatement.setTimestamp(1, message.getDateAccused() == null ? null : Timestamp.valueOf(message.getDateAccused()));
+            preparedStatement.setInt(2, message.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public Message create(Message message) {
         PreparedStatement preparedStatement = null;
         try {
@@ -62,10 +74,11 @@ public class MessageMapper extends Mapper {
             preparedStatement.setInt(2, message.getUser().getId());
             preparedStatement.setString(3, message.getMessage());
             preparedStatement.setTimestamp(4, message.getDateExpedition() == null ? null : Timestamp.valueOf(message.getDateExpedition()));
-            preparedStatement.setBoolean(5, message.isAccused());
-            preparedStatement.setBoolean(6, message.isPriority());
-            preparedStatement.setDate(7, message.getExpiration() == null ? null : Date.valueOf(message.getExpiration()));
-            preparedStatement.setBoolean(8, message.isCode());
+            preparedStatement.setTimestamp(5, message.getDateAccused() == null ? null : Timestamp.valueOf(message.getDateAccused()));
+            preparedStatement.setBoolean(6, message.isAccused());
+            preparedStatement.setBoolean(7, message.isPriority());
+            preparedStatement.setDate(8, message.getExpiration() == null ? null : Date.valueOf(message.getExpiration()));
+            preparedStatement.setBoolean(9, message.isCode());
             preparedStatement.executeUpdate();
             ResultSet resultId = preparedStatement.getGeneratedKeys();
             resultId.next();

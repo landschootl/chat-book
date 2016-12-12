@@ -54,6 +54,7 @@ CREATE TABLE MESSAGE (
 	id_user int NOT NULL,
 	message varchar(42) NOT NULL,
 	date_expedition TIMESTAMP NOT NULL,
+	date_accused TIMESTAMP NULL DEFAULT NULL,
 	accused boolean,
 	priority boolean,
 	expiration date,

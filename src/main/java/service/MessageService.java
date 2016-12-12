@@ -42,6 +42,10 @@ public class MessageService {
         return messages;
     }
 
+    public void updateDateAccused(Message message) {
+        messageMapper.updateDateAccused(message);
+    }
+
     public Message create(Message message) {
         message.setDateExpedition(LocalDateTime.now());
 
