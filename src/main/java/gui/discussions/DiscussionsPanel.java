@@ -260,20 +260,20 @@ public class DiscussionsPanel extends JPanel implements Observer {
     private void addMessagePanel(Message message) {
         JPanel wrapMessagePanel = new JPanel();
         wrapMessagePanel.setLayout(new BorderLayout());
-        wrapMessagePanel.setBorder(new EmptyBorder(0,5,0,5));
+        wrapMessagePanel.setBorder(BorderFactory.createRaisedSoftBevelBorder());
 
         JPanel messagePanel = new JPanel();
         messagePanel.setLayout(new BoxLayout(messagePanel, BoxLayout.Y_AXIS));
 
         JLabel userLabel = new JLabel();
         userLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
-        userLabel.setBorder(new EmptyBorder(5,0,0,0));
+        userLabel.setBorder(new EmptyBorder(5,5,2,5));
         userLabel.setText(message.getUser().toString());
         messagePanel.add(userLabel);
 
         JLabel dateLabel = new JLabel();
         dateLabel.setFont(new Font("Lucida Grande", Font.ITALIC, 9));
-        dateLabel.setBorder(new EmptyBorder(5,0,8,0));
+        dateLabel.setBorder(new EmptyBorder(0,5,8,5));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy à HH:mm");
         String formattedDateTime = "Le " + message.getDateExpedition().format(formatter);
         dateLabel.setText(formattedDateTime);
@@ -282,8 +282,8 @@ public class DiscussionsPanel extends JPanel implements Observer {
         JLabel expirationLabel = new JLabel();
         if (message.getExpiration() != null) {
             expirationLabel.setFont(new Font("Lucida Grande", Font.ITALIC, 9));
-            dateLabel.setBorder(new EmptyBorder(5,0,0,0));
-            expirationLabel.setBorder(new EmptyBorder(5,0,8,0));
+            dateLabel.setBorder(new EmptyBorder(0,5,0,5));
+            expirationLabel.setBorder(new EmptyBorder(0,5,8,5));
             formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             formattedDateTime = "(Expire le " + message.getDateExpedition().format(formatter) + ")";
             expirationLabel.setText(formattedDateTime);
@@ -299,7 +299,7 @@ public class DiscussionsPanel extends JPanel implements Observer {
             }
         }
         messageLabel.setText(message.getMessage());
-        messageLabel.setBorder(new EmptyBorder(0,0,10,0));
+        messageLabel.setBorder(new EmptyBorder(5,5,10,5));
         messagePanel.add(messageLabel);
 
         if (message.isAccused() &&
@@ -312,8 +312,8 @@ public class DiscussionsPanel extends JPanel implements Observer {
         JLabel accusedLabel = new JLabel();
         if (message.isAccused() && message.getDateAccused() != null) {
             accusedLabel.setFont(new Font("Lucida Grande", Font.ITALIC, 9));
-            messageLabel.setBorder(new EmptyBorder(0,0,2,0));
-            accusedLabel.setBorder(new EmptyBorder(0,0,10,0));
+            messageLabel.setBorder(new EmptyBorder(5,5,2,5));
+            accusedLabel.setBorder(new EmptyBorder(0,5,10,5));
             formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy à HH:mm");
             formattedDateTime = "(Lu le " + message.getDateAccused().format(formatter) + ")";
             accusedLabel.setText(formattedDateTime);
@@ -340,6 +340,7 @@ public class DiscussionsPanel extends JPanel implements Observer {
             userLabel.setForeground(Color.RED);
             dateLabel.setForeground(Color.RED);
             messageLabel.setForeground(Color.RED);
+            expirationLabel.setForeground(Color.RED);
             accusedLabel.setForeground(Color.RED);
         }
 
