@@ -109,7 +109,6 @@ public class DiscussionsPanel extends JPanel implements Observer {
 
         sendDiscussionPanel = new JPanel();
         sendDiscussionPanel.setLayout(new BoxLayout(sendDiscussionPanel, BoxLayout.X_AXIS));
-        discussionsPanelRight.add(sendDiscussionPanel, BorderLayout.SOUTH);
 
         newMessageTextField = new PlaceholderTextField();
         newMessageTextField.setPlaceholder("Tapez votre message...");
@@ -137,6 +136,8 @@ public class DiscussionsPanel extends JPanel implements Observer {
         sendButton.addActionListener((ActionEvent e) -> sendMessage());
 
         sendDiscussionPanel.add(sendButton);
+
+        discussionsPanelRight.add(sendDiscussionPanel, BorderLayout.SOUTH);
 
         clearDiscussionPanel();
     }
