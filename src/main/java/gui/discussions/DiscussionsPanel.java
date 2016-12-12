@@ -268,9 +268,6 @@ public class DiscussionsPanel extends JPanel implements Observer {
         userLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
         userLabel.setBorder(new EmptyBorder(5,0,0,0));
         userLabel.setText(message.getUser().toString());
-        if (message.isPriority()) {
-            userLabel.setForeground(Color.RED);
-        }
         messagePanel.add(userLabel);
 
         JLabel dateLabel = new JLabel();
@@ -280,6 +277,18 @@ public class DiscussionsPanel extends JPanel implements Observer {
         String formattedDateTime = "Le " + message.getDateExpedition().format(formatter);
         dateLabel.setText(formattedDateTime);
         messagePanel.add(dateLabel);
+
+
+        JLabel expirationLabel = new JLabel();
+        if (message.getExpiration() != null) {
+            expirationLabel.setFont(new Font("Lucida Grande", Font.ITALIC, 9));
+            dateLabel.setBorder(new EmptyBorder(5,0,0,0));
+            expirationLabel.setBorder(new EmptyBorder(5,0,8,0));
+            formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            formattedDateTime = "(Expire le " + message.getDateExpedition().format(formatter) + ")";
+            expirationLabel.setText(formattedDateTime);
+            messagePanel.add(expirationLabel);
+        }
 
         JLabel messageLabel = new JLabel();
         if (message.isCode()) {
@@ -296,13 +305,21 @@ public class DiscussionsPanel extends JPanel implements Observer {
         if (connectedUser.getId() == message.getUser().getId()) {
             userLabel.setAlignmentX(JLabel.RIGHT_ALIGNMENT);
             dateLabel.setAlignmentX(JLabel.RIGHT_ALIGNMENT);
+            expirationLabel.setAlignmentX(JLabel.RIGHT_ALIGNMENT);
             messageLabel.setAlignmentX(JLabel.RIGHT_ALIGNMENT);
             wrapMessagePanel.add(messagePanel, BorderLayout.EAST);
         } else {
             userLabel.setAlignmentX(JLabel.LEFT_ALIGNMENT);
             dateLabel.setAlignmentX(JLabel.LEFT_ALIGNMENT);
+            expirationLabel.setAlignmentX(JLabel.LEFT_ALIGNMENT);
             messageLabel.setAlignmentX(JLabel.LEFT_ALIGNMENT);
             wrapMessagePanel.add(messagePanel, BorderLayout.WEST);
+        }
+
+        if (message.isPriority()) {
+            userLabel.setForeground(Color.RED);
+            dateLabel.setForeground(Color.RED);
+            messageLabel.setForeground(Color.RED);
         }
 
         messagesPanel.add(wrapMessagePanel);
