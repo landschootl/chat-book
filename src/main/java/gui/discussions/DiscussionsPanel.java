@@ -105,12 +105,12 @@ public class DiscussionsPanel extends JPanel implements Observer {
         headerDiscussionPanel.add(updateDiscussionButton);
 
         deleteDiscussionButton = new JButton("Supprimer");
-        deleteDiscussionButton.setVisible(false);
         deleteDiscussionButton.addActionListener((ActionEvent e) -> {
             int dialogResult = JOptionPane.showConfirmDialog(null, "Etes-vous sûr de vouloir supprimer la discussion ?", "Attention", 0);
             if (dialogResult == JOptionPane.YES_OPTION) {
                 discussionService.delete(discussionSelected);
                 discussionsListModel.removeElement(discussionSelected);
+                clearDiscussionPanel();
             }
         });
         headerDiscussionPanel.add(deleteDiscussionButton);
@@ -274,6 +274,8 @@ public class DiscussionsPanel extends JPanel implements Observer {
         nameDiscussion.setVisible(false);
         newMessageTextField.setVisible(false);
         sendButton.setVisible(false);
+        messagesPanel.removeAll();
+        messagesPanel.repaint();
     }
 
     @Override

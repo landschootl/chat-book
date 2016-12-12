@@ -106,23 +106,35 @@ public class DiscussionMapper extends Mapper {
             preparedStatement.setInt(3, discussion.getId());
             preparedStatement.executeUpdate();
             List<IUser> oldUsers = userService.findByDiscussion(discussion);
-            List<IUser> existUsers = new ArrayList<>();
-            for(IUser oldUser : oldUsers){
-                if(!discussion.containUser(oldUser)){
-                    existUsers.add(discussion.getUser(oldUser.getId()));
-                } else {
-                    removeUser(discussion, oldUser);
-                }
-            }
             for(IUser user : discussion.getUsers()){
-                if(!existUsers.contains(user)) {
+                boolean userExist = false;
+                for (int i=0; i<oldUsers.size(); i++) {
+                    IUser oldUser = oldUsers.get(i);
+                    if (user.getId() == oldUser.getId()) {
+                        oldUsers.remove(i);
+                        userExist = true;
+                    }
+                }
+                if (!userExist){
                     addUser(discussion, user);
                 }
+            }
+            for(IUser oldUser : oldUsers){
+                removeUser(discussion, oldUser);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return discussion;
+    }
+
+    private boolean userIsExist(List<IUser> users, IUser user){
+        for(IUser u : users){
+            if(u.getId() == user.getId()){
+                return true;
+            }
+        }
+        return false;
     }
 
     public Discussion create(Discussion discussion) {

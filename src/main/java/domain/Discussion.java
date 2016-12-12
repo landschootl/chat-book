@@ -46,13 +46,4 @@ public class Discussion {
     public void addMessage(Message message) {
         messages.add(message);
     }
-
-    public IUser getUser(int id) {
-        for(IUser user : users){
-            if(user.getId() == user.getId()){
-                return user;
-            }
-        }
-        throw new RuntimeException("La discussion ne possède pas cette personne");
-    }
 }
