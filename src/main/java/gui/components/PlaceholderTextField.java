@@ -34,6 +34,7 @@ public class PlaceholderTextField extends JTextField {
     private String placeholder;
 
     public PlaceholderTextField() {
+        this.limit = 1000;
     }
 
     public PlaceholderTextField(int limit) {
