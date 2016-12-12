@@ -16,6 +16,7 @@ Il existe un compte unique nommé Administrateur qui dispose de droits étendus 
 * CU5 - Affichage de la liste des discussions disponibles ✓
 * CU6 - Envoi et réception de messages ✖
 * CU7 - Modération d'un groupe ✖
+* CU8 - Gestion des types de message ✖
 
 ## Architecture
 * gui : IHM - Intéraction de l'utilisateur en Swing et appels de services
