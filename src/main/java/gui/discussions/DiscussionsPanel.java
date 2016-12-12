@@ -16,6 +16,7 @@ import javax.swing.event.ListSelectionEvent;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.*;
@@ -24,7 +25,14 @@ import java.util.*;
 public class DiscussionsPanel extends JPanel implements Observer {
     private JPanel discussionsPanelLeft;
     private JPanel discussionsPanelRight;
+    private JPanel wrapSendDiscussionPanel;
     private JPanel sendDiscussionPanel;
+    private JPanel checkboxPanel;
+    private JPanel expirationPanel;
+    private JCheckBox accusedCheckbox;
+    private JCheckBox priorityCheckbox;
+    private JCheckBox codeCheckbox;
+    private PlaceholderTextField expirationDateTextField;
     private JPanel headerDiscussionPanel;
     private JLabel nameDiscussion;
 
@@ -45,6 +53,10 @@ public class DiscussionsPanel extends JPanel implements Observer {
     private MessageService messageService;
 
     private Discussion discussionSelected;
+
+    private boolean accused;
+    private boolean priority;
+    private boolean code;
 
     public DiscussionsPanel() {
         this.userService = UserService.getInstance();
@@ -115,6 +127,9 @@ public class DiscussionsPanel extends JPanel implements Observer {
         });
         headerDiscussionPanel.add(deleteDiscussionButton);
 
+        wrapSendDiscussionPanel = new JPanel();
+        wrapSendDiscussionPanel.setLayout(new BoxLayout(wrapSendDiscussionPanel, BoxLayout.Y_AXIS));
+
         sendDiscussionPanel = new JPanel();
         sendDiscussionPanel.setLayout(new BoxLayout(sendDiscussionPanel, BoxLayout.X_AXIS));
 
@@ -145,24 +160,77 @@ public class DiscussionsPanel extends JPanel implements Observer {
 
         sendDiscussionPanel.add(sendButton);
 
-        discussionsPanelRight.add(sendDiscussionPanel, BorderLayout.SOUTH);
+        wrapSendDiscussionPanel.add(sendDiscussionPanel);
+
+        checkboxPanel = new JPanel();
+        checkboxPanel.setLayout(new BoxLayout(checkboxPanel, BoxLayout.X_AXIS));
+
+        codeCheckbox = new JCheckBox("Chiffré");
+        accusedCheckbox = new JCheckBox("Accusé de réception");
+        priorityCheckbox = new JCheckBox("Prioritaire");
+
+        checkboxPanel.add(codeCheckbox);
+        checkboxPanel.add(accusedCheckbox);
+        checkboxPanel.add(priorityCheckbox);
+
+        ActionListener actionListener = new ActionHandler();
+        codeCheckbox.addActionListener(actionListener);
+        accusedCheckbox.addActionListener(actionListener);
+        priorityCheckbox.addActionListener(actionListener);
+
+        wrapSendDiscussionPanel.add(checkboxPanel);
+
+        expirationPanel = new JPanel();
+        expirationPanel.setLayout(new BoxLayout(expirationPanel, BoxLayout.X_AXIS));
+
+        JLabel lblExpirationDate = new JLabel("Date d'expiration :");
+        lblExpirationDate.setBorder(new EmptyBorder(0,190,0,0));
+        expirationPanel.add(lblExpirationDate);
+        expirationDateTextField = new PlaceholderTextField(10);
+        expirationDateTextField.setPlaceholder("jj/mm/aaaa");
+        expirationDateTextField.addKeyListener(keyListener);
+        expirationPanel.add(expirationDateTextField);
+
+        wrapSendDiscussionPanel.add(expirationPanel);
+
+        discussionsPanelRight.add(wrapSendDiscussionPanel, BorderLayout.SOUTH);
 
         clearDiscussionPanel();
     }
 
     private void sendMessage() {
-        Message message = messageService.create(Message.builder()
-                .idConnection(discussionSelected.getId())
-                .user(connectedUser)
-                .message(newMessageTextField.getText())
-                .accused(false)
-                .priority(false)
-                .expiration(null)
-                .code(false)
-                .build());
-        addMessagePanel(message);
-        discussionSelected.addMessage(message);
-        newMessageTextField.setText("");
+        if (expirationDateTextField.getText().length() == 10 || expirationDateTextField.getText().length() == 0) {
+            showMessagesType();
+            Message message = messageService.create(Message.builder()
+                    .idConnection(discussionSelected.getId())
+                    .user(connectedUser)
+                    .message(newMessageTextField.getText())
+                    .accused(false)
+                    .priority(false)
+                    .expiration(null)
+                    .code(false)
+                    .build());
+            addMessagePanel(message);
+            discussionSelected.addMessage(message);
+            newMessageTextField.setText("");
+        } else {
+            JOptionPane.showMessageDialog(new JFrame(), "Votre date d'expiration n'est pas complète.");
+        }
+    }
+
+    private void showMessagesType() {
+        System.out.println("Chiffré : " + code);
+        System.out.println("Prioritaire : " + priority);
+        System.out.println("Accusé : " + accused);
+
+        if (expirationDateTextField.getText().length() == 0) {
+            LocalDate expirationDate = null;
+            System.out.println("Date d'expiration : " + expirationDate);
+        } else {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate expirationDate = LocalDate.parse(expirationDateTextField.getText(), formatter);
+            System.out.println("Date d'expiration : " + expirationDate);
+        }
     }
 
     private void drawDiscussionsPanelRight(){
@@ -302,6 +370,30 @@ public class DiscussionsPanel extends JPanel implements Observer {
             case CREATE:
                 discussionsListModel.addElement((Discussion) element);
                 break;
+        }
+    }
+
+    class ActionHandler implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent event) {
+            JCheckBox checkbox = (JCheckBox) event.getSource();
+            if (checkbox.isSelected()) {
+                if (checkbox == codeCheckbox) {
+                    code = true;
+                } else if (checkbox == priorityCheckbox) {
+                    priority = true;
+                } else if (checkbox == accusedCheckbox) {
+                    accused = true;
+                }
+            } else {
+                if (checkbox == codeCheckbox) {
+                    code = false;
+                } else if (checkbox == priorityCheckbox) {
+                    priority = false;
+                } else if (checkbox == accusedCheckbox) {
+                    accused = false;
+                }
+            }
         }
     }
 
