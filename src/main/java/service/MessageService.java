@@ -27,11 +27,32 @@ public class MessageService {
     }
 
     public List<Message> findByDiscussion(Discussion discussion) throws SQLException {
-        return messageMapper.findByDiscussion(discussion);
+
+        List<Message> messages = messageMapper.findByDiscussion(discussion);
+        messages.forEach((Message m) -> {
+            if (m.isCode()) {
+                try {
+                    m.setMessage(SecurityService.getInstance().decrypt(m.getMessage()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        return messages;
     }
 
-    public Message create(Message message){
+    public Message create(Message message) {
         message.setDateExpedition(LocalDateTime.now());
+
+        if (message.isCode()) {
+            try {
+                message.setMessage(SecurityService.getInstance().encrypt(message.getMessage()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         return messageMapper.create(message);
     }
 }

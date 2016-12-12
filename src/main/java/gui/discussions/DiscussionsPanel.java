@@ -8,6 +8,7 @@ import gui.components.PlaceholderTextField;
 import persistence.uow.Observer;
 import service.DiscussionService;
 import service.MessageService;
+import service.SecurityService;
 import service.UserService;
 
 import javax.swing.*;
@@ -229,6 +230,7 @@ public class DiscussionsPanel extends JPanel implements Observer {
                 addMessagePanel(message);
                 discussionSelected.addMessage(message);
                 newMessageTextField.setText("");
+                expirationDateTextField.setText("");
             } else {
                 JOptionPane.showMessageDialog(new JFrame(), "Votre date d'expiration n'est pas complète.");
             }
@@ -273,6 +275,14 @@ public class DiscussionsPanel extends JPanel implements Observer {
         dateLabel.setText(formattedDateTime);
         messagePanel.add(dateLabel);
         JLabel messageLabel = new JLabel();
+
+        if (message.isCode()) {
+            try {
+                message.setMessage(SecurityService.getInstance().decrypt(message.getMessage()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         messageLabel.setText(message.getMessage());
         messageLabel.setBorder(new EmptyBorder(0,0,10,0));
         messagePanel.add(messageLabel);
