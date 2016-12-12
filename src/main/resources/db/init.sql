@@ -2,7 +2,7 @@
 -- Compte administrateur
 -- Identifiant : admin
 -- Mot de passe : admin
-INSERT INTO USER VALUES (default, "admin", "toto", "titi", "FG9b0v0WVGm7BaKVh6E3xw==", "USER_ADMIN");
+INSERT INTO USER VALUES (default, "admin", "The", "Boss", "FG9b0v0WVGm7BaKVh6E3xw==", "USER_ADMIN");
 
 -- Comptes utilisateur
 -- Identifiant : lauthieb
