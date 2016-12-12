@@ -167,12 +167,12 @@ public class DiscussionsPanel extends JPanel implements Observer {
         checkboxPanel.setLayout(new BoxLayout(checkboxPanel, BoxLayout.X_AXIS));
 
         codeCheckbox = new JCheckBox("Chiffré");
-        accusedCheckbox = new JCheckBox("Accusé de réception");
         priorityCheckbox = new JCheckBox("Prioritaire");
+        accusedCheckbox = new JCheckBox("Accusé de réception");
 
         checkboxPanel.add(codeCheckbox);
-        checkboxPanel.add(accusedCheckbox);
         checkboxPanel.add(priorityCheckbox);
+        checkboxPanel.add(accusedCheckbox);
 
         ActionListener actionListener = new ActionHandler();
         codeCheckbox.addActionListener(actionListener);
@@ -260,13 +260,19 @@ public class DiscussionsPanel extends JPanel implements Observer {
         JPanel wrapMessagePanel = new JPanel();
         wrapMessagePanel.setLayout(new BorderLayout());
         wrapMessagePanel.setBorder(new EmptyBorder(0,5,0,5));
+
         JPanel messagePanel = new JPanel();
         messagePanel.setLayout(new BoxLayout(messagePanel, BoxLayout.Y_AXIS));
+
         JLabel userLabel = new JLabel();
         userLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
         userLabel.setBorder(new EmptyBorder(5,0,0,0));
         userLabel.setText(message.getUser().toString());
+        if (message.isPriority()) {
+            userLabel.setForeground(Color.RED);
+        }
         messagePanel.add(userLabel);
+
         JLabel dateLabel = new JLabel();
         dateLabel.setFont(new Font("Lucida Grande", Font.ITALIC, 9));
         dateLabel.setBorder(new EmptyBorder(5,0,8,0));
@@ -274,8 +280,8 @@ public class DiscussionsPanel extends JPanel implements Observer {
         String formattedDateTime = "Le " + message.getDateExpedition().format(formatter);
         dateLabel.setText(formattedDateTime);
         messagePanel.add(dateLabel);
-        JLabel messageLabel = new JLabel();
 
+        JLabel messageLabel = new JLabel();
         if (message.isCode()) {
             try {
                 message.setMessage(SecurityService.getInstance().decrypt(message.getMessage()));
