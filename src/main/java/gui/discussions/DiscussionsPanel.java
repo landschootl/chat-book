@@ -182,9 +182,10 @@ public class DiscussionsPanel extends JPanel implements Observer {
 
         expirationPanel = new JPanel();
         expirationPanel.setLayout(new BoxLayout(expirationPanel, BoxLayout.X_AXIS));
+        expirationPanel.setBorder(new EmptyBorder(0,0,0,95));
 
         JLabel lblExpirationDate = new JLabel("Date d'expiration :");
-        lblExpirationDate.setBorder(new EmptyBorder(0,190,0,0));
+        lblExpirationDate.setBorder(new EmptyBorder(0,95,0,0));
         expirationPanel.add(lblExpirationDate);
         expirationDateTextField = new PlaceholderTextField(10);
         expirationDateTextField.setPlaceholder("jj/mm/aaaa");
