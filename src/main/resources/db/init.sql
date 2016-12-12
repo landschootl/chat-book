@@ -23,8 +23,8 @@ INSERT INTO FRIENDSHIP VALUES (default, 2, 4, false);
 
 /****************** Insertion groupe ******************/
 INSERT INTO CONNECTION VALUES (default, 1, "ludothieb");
-INSERT INTO USER_CONNECTION VALUES (default, (SELECT id FROM CONNECTION WHERE name="ludothieb"), (SELECT id FROM USER WHERE firstname="Ludovic"));
-INSERT INTO USER_CONNECTION VALUES (default, (SELECT id FROM CONNECTION WHERE name="ludothieb"), (SELECT id FROM USER WHERE firstname="Laurent"));
+INSERT INTO USER_CONNECTION VALUES ((SELECT id FROM CONNECTION WHERE name="ludothieb"), (SELECT id FROM USER WHERE firstname="Ludovic"));
+INSERT INTO USER_CONNECTION VALUES ((SELECT id FROM CONNECTION WHERE name="ludothieb"), (SELECT id FROM USER WHERE firstname="Laurent"));
 
 /****************** Insertion message ******************/
 INSERT INTO MESSAGE VALUES (default, (SELECT id FROM CONNECTION WHERE name="ludothieb"), (SELECT id FROM USER WHERE firstname="Ludovic"), "Salut Laurent !", "2016-12-05 18:19:03", false, false, null, false);
