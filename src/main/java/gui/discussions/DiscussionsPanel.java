@@ -200,22 +200,26 @@ public class DiscussionsPanel extends JPanel implements Observer {
     }
 
     private void sendMessage() {
-        if (expirationDateTextField.getText().length() == 10 || expirationDateTextField.getText().length() == 0) {
-            showMessagesType();
-            Message message = messageService.create(Message.builder()
-                    .idConnection(discussionSelected.getId())
-                    .user(connectedUser)
-                    .message(newMessageTextField.getText())
-                    .accused(false)
-                    .priority(false)
-                    .expiration(null)
-                    .code(false)
-                    .build());
-            addMessagePanel(message);
-            discussionSelected.addMessage(message);
-            newMessageTextField.setText("");
+        if (newMessageTextField.getText().length() == 0) {
+            JOptionPane.showMessageDialog(new JFrame(), "Votre message est vide.");
         } else {
-            JOptionPane.showMessageDialog(new JFrame(), "Votre date d'expiration n'est pas complète.");
+            if (expirationDateTextField.getText().length() == 10 || expirationDateTextField.getText().length() == 0) {
+                showMessagesType();
+                Message message = messageService.create(Message.builder()
+                        .idConnection(discussionSelected.getId())
+                        .user(connectedUser)
+                        .message(newMessageTextField.getText())
+                        .accused(false)
+                        .priority(false)
+                        .expiration(null)
+                        .code(false)
+                        .build());
+                addMessagePanel(message);
+                discussionSelected.addMessage(message);
+                newMessageTextField.setText("");
+            } else {
+                JOptionPane.showMessageDialog(new JFrame(), "Votre date d'expiration n'est pas complète.");
+            }
         }
     }
 
