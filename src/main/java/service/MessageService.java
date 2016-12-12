@@ -5,6 +5,7 @@ import domain.Message;
 import persistence.db.MessageMapper;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -30,6 +31,7 @@ public class MessageService {
     }
 
     public Message create(Message message){
+        message.setDateExpedition(LocalDateTime.now());
         return messageMapper.create(message);
     }
 }

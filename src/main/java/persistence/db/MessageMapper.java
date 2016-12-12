@@ -6,10 +6,7 @@ import domain.Message;
 import persistence.vp.UserFactory;
 import persistence.vp.VirtualProxyBuilder;
 
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +33,7 @@ public class MessageMapper extends Mapper {
                 .idConnection(rs.getInt("id_connection"))
                 .user(new VirtualProxyBuilder<>(IUser.class, new UserFactory(rs.getString("id_user"))).getProxy())
                 .message(rs.getString("message"))
+                .dateExpedition(rs.getDate("date_expedition") == null ? null : rs.getTimestamp("date_expedition").toLocalDateTime())
                 .accused(rs.getBoolean("accused"))
                 .priority(rs.getBoolean("priority"))
                 .expiration(rs.getDate("expiration") == null ? null : rs.getDate("expiration").toLocalDate())
@@ -63,10 +61,11 @@ public class MessageMapper extends Mapper {
             preparedStatement.setInt(1, message.getIdConnection());
             preparedStatement.setInt(2, message.getUser().getId());
             preparedStatement.setString(3, message.getMessage());
-            preparedStatement.setBoolean(4, message.isAccused());
-            preparedStatement.setBoolean(5, message.isPriority());
-            preparedStatement.setDate(6, message.getExpiration() == null ? null : Date.valueOf(message.getExpiration()));
-            preparedStatement.setBoolean(7, message.isCode());
+            preparedStatement.setTimestamp(4, message.getDateExpedition() == null ? null : Timestamp.valueOf(message.getDateExpedition()));
+            preparedStatement.setBoolean(5, message.isAccused());
+            preparedStatement.setBoolean(6, message.isPriority());
+            preparedStatement.setDate(7, message.getExpiration() == null ? null : Date.valueOf(message.getExpiration()));
+            preparedStatement.setBoolean(8, message.isCode());
             preparedStatement.executeUpdate();
             ResultSet resultId = preparedStatement.getGeneratedKeys();
             resultId.next();

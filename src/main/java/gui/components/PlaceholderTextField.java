@@ -3,14 +3,42 @@ package gui.components;
 import java.awt.*;
 
 import javax.swing.*;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
+import javax.swing.text.PlainDocument;
 
 @SuppressWarnings("serial")
 public class PlaceholderTextField extends JTextField {
 
+    private int limit;
+
+    @Override
+    protected Document createDefaultModel() {
+        return new LimitDocument();
+    }
+
+    private class LimitDocument extends PlainDocument {
+
+        @Override
+        public void insertString( int offset, String  str, AttributeSet attr ) throws BadLocationException {
+            if (str == null) return;
+
+            if ((getLength() + str.length()) <= limit) {
+                super.insertString(offset, str, attr);
+            }
+        }
+
+    }
+
     private String placeholder;
 
     public PlaceholderTextField() {
+    }
+
+    public PlaceholderTextField(int limit) {
+        super();
+        this.limit = limit;
     }
 
     public PlaceholderTextField(
@@ -19,10 +47,6 @@ public class PlaceholderTextField extends JTextField {
             final int pColumns)
     {
         super(pDoc, pText, pColumns);
-    }
-
-    public PlaceholderTextField(final int pColumns) {
-        super(pColumns);
     }
 
     public PlaceholderTextField(final String pText) {

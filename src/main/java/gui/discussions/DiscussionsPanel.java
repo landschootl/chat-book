@@ -11,11 +11,13 @@ import service.MessageService;
 import service.UserService;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class DiscussionsPanel extends JPanel implements Observer {
@@ -110,7 +112,7 @@ public class DiscussionsPanel extends JPanel implements Observer {
         sendDiscussionPanel = new JPanel();
         sendDiscussionPanel.setLayout(new BoxLayout(sendDiscussionPanel, BoxLayout.X_AXIS));
 
-        newMessageTextField = new PlaceholderTextField();
+        newMessageTextField = new PlaceholderTextField(42);
         newMessageTextField.setPlaceholder("Tapez votre message...");
         KeyListener keyListener = new KeyListener() {
             @Override
@@ -177,19 +179,41 @@ public class DiscussionsPanel extends JPanel implements Observer {
     }
 
     private void addMessagePanel(Message message) {
+        JPanel wrapMessagePanel = new JPanel();
+        wrapMessagePanel.setLayout(new BorderLayout());
+        wrapMessagePanel.setBorder(new EmptyBorder(0,5,0,5));
         JPanel messagePanel = new JPanel();
         messagePanel.setLayout(new BoxLayout(messagePanel, BoxLayout.Y_AXIS));
-        JLabel infosLabel = new JLabel();
-        infosLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
-        infosLabel.setBorder(new EmptyBorder(5,0,5,0));
-        infosLabel.setText(message.getUser().toString());
-        messagePanel.add(infosLabel);
+        JLabel userLabel = new JLabel();
+        userLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
+        userLabel.setBorder(new EmptyBorder(5,0,0,0));
+        userLabel.setText(message.getUser().toString());
+        messagePanel.add(userLabel);
+        JLabel dateLabel = new JLabel();
+        dateLabel.setFont(new Font("Lucida Grande", Font.ITALIC, 9));
+        dateLabel.setBorder(new EmptyBorder(5,0,8,0));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy à HH:mm");
+        String formattedDateTime = "Le " + message.getDateExpedition().format(formatter);
+        dateLabel.setText(formattedDateTime);
+        messagePanel.add(dateLabel);
         JLabel messageLabel = new JLabel();
         messageLabel.setText(message.getMessage());
-        messageLabel.setBorder(new EmptyBorder(0,0,5,0));
+        messageLabel.setBorder(new EmptyBorder(0,0,10,0));
         messagePanel.add(messageLabel);
 
-        messagesPanel.add(messagePanel);
+        if (connectedUser.getId() == message.getUser().getId()) {
+            userLabel.setAlignmentX(JLabel.RIGHT_ALIGNMENT);
+            dateLabel.setAlignmentX(JLabel.RIGHT_ALIGNMENT);
+            messageLabel.setAlignmentX(JLabel.RIGHT_ALIGNMENT);
+            wrapMessagePanel.add(messagePanel, BorderLayout.EAST);
+        } else {
+            userLabel.setAlignmentX(JLabel.LEFT_ALIGNMENT);
+            dateLabel.setAlignmentX(JLabel.LEFT_ALIGNMENT);
+            messageLabel.setAlignmentX(JLabel.LEFT_ALIGNMENT);
+            wrapMessagePanel.add(messagePanel, BorderLayout.WEST);
+        }
+
+        messagesPanel.add(wrapMessagePanel);
         messagesPanel.revalidate();
         messagesPanel.repaint();
 

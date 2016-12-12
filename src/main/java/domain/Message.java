@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * Created by landschoot on 11/12/16.
@@ -15,6 +16,7 @@ public class Message {
     private int idConnection;
     private IUser user;
     private String message;
+    private LocalDateTime dateExpedition;
     private boolean accused;
     private boolean priority;
     private LocalDate expiration;
