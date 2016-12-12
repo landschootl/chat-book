@@ -26,19 +26,21 @@ Il existe un compte unique nommé Administrateur qui dispose de droits étendus 
 
 ## Tâches Maven
 * `mvn clean install` : Installation des dépendances du projet
+* `mvn initialize` : Purge de la base de données
 * `mvn exec:java` : Execution du projet
 * `mvn clean compile assembly:single` : Génération d'un fichier JAR exécutable
 
 ## Ne pas oublier
 * Installer le plugin Lombok sur IntelliJ
 * Dans GUI Designer d'IntelliJ, générer en code Java
+* Mettre à jour les properties de connexion à la base de données dans le pom.xml
 * Ajouter un fichier config.yml dans resources contenant :  
 db:  
     driver: jdbc:mysql  
     hote: localhost:8889  
     base: chat_book  
     login: root  
-    password: root  
+    password: root
 
 ## Suivi
 Trello : https://trello.com/b/fks7bbBR/chat-book
