@@ -204,15 +204,27 @@ public class DiscussionsPanel extends JPanel implements Observer {
             JOptionPane.showMessageDialog(new JFrame(), "Votre message est vide.");
         } else {
             if (expirationDateTextField.getText().length() == 10 || expirationDateTextField.getText().length() == 0) {
-                showMessagesType();
+
+                LocalDate expirationDate = null;
+
+                if (expirationDateTextField.getText().length() != 0) {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    expirationDate = LocalDate.parse(expirationDateTextField.getText(), formatter);
+                }
+
+                System.out.println("Chiffré : " + code);
+                System.out.println("Prioritaire : " + priority);
+                System.out.println("Accusé : " + accused);
+                System.out.println("Date d'expiration : " + expirationDate);
+
                 Message message = messageService.create(Message.builder()
                         .idConnection(discussionSelected.getId())
                         .user(connectedUser)
                         .message(newMessageTextField.getText())
-                        .accused(false)
-                        .priority(false)
-                        .expiration(null)
-                        .code(false)
+                        .accused(accused)
+                        .priority(priority)
+                        .expiration(expirationDate)
+                        .code(code)
                         .build());
                 addMessagePanel(message);
                 discussionSelected.addMessage(message);
@@ -220,21 +232,6 @@ public class DiscussionsPanel extends JPanel implements Observer {
             } else {
                 JOptionPane.showMessageDialog(new JFrame(), "Votre date d'expiration n'est pas complète.");
             }
-        }
-    }
-
-    private void showMessagesType() {
-        System.out.println("Chiffré : " + code);
-        System.out.println("Prioritaire : " + priority);
-        System.out.println("Accusé : " + accused);
-
-        if (expirationDateTextField.getText().length() == 0) {
-            LocalDate expirationDate = null;
-            System.out.println("Date d'expiration : " + expirationDate);
-        } else {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            LocalDate expirationDate = LocalDate.parse(expirationDateTextField.getText(), formatter);
-            System.out.println("Date d'expiration : " + expirationDate);
         }
     }
 
