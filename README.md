@@ -11,9 +11,9 @@ Il existe un compte unique nommé Administrateur qui dispose de droits étendus 
 ## Cas d'utilisation
 * CU1 - Connexion / Déconnexion ✓
 * CU2 - CRUD utilisateur ✓
-* CU3 - Création d'un groupe ✖
-* CU4 - Recherche et ajout d'amis ✖
-* CU5 - Affichage de la liste des discussions disponibles ✖
+* CU3 - Création d'un groupe ✓
+* CU4 - Recherche et ajout d'amis ✓
+* CU5 - Affichage de la liste des discussions disponibles ✓
 * CU6 - Envoi et réception de messages ✖
 * CU7 - Modération d'un groupe ✖
 
