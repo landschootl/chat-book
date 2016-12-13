@@ -1,7 +1,6 @@
 package service;
 
 import domain.IUser;
-import domain.User;
 import lombok.Data;
 
 import java.util.List;

@@ -2,24 +2,20 @@ package gui.search;
 
 import domain.Friendship;
 import domain.IUser;
-import domain.User;
 import domain.enums.ERole;
 import gui.accounts.ShowFriendsFrame;
 import gui.components.PlaceholderTextField;
-import persistence.uow.UnitOfWork;
 import service.FriendshipService;
 import service.SearchService;
 import service.UserService;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.sql.SQLException;
 
 public class SearchPanel extends JPanel {
     private SearchService searchService;

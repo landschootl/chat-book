@@ -3,7 +3,6 @@ package gui.accounts;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
-import domain.IUser;
 import domain.User;
 import domain.enums.ECrud;
 import gui.AppFrame;
@@ -14,8 +13,8 @@ import service.UserService;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.util.*;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UpdateAccountFrame extends AppFrame implements Observable {

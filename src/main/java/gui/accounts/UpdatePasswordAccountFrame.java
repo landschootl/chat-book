@@ -4,20 +4,14 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import domain.IUser;
-import domain.User;
-import domain.enums.ECrud;
 import gui.AppFrame;
-import persistence.uow.Observable;
-import persistence.uow.Observer;
 import service.UserService;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class UpdatePasswordAccountFrame extends AppFrame {
     private UserService userService;

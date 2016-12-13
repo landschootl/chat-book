@@ -15,13 +15,16 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.*;
+import java.util.Enumeration;
 
 
 public class DiscussionsPanel extends JPanel implements Observer {
@@ -70,9 +73,12 @@ public class DiscussionsPanel extends JPanel implements Observer {
 
     private void initComponents() {
         this.setLayout(new BorderLayout(0, 0));
+        initAddDiscussionButton();
         initDiscussionsPanelLeft();
         initDiscussionsPanelRight();
+    }
 
+    private void initAddDiscussionButton() {
         addDiscussionButton = new JButton();
         addDiscussionButton.setText("Créer une nouvelle discussion");
         addDiscussionButton.addActionListener((ActionEvent e) -> {
@@ -81,7 +87,7 @@ public class DiscussionsPanel extends JPanel implements Observer {
             UpdateDiscussionFrame updateDiscussionFrame = new UpdateDiscussionFrame(Discussion.builder()
                     .mod(connectedUser)
                     .users(users)
-                    .messages(new ArrayList<Message>())
+                    .messages(new ArrayList<>())
                     .build());
             updateDiscussionFrame.addObserver(this);
         });
@@ -95,6 +101,13 @@ public class DiscussionsPanel extends JPanel implements Observer {
         discussionsPanelRight.setPreferredSize(new Dimension(400, 50));
         this.add(discussionsPanelRight, BorderLayout.EAST);
 
+        initHeaderDiscussion();
+        initMessagesPanel();
+        initFooterDiscussion();
+        clearDiscussionPanel();
+    }
+
+    private void initHeaderDiscussion() {
         headerDiscussionPanel = new JPanel();
         headerDiscussionPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         discussionsPanelRight.add(headerDiscussionPanel, BorderLayout.NORTH);
@@ -105,11 +118,6 @@ public class DiscussionsPanel extends JPanel implements Observer {
         nameDiscussion.setHorizontalTextPosition(0);
         nameDiscussion.setText("");
         headerDiscussionPanel.add(nameDiscussion);
-
-        messagesPanel = new JPanel();
-        messagesPanel.setLayout(new BoxLayout(messagesPanel, BoxLayout.Y_AXIS));
-        messagesScrollPane = new JScrollPane(messagesPanel);
-        discussionsPanelRight.add(messagesScrollPane, BorderLayout.CENTER);
 
         updateDiscussionButton = new JButton("Gérer");
         updateDiscussionButton.addActionListener((ActionEvent e) -> {
@@ -128,7 +136,16 @@ public class DiscussionsPanel extends JPanel implements Observer {
             }
         });
         headerDiscussionPanel.add(deleteDiscussionButton);
+    }
 
+    private void initMessagesPanel() {
+        messagesPanel = new JPanel();
+        messagesPanel.setLayout(new BoxLayout(messagesPanel, BoxLayout.Y_AXIS));
+        messagesScrollPane = new JScrollPane(messagesPanel);
+        discussionsPanelRight.add(messagesScrollPane, BorderLayout.CENTER);
+    }
+
+    private void initFooterDiscussion() {
         wrapSendDiscussionPanel = new JPanel();
         wrapSendDiscussionPanel.setLayout(new BoxLayout(wrapSendDiscussionPanel, BoxLayout.Y_AXIS));
 
@@ -197,8 +214,6 @@ public class DiscussionsPanel extends JPanel implements Observer {
         wrapSendDiscussionPanel.add(expirationPanel);
 
         discussionsPanelRight.add(wrapSendDiscussionPanel, BorderLayout.SOUTH);
-
-        clearDiscussionPanel();
     }
 
     private void sendMessage() {
@@ -206,18 +221,12 @@ public class DiscussionsPanel extends JPanel implements Observer {
             JOptionPane.showMessageDialog(new JFrame(), "Votre message est vide.");
         } else {
             if (expirationDateTextField.getText().length() == 10 || expirationDateTextField.getText().length() == 0) {
-
                 LocalDate expirationDate = null;
 
                 if (expirationDateTextField.getText().length() != 0) {
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                     expirationDate = LocalDate.parse(expirationDateTextField.getText(), formatter);
                 }
-
-                System.out.println("Chiffré : " + code);
-                System.out.println("Prioritaire : " + priority);
-                System.out.println("Accusé : " + accused);
-                System.out.println("Date d'expiration : " + expirationDate);
 
                 Message message = messageService.create(Message.builder()
                         .idConnection(discussionSelected.getId())
@@ -273,7 +282,7 @@ public class DiscussionsPanel extends JPanel implements Observer {
 
         JLabel dateLabel = new JLabel();
         dateLabel.setFont(new Font("Lucida Grande", Font.ITALIC, 9));
-        dateLabel.setBorder(new EmptyBorder(0,5,8,5));
+        dateLabel.setBorder(new EmptyBorder(0,5,6,5));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy à HH:mm");
         String formattedDateTime = "Le " + message.getDateExpedition().format(formatter);
         dateLabel.setText(formattedDateTime);
@@ -283,7 +292,7 @@ public class DiscussionsPanel extends JPanel implements Observer {
         if (message.getExpiration() != null) {
             expirationLabel.setFont(new Font("Lucida Grande", Font.ITALIC, 9));
             dateLabel.setBorder(new EmptyBorder(0,5,0,5));
-            expirationLabel.setBorder(new EmptyBorder(0,5,8,5));
+            expirationLabel.setBorder(new EmptyBorder(0,5,6,5));
             formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             formattedDateTime = "(Expire le " + message.getDateExpedition().format(formatter) + ")";
             expirationLabel.setText(formattedDateTime);
@@ -300,6 +309,7 @@ public class DiscussionsPanel extends JPanel implements Observer {
         }
         messageLabel.setText(message.getMessage());
         messageLabel.setBorder(new EmptyBorder(5,5,10,5));
+        messageLabel.setFont(new Font("Lucida Grande", Font.BOLD, 12));
         messagePanel.add(messageLabel);
 
         if (message.isAccused() &&
@@ -338,10 +348,10 @@ public class DiscussionsPanel extends JPanel implements Observer {
 
         if (message.isPriority()) {
             userLabel.setForeground(Color.RED);
-            dateLabel.setForeground(Color.RED);
             messageLabel.setForeground(Color.RED);
-            expirationLabel.setForeground(Color.RED);
             accusedLabel.setForeground(Color.RED);
+            dateLabel.setForeground(Color.RED);
+            expirationLabel.setForeground(Color.RED);
         }
 
         messagesPanel.add(wrapMessagePanel);
@@ -453,5 +463,4 @@ public class DiscussionsPanel extends JPanel implements Observer {
             }
         }
     }
-
 }
