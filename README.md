@@ -14,8 +14,8 @@ Il existe un compte unique nommé Administrateur qui dispose de droits étendus 
 * CU3 - Création d'un groupe ✓
 * CU4 - Recherche et ajout d'amis ✓
 * CU5 - Affichage de la liste des discussions disponibles ✓
-* CU6 - Envoi et réception de messages ✖
-* CU7 - Modération d'un groupe ✖
+* CU6 - Envoi et réception de messages ✓
+* CU7 - Modération d'un groupe ✓
 * CU8 - Gestion des types de message ✖
 
 ## Architecture
