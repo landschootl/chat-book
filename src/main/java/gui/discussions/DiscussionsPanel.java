@@ -347,11 +347,12 @@ public class DiscussionsPanel extends JPanel implements Observer {
         }
 
         if (message.isPriority()) {
-            userLabel.setForeground(Color.RED);
-            messageLabel.setForeground(Color.RED);
-            accusedLabel.setForeground(Color.RED);
-            dateLabel.setForeground(Color.RED);
-            expirationLabel.setForeground(Color.RED);
+            Color red = new Color(214, 0, 0);
+            userLabel.setForeground(red);
+            messageLabel.setForeground(red);
+            accusedLabel.setForeground(red);
+            dateLabel.setForeground(red);
+            expirationLabel.setForeground(red);
         }
 
         messagesPanel.add(wrapMessagePanel);
