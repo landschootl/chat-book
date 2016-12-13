@@ -60,6 +60,8 @@ public class SearchPanel extends JPanel {
             accountsListModel = new DefaultListModel<>();
             accountsJList = new JList(accountsListModel);
             accountsJList.setVisibleRowCount(10);
+            accountsJList.setFixedCellHeight(30);
+            accountsJList.setSelectionBackground(new Color(59, 89, 152));
             accountsJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             accountsScrollPane = new JScrollPane(accountsJList);
             this.add(accountsScrollPane);

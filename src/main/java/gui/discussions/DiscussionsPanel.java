@@ -373,6 +373,8 @@ public class DiscussionsPanel extends JPanel implements Observer {
         try {
             discussionsListModel = new DefaultListModel<>();
             discussionsList = new JList(discussionsListModel);
+            discussionsList.setFixedCellHeight(30);
+            discussionsList.setSelectionBackground(new Color(59, 89, 152));
             discussionsPanelLeft.add(discussionsList, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
 
             java.util.List<Discussion> listDiscussion;

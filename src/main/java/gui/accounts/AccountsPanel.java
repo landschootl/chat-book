@@ -53,6 +53,8 @@ public class AccountsPanel extends JPanel {
     private void initAccountsList() {
         accountsListModel = new DefaultListModel<>();
         accountsJList = new JList(accountsListModel);
+        accountsJList.setFixedCellHeight(30);
+        accountsJList.setSelectionBackground(new Color(59, 89, 152));
         java.util.List<IUser> accountsList = userService.findAll();
         for (IUser user : accountsList) {
             if (user.getId() != userService.getConnectedUser().getId()) {
