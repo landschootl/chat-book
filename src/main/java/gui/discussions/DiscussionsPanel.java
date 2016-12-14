@@ -221,7 +221,7 @@ public class DiscussionsPanel extends JPanel implements Observer {
 
         boolean expirationIsValid = true;
         if (expirationDateTextField.getText().length() != 0) {
-            if(!expirationDateTextField.getText().matches("\\d{4}-[01]\\d-[0-3]\\d")){
+            if(!expirationDateTextField.getText().matches("\\d{2}/\\d{2}/\\d{4}")){
                 expirationIsValid = false;
                 expirationDateTextField.setBorder(BorderFactory.createLineBorder(Color.red));
             } else {
