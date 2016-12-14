@@ -217,17 +217,27 @@ public class DiscussionsPanel extends JPanel implements Observer {
     }
 
     private void sendMessage() {
+        LocalDate expirationDate = null;
+
+        boolean expirationIsValid = true;
+        if (expirationDateTextField.getText().length() != 0) {
+            if(!expirationDateTextField.getText().matches("\\d{4}-[01]\\d-[0-3]\\d")){
+                expirationIsValid = false;
+                expirationDateTextField.setBorder(BorderFactory.createLineBorder(Color.red));
+            } else {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                expirationDate = LocalDate.parse(expirationDateTextField.getText(), formatter);
+            }
+        }
+
         if (newMessageTextField.getText().length() == 0) {
             JOptionPane.showMessageDialog(new JFrame(), "Votre message est vide.");
+        } else if(expirationDate != null && expirationDate.isBefore(LocalDate.now())) {
+            JOptionPane.showMessageDialog(new JFrame(), "Veuillez mettre une date d'expiration supérieur à la date du jour.");
+            expirationDateTextField.setBorder(BorderFactory.createLineBorder(Color.red));
         } else {
-            if (expirationDateTextField.getText().length() == 10 || expirationDateTextField.getText().length() == 0) {
-                LocalDate expirationDate = null;
-
-                if (expirationDateTextField.getText().length() != 0) {
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                    expirationDate = LocalDate.parse(expirationDateTextField.getText(), formatter);
-                }
-
+            expirationDateTextField.setBorder(null);
+            if(expirationIsValid) {
                 Message message = messageService.create(Message.builder()
                         .idConnection(discussionSelected.getId())
                         .user(connectedUser)
@@ -242,7 +252,7 @@ public class DiscussionsPanel extends JPanel implements Observer {
                 newMessageTextField.setText("");
                 expirationDateTextField.setText("");
             } else {
-                JOptionPane.showMessageDialog(new JFrame(), "Votre date d'expiration n'est pas complète.");
+                JOptionPane.showMessageDialog(new JFrame(), "Votre date d'expiration n'est pas correct.");
             }
         }
     }
@@ -251,6 +261,7 @@ public class DiscussionsPanel extends JPanel implements Observer {
         nameDiscussion.setVisible(true);
         newMessageTextField.setVisible(true);
         sendButton.setVisible(true);
+        wrapSendDiscussionPanel.setVisible(true);
         nameDiscussion.setText(discussionSelected.getName());
         if (discussionSelected.getMod().getId() == connectedUser.getId() || connectedUser.isAdmin()) {
             updateDiscussionButton.setVisible(true);
@@ -294,7 +305,7 @@ public class DiscussionsPanel extends JPanel implements Observer {
             dateLabel.setBorder(new EmptyBorder(0,5,0,5));
             expirationLabel.setBorder(new EmptyBorder(0,5,6,5));
             formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            formattedDateTime = "(Expire le " + message.getDateExpedition().format(formatter) + ")";
+            formattedDateTime = "(Expire le " + message.getExpiration().format(formatter) + ")";
             expirationLabel.setText(formattedDateTime);
             messagePanel.add(expirationLabel);
         }
@@ -395,7 +406,6 @@ public class DiscussionsPanel extends JPanel implements Observer {
                     discussionSelected = (Discussion) discussionsList.getSelectedValue();
                     if(discussionSelected != null){
                         drawDiscussionsPanelRight();
-                        discussionsPanelRight.setVisible(true);
                     } else {
                         clearDiscussionPanel();
                     }
@@ -412,6 +422,8 @@ public class DiscussionsPanel extends JPanel implements Observer {
         nameDiscussion.setVisible(false);
         newMessageTextField.setVisible(false);
         sendButton.setVisible(false);
+        wrapSendDiscussionPanel.setVisible(false);
+        expirationDateTextField.setBorder(null);
         messagesPanel.removeAll();
         messagesPanel.repaint();
     }

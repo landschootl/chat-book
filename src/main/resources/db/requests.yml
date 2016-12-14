@@ -38,7 +38,7 @@ select:
 
     message.by.discussion: SELECT id, id_connection, id_user, message, date_expedition, date_accused, accused, priority, expiration, code
         FROM MESSAGE
-        WHERE id_connection = ?;
+        WHERE id_connection = ? AND (expiration > NOW() OR expiration is null);
 
 create:
   user:
