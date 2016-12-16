@@ -247,6 +247,13 @@ public class DiscussionsPanel extends JPanel implements Observer {
                         .expiration(expirationDate)
                         .code(code)
                         .build());
+                if (message.isCode()) {
+                    try {
+                        message.setMessage(SecurityService.getInstance().decrypt(message.getMessage()));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
                 addMessagePanel(message);
                 discussionSelected.addMessage(message);
                 newMessageTextField.setText("");
@@ -311,13 +318,6 @@ public class DiscussionsPanel extends JPanel implements Observer {
         }
 
         JLabel messageLabel = new JLabel();
-        if (message.isCode()) {
-            try {
-                message.setMessage(SecurityService.getInstance().decrypt(message.getMessage()));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
         messageLabel.setText(message.getMessage());
         messageLabel.setBorder(new EmptyBorder(5,5,10,5));
         messageLabel.setFont(new Font("Lucida Grande", Font.BOLD, 12));
