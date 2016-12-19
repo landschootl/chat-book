@@ -15,6 +15,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
+/**
+ * Classe représentant une fenêtre de création de compte.
+ *
+ * @author Laurent THIEBAULT & Ludovic LANDSCHOOT
+ */
 public class CreateAccountFrame extends AppFrame {
     private UserService userService;
     private DefaultListModel accountsListModel;
@@ -36,6 +41,9 @@ public class CreateAccountFrame extends AppFrame {
         this.setVisible(true);
     }
 
+    /**
+     * Initialise les boutons de la fenêtre.
+     */
     public void initButtons() {
         createAccountButton.addActionListener((ActionEvent e) -> {
             if (!fieldsEmpty()) {
@@ -65,6 +73,10 @@ public class CreateAccountFrame extends AppFrame {
         cancelButton.addActionListener((ActionEvent e) -> this.dispose());
     }
 
+    /**
+     * Permet de savoir si un champ n'est pas rempli.
+     * @return
+     */
     public boolean fieldsEmpty() {
         return this.loginTextField.getText().isEmpty() ||
                 this.firstNameTextField.getText().isEmpty() ||

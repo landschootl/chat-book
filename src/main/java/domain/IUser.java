@@ -3,7 +3,7 @@ package domain;
 import domain.enums.ERole;
 
 /**
- * Interface décrivant un utilisateur
+ * Interface décrivant un utilisateur.
  *
  * @author Laurent THIEBAULT & Ludovic LANDSCHOOT
  */

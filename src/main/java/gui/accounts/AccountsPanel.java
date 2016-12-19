@@ -12,6 +12,11 @@ import javax.swing.event.ListSelectionEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
+/**
+ * Classe représentant le panneau de gestion des comptes.
+ *
+ * @author Laurent THIEBAULT & Ludovic LANDSCHOOT
+ */
 public class AccountsPanel extends JPanel {
 
     private UserService userService;
@@ -44,12 +49,18 @@ public class AccountsPanel extends JPanel {
         initAccountsPanelRight();
     }
 
+    /**
+     * Initialise le bouton "Créer un nouvel utilisateur".
+     */
     private void initCreateAccountButton() {
         createAccountButton = new JButton("Créer un nouvel utilisateur");
         createAccountButton.addActionListener((ActionEvent e) -> new CreateAccountFrame(accountsListModel));
         this.add(createAccountButton, BorderLayout.NORTH);
     }
 
+    /**
+     * Initialiser la liste des utilisateurs de l'application.
+     */
     private void initAccountsList() {
         accountsListModel = new DefaultListModel<>();
         accountsJList = new JList(accountsListModel);
@@ -86,6 +97,9 @@ public class AccountsPanel extends JPanel {
         });
     }
 
+    /**
+     * Initialise le panneau de droite permettant d'afficher les informations de l'utilisateur sélectionné.
+     */
     private void initAccountsPanelRight() {
         accountsPanelRight = new JPanel();
         accountsPanelRight.setLayout(new BorderLayout());
@@ -161,6 +175,9 @@ public class AccountsPanel extends JPanel {
         setVisibleAccountInfos(false);
     }
 
+    /**
+     * Met à jour le panneau de droite par rapport à l'utilisateur sélectionné dans la liste.
+     */
     private void updateUserInfos() {
         this.userSelected.setLogin(this.loginAccountField.getText());
         this.userSelected.setFirstname(this.firstnameAccountField.getText());
@@ -172,6 +189,10 @@ public class AccountsPanel extends JPanel {
         }
     }
 
+    /**
+     * Rend visible ou non les informations du panneau de droite.
+     * @param visible
+     */
     private void setVisibleAccountInfos(boolean visible) {
         loginAccountField.setVisible(visible);
         infosAccountPanel.setVisible(visible);

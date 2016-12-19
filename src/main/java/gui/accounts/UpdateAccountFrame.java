@@ -17,6 +17,11 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe représentant une fenêtre de modification du compte de l'utilisateur connecté.
+ *
+ * @author Laurent THIEBAULT & Ludovic LANDSCHOOT
+ */
 public class UpdateAccountFrame extends AppFrame implements Observable {
     private List<Observer> obs;
 
@@ -39,6 +44,9 @@ public class UpdateAccountFrame extends AppFrame implements Observable {
         this.setVisible(true);
     }
 
+    /**
+     * Initialise les boutons de la fenêtre.
+     */
     public void initButtons() {
         saveButton.addActionListener((ActionEvent e) -> {
             if (!fieldsEmpty()) {
@@ -78,6 +86,10 @@ public class UpdateAccountFrame extends AppFrame implements Observable {
         passwordButton.addActionListener((ActionEvent e) -> new UpdatePasswordAccountFrame(userService.getConnectedUser()));
     }
 
+    /**
+     * Permet de savoir si un champ n'est pas rempli.
+     * @return
+     */
     public boolean fieldsEmpty() {
         return this.loginTextField.getText().isEmpty() ||
                 this.firstNameTextField.getText().isEmpty() ||

@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 /**
- * Classe représentant une amitié entre deux utilisateurs
+ * Classe représentant une amitié entre deux utilisateurs.
  *
  * @author Laurent THIEBAULT & Ludovic LANDSCHOOT
  */

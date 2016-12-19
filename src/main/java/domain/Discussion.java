@@ -25,7 +25,7 @@ public class Discussion {
     }
 
     /**
-     * Ajout d'un utilisateur à la discussion
+     * Ajout d'un utilisateur à la discussion.
      * @param user
      */
     public void addUser(IUser user){
@@ -33,7 +33,7 @@ public class Discussion {
     }
 
     /**
-     * Suppression d'un utilisateur à la discussion
+     * Suppression d'un utilisateur à la discussion.
      * @param idUser
      */
     public void removeUser(int idUser){
@@ -45,7 +45,7 @@ public class Discussion {
     }
 
     /**
-     * Méthode pour vérifier si un utilisateur donné est dans la discussion
+     * Méthode pour vérifier si un utilisateur donné est dans la discussion.
      * @param user
      * @return si l'utilisateur est dans la conversation
      */
@@ -59,7 +59,7 @@ public class Discussion {
     }
 
     /**
-     * Ajout d'un message dans la discussion
+     * Ajout d'un message dans la discussion.
      * @param message
      */
     public void addMessage(Message message) {

@@ -13,6 +13,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.Arrays;
 
+/**
+ * Classe représentant une fenêtre de modification du mot de passe de l'utilisateur connecté.
+ *
+ * @author Laurent THIEBAULT & Ludovic LANDSCHOOT
+ */
 public class UpdatePasswordAccountFrame extends AppFrame {
     private UserService userService;
 
@@ -32,6 +37,9 @@ public class UpdatePasswordAccountFrame extends AppFrame {
         this.setVisible(true);
     }
 
+    /**
+     * Initialise les boutons de la fenêtre.
+     */
     public void initButtons() {
         saveButton.addActionListener((ActionEvent e) -> {
             if (!fieldsEmpty()) {
@@ -49,6 +57,10 @@ public class UpdatePasswordAccountFrame extends AppFrame {
         });
     }
 
+    /**
+     * Permet de savoir si un champ n'est pas rempli.
+     * @return
+     */
     public boolean fieldsEmpty() {
         return this.passwordField1.getPassword().length == 0 ||
                 this.passwordField2.getPassword().length == 0;

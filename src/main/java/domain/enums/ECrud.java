@@ -1,7 +1,7 @@
 package domain.enums;
 
 /**
- * Enumération représentant les 4 éléments du CRUD
+ * Enumération représentant les 4 éléments du CRUD.
  *
  * @author Laurent THIEBAULT & Ludovic LANDSCHOOT
  */

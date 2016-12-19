@@ -12,6 +12,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.stream.Collectors;
 
+/**
+ * Classe représentant une fenêtre de visualisation des amis de l'utilisateur connecté.
+ *
+ * @author Laurent THIEBAULT & Ludovic LANDSCHOOT
+ */
 public class ShowFriendsFrame extends AppFrame {
 
     private java.util.List<IUser> friends;
@@ -51,6 +56,9 @@ public class ShowFriendsFrame extends AppFrame {
         this.add(noFriendLabel, BorderLayout.NORTH);
     }
 
+    /**
+     * Initialise la liste des amis de l'utilisateur connecté.
+     */
     public void initFriendshipList() {
         friends = userService.findConnectedUserFriends();
 
@@ -90,6 +98,9 @@ public class ShowFriendsFrame extends AppFrame {
         }
     }
 
+    /**
+     * Affiche ou non le texte "Vous n'avez pas d'amis".
+     */
     private void checkVisibilityNoFriendLabel() {
         if (friends.isEmpty()) {
             this.noFriendLabel.setVisible(true);
