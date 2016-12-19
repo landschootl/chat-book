@@ -7,7 +7,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
- * Created by landschoot on 11/12/16.
+ * Classe représentant un message
+ *
+ * @author Laurent THIEBAULT & Ludovic LANDSCHOOT
  */
 @Data
 @Builder

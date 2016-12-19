@@ -4,7 +4,9 @@ import persistence.uow.Observable;
 import persistence.uow.Visitable;
 
 /**
- * Created by lauthieb on 02/12/2016.
+ * Interface décrivant un objet du domaine
+ *
+ * @author Laurent THIEBAULT & Ludovic LANDSCHOOT
  */
 public interface IDomainObject extends Observable,Visitable {
 }

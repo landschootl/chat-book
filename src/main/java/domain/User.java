@@ -8,6 +8,11 @@ import persistence.uow.Visitor;
 
 import java.util.List;
 
+/**
+ * Classe représentant un utilisateur
+ *
+ * @author Laurent THIEBAULT & Ludovic LANDSCHOOT
+ */
 @Builder
 @Getter
 public class User implements IUser{

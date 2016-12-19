@@ -3,7 +3,9 @@ package domain;
 import domain.enums.ERole;
 
 /**
- * Created by landschoot on 02/12/16.
+ * Interface décrivant un utilisateur
+ *
+ * @author Laurent THIEBAULT & Ludovic LANDSCHOOT
  */
 public interface IUser extends IDomainObject {
     public String getFirstname();
