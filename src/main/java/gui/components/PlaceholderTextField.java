@@ -7,6 +7,11 @@ import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 import java.awt.*;
 
+/**
+ * Classe représentant un champ avec un placeholder.
+ *
+ * @author Laurent THIEBAULT & Ludovic LANDSCHOOT
+ */
 @SuppressWarnings("serial")
 public class PlaceholderTextField extends JTextField {
 

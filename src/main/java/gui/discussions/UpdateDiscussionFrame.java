@@ -21,7 +21,9 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 /**
- * Created by landschoot on 11/12/16.
+ * Classe représentant la fenêtre de gestion d'une discussion.
+ *
+ * @author Laurent THIEBAULT & Ludovic LANDSCHOOT
  */
 public class UpdateDiscussionFrame extends AppFrame implements Observable {
     private JPanel mainPanel;
@@ -53,10 +55,10 @@ public class UpdateDiscussionFrame extends AppFrame implements Observable {
         this.obs = new ArrayList<>();
         this.discussion = discussion;
         initComponents();
-        initInformationsDiscution();
+        initInformationsDiscussion();
         initListUsers();
         initListFriends();
-        initButton();
+        initButtons();
     }
 
     @Override
@@ -70,11 +72,17 @@ public class UpdateDiscussionFrame extends AppFrame implements Observable {
         this.setContentPane(mainPanel);
     }
 
-    public void initInformationsDiscution() {
+    /**
+     * Initialise les informations de la discussion.
+     */
+    public void initInformationsDiscussion() {
         titleField.setText(discussion.getName());
         managerLabel.setText(INIT_MANAGER_LABEL + discussion.getMod().getLogin());
     }
 
+    /**
+     * Initialise la liste des utilisateurs dans la discussion.
+     */
     public void initListUsers() {
         users = new DefaultListModel<>();
         for (IUser user : discussion.getUsers()) {
@@ -105,6 +113,9 @@ public class UpdateDiscussionFrame extends AppFrame implements Observable {
 
     }
 
+    /**
+     * Initialise la liste des amis de l'utilisateur connecté.
+     */
     public void initListFriends() {
         friendsList.setPreferredSize(new Dimension(150, 150));
         friends = new DefaultListModel<>();
@@ -122,6 +133,11 @@ public class UpdateDiscussionFrame extends AppFrame implements Observable {
         friendsList.setModel(friends);
     }
 
+    /**
+     * Permet de savoir si un ami est dans la discussion.
+     * @param friend
+     * @return
+     */
     public boolean friendInTheUsers(IUser friend) {
         for (IUser user : discussion.getUsers()) {
             if (friend.getId() == user.getId()) {
@@ -131,7 +147,10 @@ public class UpdateDiscussionFrame extends AppFrame implements Observable {
         return false;
     }
 
-    public void initButton() {
+    /**
+     * Initialise les boutons de la fenêtre.
+     */
+    public void initButtons() {
         addUserButton.addActionListener((ActionEvent e) -> {
             IUser friendSelected = (IUser) friendsList.getSelectedValue();
             if (friendSelected != null) {

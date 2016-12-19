@@ -26,7 +26,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
-
+/**
+ * Classe représentant le panneau des discussions de l'utilisateur connecté.
+ *
+ * @author Laurent THIEBAULT & Ludovic LANDSCHOOT
+ */
 public class DiscussionsPanel extends JPanel implements Observer {
     private JPanel discussionsPanelLeft;
     private JPanel discussionsPanelRight;
@@ -71,6 +75,9 @@ public class DiscussionsPanel extends JPanel implements Observer {
         initComponents();
     }
 
+    /**
+     * Intialise les composants du panneau.
+     */
     private void initComponents() {
         this.setLayout(new BorderLayout(0, 0));
         initAddDiscussionButton();
@@ -78,6 +85,9 @@ public class DiscussionsPanel extends JPanel implements Observer {
         initDiscussionsPanelRight();
     }
 
+    /**
+     * Initialise le bouton d'ajout d'une discussion.
+     */
     private void initAddDiscussionButton() {
         addDiscussionButton = new JButton();
         addDiscussionButton.setText("Créer une nouvelle discussion");
@@ -94,6 +104,9 @@ public class DiscussionsPanel extends JPanel implements Observer {
         this.add(addDiscussionButton, BorderLayout.NORTH);
     }
 
+    /**
+     * Initialise le panneau de droite représentant le détail de la discussion sélectionnée.
+     */
     private void initDiscussionsPanelRight() {
         discussionsPanelRight = new JPanel();
         discussionsPanelRight.setLayout(new BorderLayout(0, 0));
@@ -107,6 +120,9 @@ public class DiscussionsPanel extends JPanel implements Observer {
         clearDiscussionPanel();
     }
 
+    /**
+     * Initialise le haut du panneau de droite.
+     */
     private void initHeaderDiscussion() {
         headerDiscussionPanel = new JPanel();
         headerDiscussionPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -138,6 +154,9 @@ public class DiscussionsPanel extends JPanel implements Observer {
         headerDiscussionPanel.add(deleteDiscussionButton);
     }
 
+    /**
+     * Initialise le corps du panneau de droite.
+     */
     private void initMessagesPanel() {
         messagesPanel = new JPanel();
         messagesPanel.setLayout(new BoxLayout(messagesPanel, BoxLayout.Y_AXIS));
@@ -145,6 +164,9 @@ public class DiscussionsPanel extends JPanel implements Observer {
         discussionsPanelRight.add(messagesScrollPane, BorderLayout.CENTER);
     }
 
+    /**
+     * Initialise le bas de page du panneau de droite.
+     */
     private void initFooterDiscussion() {
         wrapSendDiscussionPanel = new JPanel();
         wrapSendDiscussionPanel.setLayout(new BoxLayout(wrapSendDiscussionPanel, BoxLayout.Y_AXIS));
@@ -216,6 +238,9 @@ public class DiscussionsPanel extends JPanel implements Observer {
         discussionsPanelRight.add(wrapSendDiscussionPanel, BorderLayout.SOUTH);
     }
 
+    /**
+     * Envoie un message dans la discussion sélectionnée.
+     */
     private void sendMessage() {
         LocalDate expirationDate = null;
 
@@ -264,6 +289,9 @@ public class DiscussionsPanel extends JPanel implements Observer {
         }
     }
 
+    /**
+     * Dessine le panneau de droite.
+     */
     private void drawDiscussionsPanelRight(){
         nameDiscussion.setVisible(true);
         newMessageTextField.setVisible(true);
@@ -284,6 +312,10 @@ public class DiscussionsPanel extends JPanel implements Observer {
         }
     }
 
+    /**
+     * Ajout un panneau de message.
+     * @param message
+     */
     private void addMessagePanel(Message message) {
         JPanel wrapMessagePanel = new JPanel();
         wrapMessagePanel.setLayout(new BorderLayout());
@@ -374,6 +406,9 @@ public class DiscussionsPanel extends JPanel implements Observer {
                 new Rectangle(0, messagesPanel.getHeight()+200, 0, 0));
     }
 
+    /**
+     * Initialise le panneau possédant la liste des discussions.
+     */
     private void initDiscussionsPanelLeft() {
         discussionsPanelLeft = new JPanel();
         discussionsPanelLeft.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
@@ -381,6 +416,9 @@ public class DiscussionsPanel extends JPanel implements Observer {
         initDiscussionsList();
     }
 
+    /**
+     * Initialise la liste des discussions.
+     */
     public void initDiscussionsList() {
         try {
             discussionsListModel = new DefaultListModel<>();
@@ -416,6 +454,9 @@ public class DiscussionsPanel extends JPanel implements Observer {
         }
     }
 
+    /**
+     * Vider la panneau de discussion.
+     */
     private void clearDiscussionPanel(){
         updateDiscussionButton.setVisible(false);
         deleteDiscussionButton.setVisible(false);
@@ -455,6 +496,9 @@ public class DiscussionsPanel extends JPanel implements Observer {
         }
     }
 
+    /**
+     * Gestion des checkbox pour la sélection du type de message à envoyer.
+     */
     class ActionHandler implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent event) {
