@@ -5,14 +5,13 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import domain.User;
 import gui.AppFrame;
 import gui.MainFrame;
+import persistence.db.SingletonDB;
 import service.UserService;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 
 public class LoginFrame extends AppFrame {
     private JPanel mainPanel;
@@ -37,6 +36,12 @@ public class LoginFrame extends AppFrame {
         initFrame();
         initComponents();
         configListeners();
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent windowEvent) {
+                SingletonDB.getInstance().close();
+            }
+        });
         this.setVisible(true);
     }
 

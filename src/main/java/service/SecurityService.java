@@ -33,8 +33,8 @@ public class SecurityService {
         Key key = generateKey();
         Cipher c = Cipher.getInstance(ALGORITHM);
         c.init(Cipher.DECRYPT_MODE, key);
-        byte[] decordedValue = new BASE64Decoder().decodeBuffer(encryptedValue);
-        byte[] decValue = c.doFinal(decordedValue);
+        byte[] decodedValue = new BASE64Decoder().decodeBuffer(encryptedValue);
+        byte[] decValue = c.doFinal(decodedValue);
         return new String(decValue);
     }
 

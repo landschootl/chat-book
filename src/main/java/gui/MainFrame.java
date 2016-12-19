@@ -11,6 +11,7 @@ import gui.discussions.DiscussionsPanel;
 import gui.login.LoginFrame;
 import gui.search.SearchPanel;
 import gui.waitingFriendships.WaitingFriendshipsFrame;
+import persistence.db.SingletonDB;
 import persistence.uow.Observer;
 import persistence.uow.UnitOfWork;
 import service.FriendshipService;
@@ -21,7 +22,11 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class MainFrame extends AppFrame implements Observer {
     private JPanel navPanel;
@@ -65,6 +70,12 @@ public class MainFrame extends AppFrame implements Observer {
         configDashboard();
         cleanButtons();
         checkRole();
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent windowEvent) {
+                SingletonDB.getInstance().close();
+            }
+        });
         this.setVisible(true);
     }
 

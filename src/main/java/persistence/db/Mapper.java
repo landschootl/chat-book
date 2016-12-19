@@ -17,7 +17,7 @@ public abstract class Mapper {
     protected Statement statement;
     protected PreparedStatement preparedStatement;
 
-    public Mapper(){
+    public Mapper() {
         this.db = SingletonDB.getInstance().getDb();
         this.bundle = ResourceBundle.getBundle("db/requests", YamlResourceBundle.Control.INSTANCE);
         try {
