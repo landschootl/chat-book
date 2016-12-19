@@ -39,7 +39,7 @@ public class LoginFrame extends AppFrame {
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent windowEvent) {
-                SingletonDB.getInstance().close();
+            SingletonDB.getInstance().close();
             }
         });
         this.setVisible(true);

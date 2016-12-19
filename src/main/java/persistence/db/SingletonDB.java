@@ -2,6 +2,9 @@ package persistence.db;
 
 import net.rakugakibox.util.YamlResourceBundle;
 
+import javax.swing.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -51,7 +54,7 @@ public class SingletonDB {
             this.db = DriverManager.getConnection(DB_DRIVER + "://" + DB_HOTE + "/" + DB_BASE, DB_LOGIN, DB_PASSWORD);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "La connexion à la base de données a echouée.");
         }
         return false;
     }
