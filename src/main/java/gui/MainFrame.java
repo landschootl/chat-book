@@ -25,8 +25,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 public class MainFrame extends AppFrame implements Observer {
     private JPanel navPanel;
