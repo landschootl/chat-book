@@ -13,6 +13,11 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 
+/**
+ * Classe représentant la fenêtre de connexion à l'application.
+ *
+ * @author Laurent THIEBAULT & Ludovic LANDSCHOOT
+ */
 public class LoginFrame extends AppFrame {
     private JPanel mainPanel;
     private JLabel titleLabel;
@@ -45,6 +50,9 @@ public class LoginFrame extends AppFrame {
         this.setVisible(true);
     }
 
+    /**
+     * Initialise les composants de la fenêtre.
+     */
     public void initComponents() {
         this.titleLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
         ImageIcon icon = new ImageIcon(getClass().getResource("/img/logo.png"));
@@ -52,6 +60,9 @@ public class LoginFrame extends AppFrame {
         this.bodyPanel.setBorder(new EmptyBorder(30, 30, 30, 30));
     }
 
+    /**
+     * Configure les listeners sur les différents boutons et champs de saisie.
+     */
     public void configListeners() {
         connectButton.addActionListener((ActionEvent e) -> connect());
 
@@ -76,6 +87,9 @@ public class LoginFrame extends AppFrame {
         passwordField.addKeyListener(keyListener);
     }
 
+    /**
+     * Connexion à l'application
+     */
     private void connect() {
         if (!fieldsEmpty()) {
             try {
@@ -88,10 +102,18 @@ public class LoginFrame extends AppFrame {
         }
     }
 
+    /**
+     * Permet de savoir si un champ n'est pas rempli.
+     * @return
+     */
     public boolean fieldsEmpty() {
         return this.loginField.getText() == "" || this.passwordField.getPassword().length == 0;
     }
 
+    /**
+     * Permet de savoir si l'utilisateur peut accéder à l'application.
+     * @param user
+     */
     public void checkUser(User user) {
         if (user != null) {
             this.setVisible(false);
