@@ -14,6 +14,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
+/**
+ * Classe représentant la fenêtre des demandes d'amitié en attente de confirmation.
+ *
+ * @author Laurent THIEBAULT & Ludovic LANDSCHOOT
+ */
 public class WaitingFriendshipsFrame extends AppFrame implements Observable {
 
     private java.util.List<Observer> obs;
@@ -54,6 +59,9 @@ public class WaitingFriendshipsFrame extends AppFrame implements Observable {
         this.add(noWaitingFriendships, BorderLayout.NORTH);
     }
 
+    /**
+     * Initialise la liste des demandes d'amitié en attente de confirmation.
+     */
     public void initFriendshipList() {
         waitingFrienships = friendshipService.findWaitingFriendships(UserService.getInstance().getConnectedUser());
 
@@ -96,6 +104,9 @@ public class WaitingFriendshipsFrame extends AppFrame implements Observable {
         }
     }
 
+    /**
+     * Affiche ou non "Vous n'avez pas d'amis.".
+     */
     private void checkVisibilityNoWaitingFriendships() {
         if (waitingFrienships.isEmpty()) {
             this.noWaitingFriendships.setVisible(true);

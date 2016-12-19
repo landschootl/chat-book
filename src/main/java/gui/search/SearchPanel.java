@@ -17,6 +17,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+/**
+ * Classe représentant le panneau de recherche d'utilisateurs.
+ *
+ * @author Laurent THIEBAULT & Ludovic LANDSCHOOT
+ */
 public class SearchPanel extends JPanel {
     private SearchService searchService;
     private UserService userService;
@@ -55,6 +60,9 @@ public class SearchPanel extends JPanel {
         initAccountsPanelRight();
     }
 
+    /**
+     * Initialise la liste des utilisateurs de l'application.
+     */
     private void initAccountsList() {
         try {
             accountsListModel = new DefaultListModel<>();
@@ -93,6 +101,9 @@ public class SearchPanel extends JPanel {
         }
     }
 
+    /**
+     * Met à jour la liste des utilisateurs.
+     */
     public void updateAccountsList() {
         this.accountsListModel.removeAllElements();
         java.util.List<IUser> accountsList = this.searchService.searchUsers(lastnameSearch.getText(), firstnameSearch.getText());
@@ -107,6 +118,9 @@ public class SearchPanel extends JPanel {
         this.repaint();
     }
 
+    /**
+     * Initialise la partie recherche.
+     */
     private void initSearch() {
         JPanel panelSearch = new JPanel();
         this.add(panelSearch, BorderLayout.NORTH);
@@ -148,6 +162,9 @@ public class SearchPanel extends JPanel {
         panelSearch.add(showFriendsButton);
     }
 
+    /**
+     * Initialise le panneau de droite représentant le détail de l'utilisateur sélectionné.
+     */
     private void initAccountsPanelRight() {
         panelRight = new JPanel();
         panelRight.setOpaque(true);
@@ -221,6 +238,10 @@ public class SearchPanel extends JPanel {
         setVisibleAccountInfos(false);
     }
 
+    /**
+     * Rend visible ou non les informations de l'utilisateur dans le panneau de droite.
+     * @param visible
+     */
     private void setVisibleAccountInfos(boolean visible) {
         loginAccount.setVisible(visible);
         infosAccountPanel.setVisible(visible);
@@ -228,6 +249,9 @@ public class SearchPanel extends JPanel {
         lastnameAccount.setVisible(visible);
     }
 
+    /**
+     * Dynamise l'affichage des composants "Ajout en ami", "En attente de confirmation" et "Supprimer de vos amis".
+     */
     private void checkVisibilityFriendButtons() {
         IUser connectedUser = userService.getConnectedUser();
 

@@ -2,6 +2,11 @@ package gui;
 
 import javax.swing.*;
 
+/**
+ * Classe abstraite représentant une fenêtre basique de l'application.
+ *
+ * @author Laurent THIEBAULT & Ludovic LANDSCHOOT
+ */
 public abstract class AppFrame extends JFrame {
     public void initFrame() {
         this.setTitle("Chatbook");

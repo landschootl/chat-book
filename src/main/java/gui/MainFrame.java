@@ -26,6 +26,11 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 
+/**
+ * Classe représentant la fenêtre principale de l'application.
+ *
+ * @author Laurent THIEBAULT & Ludovic LANDSCHOOT
+ */
 public class MainFrame extends AppFrame implements Observer {
     private JPanel navPanel;
     private JLabel titleLabel;
@@ -77,6 +82,9 @@ public class MainFrame extends AppFrame implements Observer {
         this.setVisible(true);
     }
 
+    /**
+     * Dynamise les composants à afficher en fonction du rôle de l'utilisateur connecté.
+     */
     private void checkRole() {
         if (userService.getConnectedUser().getRole().equals(ERole.USER_ADMIN)) {
             this.setTitle("Chatbook - Admin");
@@ -96,6 +104,9 @@ public class MainFrame extends AppFrame implements Observer {
         }
     }
 
+    /**
+     * Initialise les panneaux.
+     */
     public void initPanels() {
         this.accountsPanel = new AccountsPanel();
         contentPanel.add(accountsPanel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
@@ -105,12 +116,16 @@ public class MainFrame extends AppFrame implements Observer {
         contentPanel.add(searchPanel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
     }
 
+    /**
+     * Rend invisible les panneaux.
+     */
     public void cleanPanels() {
         this.accountsPanel.setVisible(false);
         this.discussionsPanel.setVisible(false);
         this.searchPanel.setVisible(false);
     }
 
+    @Override
     public void initComponents() {
         titleLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
         userLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -122,6 +137,9 @@ public class MainFrame extends AppFrame implements Observer {
         configWaitingFriendshipImage();
     }
 
+    /**
+     * Affiche ou non une notification s'il existe des demandes d'amitié en attente de confirmation.
+     */
     private void configWaitingFriendshipImage() {
         Image waitingFriendshipImg = null;
         try {
@@ -137,7 +155,9 @@ public class MainFrame extends AppFrame implements Observer {
         waitingFriendshipsButton.setIcon(new ImageIcon(waitingFriendshipImg));
     }
 
-
+    /**
+     * Initialise les images dans la barre de navigation.
+     */
     private void initImages() {
         Image updateAccountImg = null;
         Image logoutImg = null;
@@ -153,12 +173,18 @@ public class MainFrame extends AppFrame implements Observer {
         deconnectButton.setIcon(new ImageIcon(logoutImg));
     }
 
+    /**
+     * Affiche ou non certains composants en fonction du rôle de l'utilisateur connecté.
+     */
     public void checkComponentRoles() {
         if (!ERole.USER_ADMIN.equals(userService.getConnectedUser().getRole())) {
             accountsButton.setVisible(false);
         }
     }
 
+    /**
+     * Configure les différents listeners des boutons du tableau de bord.
+     */
     public void configDashboard() {
         accountsButton.addActionListener((ActionEvent e) -> {
             cleanPanels();
@@ -184,6 +210,9 @@ public class MainFrame extends AppFrame implements Observer {
         });
     }
 
+    /**
+     * Configure le listener du bouton de déconnexion.
+     */
     public void configDeconnectButton() {
         deconnectButton.addActionListener(e -> {
             this.userService.setConnectedUser(null);
@@ -193,6 +222,9 @@ public class MainFrame extends AppFrame implements Observer {
         });
     }
 
+    /**
+     * Configure le listener de modification de compte.
+     */
     public void configUpdateAccountButton() {
         updateAccountButton.addActionListener(e -> {
             UpdateAccountFrame updateAccountFrame = new UpdateAccountFrame();
@@ -200,6 +232,9 @@ public class MainFrame extends AppFrame implements Observer {
         });
     }
 
+    /**
+     * Configure le listener du bouton des demandes d'amitié en attente de confirmation.
+     */
     public void configWaitingFriendshipButton() {
         waitingFriendshipsButton.addActionListener(e -> {
             WaitingFriendshipsFrame waitingFriendshipsFrame = new WaitingFriendshipsFrame();
@@ -207,6 +242,9 @@ public class MainFrame extends AppFrame implements Observer {
         });
     }
 
+    /**
+     * Rend les boutons non sélectionnés.
+     */
     public void cleanButtons() {
         accountsButton.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
         accountsButton.setForeground(Color.BLACK);
