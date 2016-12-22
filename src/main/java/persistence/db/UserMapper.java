@@ -14,6 +14,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe représentant le mapper d'un utilisateur.
+ *
+ * @author Laurent THIEBAULT & Ludovic LANDSCHOOT
+ */
 public class UserMapper extends Mapper {
     public static UserMapper instance = null;
 
@@ -28,6 +33,13 @@ public class UserMapper extends Mapper {
         return instance;
     }
 
+    /**
+     * Retourne un utilisateur en fonction du login / mot de passe.
+     * @param login
+     * @param password
+     * @return
+     * @throws SQLException
+     */
     public User findByCredentials(String login, String password) throws SQLException {
         User user = null;
         preparedStatement = db.prepareStatement(this.bundle.getString("select.user.by.credentials"));
@@ -43,6 +55,10 @@ public class UserMapper extends Mapper {
         return user;
     }
 
+    /**
+     * Créé un utilisateur en base de données.
+     * @param user
+     */
     public void create(User user) {
         try {
             PreparedStatement preparedStatement = db.prepareStatement(this.bundle.getString("create.user"));
@@ -57,6 +73,10 @@ public class UserMapper extends Mapper {
         }
     }
 
+    /**
+     * Retourne la liste des utilisateurs
+     * @return
+     */
     public List<IUser> findAll() {
         List<IUser> users = new ArrayList<>();
         ResultSet rs = null;
@@ -72,6 +92,12 @@ public class UserMapper extends Mapper {
         return users;
     }
 
+    /**
+     * Retourne la liste des utilisateurs d'une discussion.
+     * @param discussion
+     * @return
+     * @throws SQLException
+     */
     public List<IUser> findByDiscussion(Discussion discussion) throws SQLException {
         List<IUser> users = new ArrayList<>();
         preparedStatement = db.prepareStatement(this.bundle.getString("select.users.by.discussion"));
@@ -86,6 +112,13 @@ public class UserMapper extends Mapper {
         return users;
     }
 
+    /**
+     * Retourne un utilisateur par son identifiant.
+     * @param identifiant
+     * @return
+     * @throws SQLException
+     * @throws NoDataFoundException
+     */
     public IUser findByIdentifiant(String identifiant) throws SQLException, NoDataFoundException {
         IUser user;
         preparedStatement = db.prepareStatement(this.bundle.getString("select.user.by.identifiant"));
@@ -102,6 +135,11 @@ public class UserMapper extends Mapper {
         return user;
     }
 
+    /**
+     * Retourne les amis d'un utilisateur.
+     * @param user
+     * @return
+     */
     public List<IUser> findFriends(IUser user) {
         List<IUser> friends = new ArrayList<>();
         try {
@@ -120,6 +158,10 @@ public class UserMapper extends Mapper {
         return friends;
     }
 
+    /**
+     * Mise à jour d'un utilisateur avec son rôle.
+     * @param user
+     */
     public void update(User user) {
         try {
             PreparedStatement preparedStatement = db.prepareStatement(this.bundle.getString("update.user.by.identifiant"));
@@ -134,6 +176,10 @@ public class UserMapper extends Mapper {
         }
     }
 
+    /**
+     * Mise à jour d'un utilisateur sans rôle.
+     * @param user
+     */
     public void updateAccount(User user) {
         try {
             PreparedStatement preparedStatement = db.prepareStatement(this.bundle.getString("update.user.account"));
@@ -147,6 +193,10 @@ public class UserMapper extends Mapper {
         }
     }
 
+    /**
+     * Mise à jour du mot de passe d'un utilisateur.
+     * @param user
+     */
     public void updatePassword(IUser user) {
         try {
             PreparedStatement preparedStatement = db.prepareStatement(this.bundle.getString("update.user.password"));
@@ -158,6 +208,10 @@ public class UserMapper extends Mapper {
         }
     }
 
+    /**
+     * Supprime d'un utilisateur.
+     * @param user
+     */
     public void delete(IUser user) {
         try {
             PreparedStatement preparedStatement = db.prepareStatement(this.bundle.getString("delete.user.by.identifiant"));
@@ -168,6 +222,12 @@ public class UserMapper extends Mapper {
         }
     }
 
+    /**
+     * Créé un
+     * @param rs
+     * @return
+     * @throws SQLException
+     */
     private User createUser(ResultSet rs) throws SQLException {
         User user;
         user = User.builder()

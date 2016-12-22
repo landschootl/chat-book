@@ -4,7 +4,9 @@ import domain.IDomainObject;
 import domain.User;
 
 /**
- * Created by lauthieb on 02/12/2016.
+ * Interface décrivant un visiteur.
+ *
+ * @author Ludovic LANDSCHOOT & Laurent THIEBAULT
  */
 public abstract class Visitor {
     public void visit(IDomainObject o) {

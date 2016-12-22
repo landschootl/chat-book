@@ -9,7 +9,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * Created by landschoot on 11/12/16.
+ * Classe représentant le service d'un message.
+ *
+ * @author Laurent THIEBAULT & Ludovic LANDSCHOOT
  */
 public class MessageService {
     public static MessageService instance = null;
@@ -26,6 +28,12 @@ public class MessageService {
         return instance;
     }
 
+    /**
+     * Retourne la liste des messages d'une discussion.
+     * @param discussion
+     * @return
+     * @throws SQLException
+     */
     public List<Message> findByDiscussion(Discussion discussion) throws SQLException {
 
         List<Message> messages = messageMapper.findByDiscussion(discussion);
@@ -42,10 +50,19 @@ public class MessageService {
         return messages;
     }
 
+    /**
+     * Mise à jour de l'accusé de réception.
+     * @param message
+     */
     public void updateDateAccused(Message message) {
         messageMapper.updateDateAccused(message);
     }
 
+    /**
+     * Créé un message en base de données.
+     * @param message
+     * @return
+     */
     public Message create(Message message) {
         message.setDateExpedition(LocalDateTime.now());
 

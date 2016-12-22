@@ -16,7 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by landschoot on 04/11/16.
+ * Classe représentant le mapper d'une discussion.
+ *
+ * @author Laurent THIEBAULT & Ludovic LANDSCHOOT
  */
 public class DiscussionMapper extends Mapper {
     public static DiscussionMapper instance = null;
@@ -37,17 +39,11 @@ public class DiscussionMapper extends Mapper {
         return instance;
     }
 
-    private Discussion createDiscussion(ResultSet rs) throws SQLException {
-        Discussion discussion = Discussion.builder()
-                .id(rs.getInt("id"))
-                .mod(new VirtualProxyBuilder<>(IUser.class, new UserFactory(rs.getString("id_mod"))).getProxy())
-                .name(rs.getString("name"))
-                .build();
-        discussion.setUsers(userService.findByDiscussion(discussion));
-        discussion.setMessages(messageService.findByDiscussion(discussion));
-        return discussion;
-    }
-
+    /**
+     * Retourne la liste de l'ensemble des discussions.
+     * @return
+     * @throws SQLException
+     */
     public List<Discussion> findAll() throws SQLException {
         List <Discussion> discussions = new ArrayList<>();
         ResultSet rs = statement.executeQuery(this.bundle.getString("select.discussions.all"));
@@ -60,6 +56,12 @@ public class DiscussionMapper extends Mapper {
         return discussions;
     }
 
+    /**
+     * Retourne la liste des discussions d'un utilisateur.
+     * @param user
+     * @return
+     * @throws SQLException
+     */
     public List<Discussion> findByUser(User user) throws SQLException {
         List <Discussion> discussions = new ArrayList<>();
         preparedStatement = db.prepareStatement(this.bundle.getString("select.discussions.by.user"));
@@ -72,10 +74,20 @@ public class DiscussionMapper extends Mapper {
         return discussions;
     }
 
+    /**
+     * Retourne une discussion en fonction de son id.
+     * @param id
+     * @return
+     */
     public Discussion findById(int id) {
         throw new NO_IMPLEMENT();
     }
 
+    /**
+     * Ajoute un utilisateur à une discussion.
+     * @param discussion
+     * @param user
+     */
     public void addUser(Discussion discussion, IUser user) {
         try {
             preparedStatement = db.prepareStatement(this.bundle.getString("create.discussion.user"));
@@ -87,6 +99,11 @@ public class DiscussionMapper extends Mapper {
         }
     }
 
+    /**
+     * Supprime un utilisateur d'une discussion.
+     * @param discussion
+     * @param user
+     */
     public void removeUser(Discussion discussion, IUser user) {
         try {
             preparedStatement = db.prepareStatement(this.bundle.getString("delete.discussion.user"));
@@ -98,6 +115,11 @@ public class DiscussionMapper extends Mapper {
         }
     }
 
+    /**
+     * Mise à jour d'une discussion.
+     * @param discussion
+     * @return
+     */
     public Discussion update(Discussion discussion) {
         try {
             PreparedStatement preparedStatement = db.prepareStatement(this.bundle.getString("update.discussion"));
@@ -128,15 +150,11 @@ public class DiscussionMapper extends Mapper {
         return discussion;
     }
 
-    private boolean userIsExist(List<IUser> users, IUser user){
-        for(IUser u : users){
-            if(u.getId() == user.getId()){
-                return true;
-            }
-        }
-        return false;
-    }
-
+    /**
+     * Créé une discussion en base de données.
+     * @param discussion
+     * @return
+     */
     public Discussion create(Discussion discussion) {
         try {
             PreparedStatement preparedStatement = db.prepareStatement(this.bundle.getString("create.discussion"), PreparedStatement.RETURN_GENERATED_KEYS);
@@ -155,6 +173,10 @@ public class DiscussionMapper extends Mapper {
         return discussion;
     }
 
+    /**
+     * Supprime une discussion.
+     * @param discussion
+     */
     public void remove(Discussion discussion) {
         try {
             PreparedStatement preparedStatement = db.prepareStatement(this.bundle.getString("delete.discussion.by.identifiant"));
@@ -163,5 +185,22 @@ public class DiscussionMapper extends Mapper {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Créé une discussion.
+     * @param rs
+     * @return
+     * @throws SQLException
+     */
+    private Discussion createDiscussion(ResultSet rs) throws SQLException {
+        Discussion discussion = Discussion.builder()
+                .id(rs.getInt("id"))
+                .mod(new VirtualProxyBuilder<>(IUser.class, new UserFactory(rs.getString("id_mod"))).getProxy())
+                .name(rs.getString("name"))
+                .build();
+        discussion.setUsers(userService.findByDiscussion(discussion));
+        discussion.setMessages(messageService.findByDiscussion(discussion));
+        return discussion;
     }
 }

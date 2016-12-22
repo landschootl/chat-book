@@ -11,7 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by landschoot on 11/12/16.
+ * Classe représentant le mapper d'un message.
+ *
+ * @author Laurent THIEBAULT & Ludovic LANDSCHOOT
  */
 public class MessageMapper extends Mapper {
     public static MessageMapper instance = null;
@@ -27,22 +29,12 @@ public class MessageMapper extends Mapper {
         return instance;
     }
 
-    private Message createMessage(ResultSet rs) throws SQLException {
-        Message message = Message.builder()
-                .id(rs.getInt("id"))
-                .idConnection(rs.getInt("id_connection"))
-                .user(new VirtualProxyBuilder<>(IUser.class, new UserFactory(rs.getString("id_user"))).getProxy())
-                .message(rs.getString("message"))
-                .dateExpedition(rs.getDate("date_expedition") == null ? null : rs.getTimestamp("date_expedition").toLocalDateTime())
-                .dateAccused(rs.getDate("date_accused") == null ? null : rs.getTimestamp("date_accused").toLocalDateTime())
-                .accused(rs.getBoolean("accused"))
-                .priority(rs.getBoolean("priority"))
-                .expiration(rs.getDate("expiration") == null ? null : rs.getDate("expiration").toLocalDate())
-                .code(rs.getBoolean("code"))
-                .build();
-        return message;
-    }
-
+    /**
+     * Retourne la liste des messages d'une discussion.
+     * @param discussion
+     * @return
+     * @throws SQLException
+     */
     public List<Message> findByDiscussion(Discussion discussion) throws SQLException {
         List<Message> messages = new ArrayList<>();
         preparedStatement = db.prepareStatement(this.bundle.getString("select.message.by.discussion"));
@@ -55,6 +47,10 @@ public class MessageMapper extends Mapper {
         return messages;
     }
 
+    /**
+     * Mise à jour de l'accusé de réception.
+     * @param message
+     */
     public void updateDateAccused(Message message) {
         try {
             preparedStatement = db.prepareStatement(this.bundle.getString("update.message.date.accused"));
@@ -66,6 +62,11 @@ public class MessageMapper extends Mapper {
         }
     }
 
+    /**
+     * Créé un message en base de données.
+     * @param message
+     * @return
+     */
     public Message create(Message message) {
         PreparedStatement preparedStatement = null;
         try {
@@ -86,6 +87,28 @@ public class MessageMapper extends Mapper {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return message;
+    }
+
+    /**
+     * Créé un message.
+     * @param rs
+     * @return
+     * @throws SQLException
+     */
+    private Message createMessage(ResultSet rs) throws SQLException {
+        Message message = Message.builder()
+                .id(rs.getInt("id"))
+                .idConnection(rs.getInt("id_connection"))
+                .user(new VirtualProxyBuilder<>(IUser.class, new UserFactory(rs.getString("id_user"))).getProxy())
+                .message(rs.getString("message"))
+                .dateExpedition(rs.getDate("date_expedition") == null ? null : rs.getTimestamp("date_expedition").toLocalDateTime())
+                .dateAccused(rs.getDate("date_accused") == null ? null : rs.getTimestamp("date_accused").toLocalDateTime())
+                .accused(rs.getBoolean("accused"))
+                .priority(rs.getBoolean("priority"))
+                .expiration(rs.getDate("expiration") == null ? null : rs.getDate("expiration").toLocalDate())
+                .code(rs.getBoolean("code"))
+                .build();
         return message;
     }
 }

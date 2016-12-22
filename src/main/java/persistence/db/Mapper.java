@@ -9,7 +9,9 @@ import java.sql.Statement;
 import java.util.ResourceBundle;
 
 /**
- * Created by landschoot on 04/11/16.
+ * Classe abstraite représentant un mapper de l'application.
+ *
+ * @author Laurent THIEBAULT & Ludovic LANDSCHOOT
  */
 public abstract class Mapper {
     protected Connection db;

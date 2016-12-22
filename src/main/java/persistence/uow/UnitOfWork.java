@@ -27,18 +27,27 @@ public class UnitOfWork implements Observer {
     }
 
     /**
-     * Ajoute un utilisateur à modifier.
+     * Ajoute un IDomainObject à modifier.
      * @param o
      */
     public void action(IDomainObject o) {
         dirty.add(o);
     }
 
+    /**
+     * Ajoute un Object à modifier.
+     * @param o
+     */
     @Override
     public void action(Object o) {
 
     }
 
+    /**
+     * Ajoute un crud et un élément à modifier.
+     * @param crud
+     * @param element
+     */
     @Override
     public void action(Object crud, Object element) {
 

@@ -1,10 +1,10 @@
-/****************** Configuration de la Base ******************/
+/****************** CONFIGURATION DE LA BASE ******************/
 -- Création de la base
 DROP DATABASE IF EXISTS chat_book;
 CREATE DATABASE chat_book CHARACTER SET 'utf8';
 USE chat_book;
 
-/****************** Création des tables ******************/
+/****************** CREATION DES TABLES ******************/
 -- Table des utilisateurs
 DROP TABLE IF EXISTS USER;
 CREATE TABLE USER (

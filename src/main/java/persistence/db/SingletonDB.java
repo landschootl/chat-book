@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 /**
- * Classe singleton servant à la connexion à une base de données dont la config est située dans le fichier resources/tp3.yml
+ * Classe singleton servant à la connexion à la base de données.
  *
  * @author Ludovic LANDSCHOOT & Laurent THIEBAULT
  */
@@ -37,6 +37,9 @@ public class SingletonDB {
         connect();
     }
 
+    /**
+     * Chargement de la configuration dans le fichier resources/config.yml.
+     */
     private void loadConfig() {
         ResourceBundle bundle = ResourceBundle.getBundle("config", YamlResourceBundle.Control.INSTANCE);
         this.DB_DRIVER = bundle.getString("db.driver");
@@ -46,6 +49,10 @@ public class SingletonDB {
         this.DB_PASSWORD = bundle.getString("db.password");
     }
 
+    /**
+     * Permet la connexion à la base de données.
+     * @return
+     */
     public Boolean connect() {
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -57,6 +64,9 @@ public class SingletonDB {
         return false;
     }
 
+    /**
+     * Fermeture de la connexion à la base de données.
+     */
     public void close() {
         try {
             this.db.close();

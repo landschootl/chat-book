@@ -10,6 +10,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe représentant le mapper d'une amitié.
+ *
+ * @author Laurent THIEBAULT & Ludovic LANDSCHOOT
+ */
 public class FriendshipMapper extends Mapper {
     public static FriendshipMapper instance = null;
 
@@ -24,6 +29,10 @@ public class FriendshipMapper extends Mapper {
         return instance;
     }
 
+    /**
+     * Création d'une amitié entre deux utilisateurs.
+     * @param friendship
+     */
     public void create(Friendship friendship) {
         try {
             preparedStatement = db.prepareStatement(this.bundle.getString("create.friendship"));
@@ -36,6 +45,12 @@ public class FriendshipMapper extends Mapper {
         }
     }
 
+    /**
+     * Retourne une amitié entre deux utilisateurs.
+     * @param user1
+     * @param user2
+     * @return
+     */
     public Friendship find(IUser user1, IUser user2) {
         try {
             preparedStatement = db.prepareStatement(this.bundle.getString("select.friendship"));
@@ -58,6 +73,11 @@ public class FriendshipMapper extends Mapper {
         return null;
     }
 
+    /**
+     * Retourne la liste des demandes d'amitié en attente d'un utilisateur.
+     * @param user
+     * @return
+     */
     public List<Friendship> findWaitingFriendships(IUser user) {
         List<Friendship> waitingFriendships = new ArrayList<>();
 
@@ -82,6 +102,10 @@ public class FriendshipMapper extends Mapper {
         return waitingFriendships;
     }
 
+    /**
+     * Accepter une demande d'amitié en attente.
+     * @param friendship
+     */
     public void acceptFriendship(Friendship friendship) {
         try {
             preparedStatement = db.prepareStatement(this.bundle.getString("update.friendship.accept"));
@@ -93,6 +117,10 @@ public class FriendshipMapper extends Mapper {
         }
     }
 
+    /**
+     * Refuser une demande d'amitié en attente.
+     * @param friendship
+     */
     public void refuseFriendship(Friendship friendship) {
         try {
             preparedStatement = db.prepareStatement(this.bundle.getString("delete.friendship.refuse"));
@@ -104,6 +132,10 @@ public class FriendshipMapper extends Mapper {
         }
     }
 
+    /**
+     * Supprimer une amitié entre deux utilisateurs.
+     * @param friendship
+     */
     public void delete(Friendship friendship) {
         try {
             preparedStatement = db.prepareStatement(this.bundle.getString("delete.friendship"));

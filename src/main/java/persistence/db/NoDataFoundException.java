@@ -1,7 +1,9 @@
 package persistence.db;
 
 /**
- * Created by landschoot on 06/12/16.
+ * Classe d'exception métier lorsque des données sont absentes en base de données.
+ *
+ * @author Laurent THIEBAULT & Ludovic LANDSCHOOT
  */
 public class NoDataFoundException extends Throwable {
     public NoDataFoundException(String text) {

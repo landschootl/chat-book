@@ -9,8 +9,9 @@ import java.util.List;
 
 
 /**
- * Created by landschoot on 04/11/16.
- * Permet la gestion des discussiones de discutions.
+ * Classe représentant le service d'une discussion.
+ *
+ * @author Laurent THIEBAULT & Ludovic LANDSCHOOT
  */
 public class DiscussionService {
     public static DiscussionService instance = null;
@@ -27,26 +28,56 @@ public class DiscussionService {
         return instance;
     }
 
+    /**
+     * Retourne la liste de l'ensemble des discussions.
+     * @return
+     * @throws SQLException
+     */
     public List<Discussion> findAll() throws SQLException {
         return discussionMapper.findAll();
     }
 
+    /**
+     * Retourne la liste des discussions d'un utilisateur.
+     * @param user
+     * @return
+     * @throws SQLException
+     */
     public List<Discussion> findByUser(User user) throws SQLException {
         return discussionMapper.findByUser(user);
     }
 
+    /**
+     * Retourne une discussion en fonction de son id.
+     * @param id
+     * @return
+     */
     public Discussion findById(int id){
         return discussionMapper.findById(id);
     }
 
+    /**
+     * Mise à jour d'une discussion.
+     * @param discussion
+     * @return
+     */
     public Discussion update(Discussion discussion){
         return discussionMapper.update(discussion);
     }
 
+    /**
+     * Créé une discussion en base de données.
+     * @param discussion
+     * @return
+     */
     public Discussion create(Discussion discussion){
         return discussionMapper.create(discussion);
     }
 
+    /**
+     * Supprime une discussion.
+     * @param discussion
+     */
     public void delete(Discussion discussion){
         discussionMapper.remove(discussion);
     }
